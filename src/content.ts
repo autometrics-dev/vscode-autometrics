@@ -15,7 +15,7 @@ sum by (function, module) (rate(function_calls_count{function="${functionName}"}
 function getCalledByRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to functions called by \`${functionName}\` per second, averaged over 5 minute windows
   
-sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5m]))'`;
+sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
@@ -39,7 +39,7 @@ function getLatency(functionName: string, options: Options) {
   const query = `# 95th and 99th percentile latencies for the \`${functionName}\` function
   
 histogram_quantile(0.99, sum by (le, function, module) (rate(function_calls_duration_bucket{function="${functionName}"}[5m]))) or
-histogram_quantile(0.95, sum by (le, function, module) (rate(function_calls_duration_bucket{function="${functionName}"}[5m])))'`;
+histogram_quantile(0.95, sum by (le, function, module) (rate(function_calls_duration_bucket{function="${functionName}"}[5m])))`;
   return buildQuery(query, options);
 }
 
