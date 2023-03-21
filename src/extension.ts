@@ -3,9 +3,11 @@
 import * as vscode from "vscode";
 import { getContent } from "./content";
 
+// let config;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+// export function activate(context: vscode.ExtensionContext) {
+export function activate() {
   vscode.languages.registerHoverProvider("python", {
     provideHover(document, position) {
       const textLine = document.lineAt(position.line);
@@ -21,10 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
         position.line > 1 &&
         decoratorRegex.test(document.lineAt(position.line - 1).text)
       ) {
-        return {
-          contents: getContent(name),
-        };
+        return new vscode.Hover(getContent(name));
       }
+
+      // eslint-disable-next-line unicorn/no-useless-undefined
+      return undefined;
     },
   });
 }

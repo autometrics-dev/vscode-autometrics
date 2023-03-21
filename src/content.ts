@@ -1,35 +1,25 @@
+import * as vscode from "vscode";
 import { MarkdownString } from "vscode";
 
-function getRequestRate(
-  functionName: string,
-  options: {
-    baseUrl: string;
-  }
-) {
+type Options = {
+  baseUrl: string;
+};
+
+function getRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to the \`${functionName}\` function per second, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count{function="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
-function getCalledByRequestRate(
-  functionName: string,
-  options: {
-    baseUrl: string;
-  }
-) {
+function getCalledByRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to functions called by \`${functionName}\` per second, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5m]))'`;
   return buildQuery(query, options);
 }
 
-function getErrorRatio(
-  functionName: string,
-  options: {
-    baseUrl: string;
-  }
-) {
+function getErrorRatio(functionName: string, options: Options) {
   const query = `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count{function="${functionName}",result="error"}[5m])) /
@@ -37,12 +27,7 @@ sum by (function, module) (rate(function_calls_count{function="${functionName}"}
   return buildQuery(query, options);
 }
 
-function getCalledByErrorRatio(
-  functionName: string,
-  options: {
-    baseUrl: string;
-  }
-) {
+function getCalledByErrorRatio(functionName: string, options: Options) {
   const query = `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count{caller="${functionName}",result="error"}[5m])) /
@@ -50,12 +35,7 @@ sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5
   return buildQuery(query, options);
 }
 
-function getLatency(
-  functionName: string,
-  options: {
-    baseUrl: string;
-  }
-) {
+function getLatency(functionName: string, options: Options) {
   const query = `# 95th and 99th percentile latencies for the \`${functionName}\` function
   
 histogram_quantile(0.99, sum by (le, function, module) (rate(function_calls_duration_bucket{function="${functionName}"}[5m]))) or
@@ -71,10 +51,12 @@ function buildQuery(query: string, options: { baseUrl: string }): string {
   return url.toString();
 }
 
-export function getContent(name: string): MarkdownString {
-  const options = {
-    // TODO: (JF) Make this configurable
-    baseUrl: "http://localhost:1234",
+export function getContent(name: string) {
+  const config = vscode.workspace.getConfiguration("autometrics");
+  const baseUrl =
+    config.get<string>("prometheusUrl") || "http://localhost:9090";
+  const options: Options = {
+    baseUrl,
   };
 
   return new MarkdownString(`## Autometrics

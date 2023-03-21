@@ -1,6 +1,6 @@
 {
   "name": "autometrics",
-  "displayName": "autometrics",
+  "displayName": "Autometrics",
   "description": "Show enhanced autometrics information from your code",
   "version": "0.0.1",
   "engines": {
@@ -13,11 +13,28 @@
     "onLanguage:python"
   ],
   "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": [
+      {
+        "id": "General",
+        "title": "Autometrics",
+        "order": 1,
+        "properties": {
+          "autometrics.prometheusUrl": {
+            "type": "string",
+            "title": "Prometheus URL",
+            "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
+            "default": "http://localhost:9090"
+          }
+        }
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "package",
     "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "watch": "esbuild-base -- --sourcemap --watch",
-    "package": "esbuild-base -- --minify",
+    "watch": "yarn run compile -- --sourcemap --watch",
+    "package": "yarn run compile -- --minify",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
