@@ -10,7 +10,9 @@
   "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md,toml}"],
   "excludes": [
     "**/node_modules",
-    "**/*-lock.json"
+    "**/*-lock.json",
+    "**/out",
+    "**/dist"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.84.0.wasm",
