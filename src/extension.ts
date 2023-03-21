@@ -66,30 +66,30 @@ histogram_quantile(0.95, sum by (le, function, module) (rate(function_calls_dura
 }
 
 function buildQuery(query: string, options: { baseUrl: string }): string {
-  const params = new URLSearchParams();
-  params.set("g0.expr", query);
-  params.set("g0.tab", "0");
-  const url = new URL(`${options.baseUrl}/graph?${params.toString()}`);
+  const parameters = new URLSearchParams();
+  parameters.set("g0.expr", query);
+  parameters.set("g0.tab", "0");
+  const url = new URL(`${options.baseUrl}/graph?${parameters.toString()}`);
   return url.toString();
 }
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   vscode.languages.registerHoverProvider("python", {
-    provideHover(document, position, token) {
+    provideHover(document, position) {
       const textLine = document.lineAt(position.line);
 
-      const functionRegex = /def\s*(?<name>[A-z0-9]+)?\s*\(/;
-      let match = textLine.text.match(functionRegex);
+      // TODO: (JF) we should also display the tooltip when
+      //
+      const functionRegex = /def\s*(?<name>[\dA-z]+)?\s*\(/;
+      const match = textLine.text.match(functionRegex);
       const name = match?.groups?.name;
       const decoratorRegex = /@autometrics/g;
       if (
         name &&
         position.line > 1 &&
-        document.lineAt(position.line - 1).text.match(decoratorRegex)
+        decoratorRegex.test(document.lineAt(position.line - 1).text)
       ) {
-        console.log(`test${name}test`);
-        // console.log(`yes auto metrics please for ${name}`);
         const options = {
           // TODO: (JF) Make this configurable
           baseUrl: "http://localhost:1234",
@@ -112,15 +112,13 @@ Or, dig into the metrics of functions called by ${name}:
           ],
         };
       }
-
-      return null;
     },
   });
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
+  const disposable = vscode.commands.registerCommand(
     "autometrics.helloWorld",
     () => {
       // The code you place here will be executed every time your command is executed
@@ -133,4 +131,5 @@ Or, dig into the metrics of functions called by ${name}:
 }
 
 // This method is called when your extension is deactivated
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function deactivate() {}

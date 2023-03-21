@@ -1,0 +1,7 @@
+{
+  "includes": ["src/**/*.*"],
+  "excludes": [],
+  "plugins": [
+    "https://plugins.dprint.dev/prettier-0.21.0.json@36b7f318764bb2b0768cab4f6e79326c1539deeb1daa9069d610a002668a0304"
+  ]
+}
