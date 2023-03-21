@@ -8,30 +8,30 @@ type Options = {
 function getRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to the \`${functionName}\` function per second, averaged over 5 minute windows
   
-sum by (function, module) (rate(function_calls_count{function="${functionName}"}[5m]))`;
+sum by (function, module) (rate(function_calls_count_total{function="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
 function getCalledByRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to functions called by \`${functionName}\` per second, averaged over 5 minute windows
   
-sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5m]))`;
+sum by (function, module) (rate(function_calls_count_total{caller="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
 function getErrorRatio(functionName: string, options: Options) {
   const query = `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
   
-sum by (function, module) (rate(function_calls_count{function="${functionName}",result="error"}[5m])) /
-sum by (function, module) (rate(function_calls_count{function="${functionName}"}[5m]))`;
+sum by (function, module) (rate(function_calls_count_total{function="${functionName}",result="error"}[5m])) /
+sum by (function, module) (rate(function_calls_count_total{function="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
 function getCalledByErrorRatio(functionName: string, options: Options) {
   const query = `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
   
-sum by (function, module) (rate(function_calls_count{caller="${functionName}",result="error"}[5m])) /
-sum by (function, module) (rate(function_calls_count{caller="${functionName}"}[5m]))`;
+sum by (function, module) (rate(function_calls_count_total{caller="${functionName}",result="error"}[5m])) /
+sum by (function, module) (rate(function_calls_count_total{caller="${functionName}"}[5m]))`;
   return buildQuery(query, options);
 }
 
