@@ -20,7 +20,8 @@ sum by (function, module) (rate(function_calls_count_total{caller="${functionNam
 }
 
 function getErrorRatio(functionName: string, options: Options) {
-  const query = `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
+  const query =
+    `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count_total{function="${functionName}",result="error"}[5m])) /
 sum by (function, module) (rate(function_calls_count_total{function="${functionName}"}[5m]))`;
@@ -28,7 +29,8 @@ sum by (function, module) (rate(function_calls_count_total{function="${functionN
 }
 
 function getCalledByErrorRatio(functionName: string, options: Options) {
-  const query = `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
+  const query =
+    `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count_total{caller="${functionName}",result="error"}[5m])) /
 sum by (function, module) (rate(function_calls_count_total{caller="${functionName}"}[5m]))`;
@@ -53,8 +55,7 @@ function buildQuery(query: string, options: { baseUrl: string }): string {
 
 export function getContent(name: string) {
   const config = vscode.workspace.getConfiguration("autometrics");
-  const baseUrl =
-    config.get<string>("prometheusUrl") || "http://localhost:9090";
+  const baseUrl = config.get<string>("prometheusUrl") || "http://localhost:9090";
   const options: Options = {
     baseUrl,
   };

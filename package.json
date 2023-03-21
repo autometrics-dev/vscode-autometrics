@@ -1,6 +1,7 @@
 {
   "name": "autometrics",
   "displayName": "Autometrics",
+  "license": "MIT",
   "description": "Show enhanced autometrics information from your code",
   "version": "0.0.1",
   "engines": {

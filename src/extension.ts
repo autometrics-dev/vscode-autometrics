@@ -19,9 +19,9 @@ export function activate() {
       const name = match?.groups?.name;
       const decoratorRegex = /@autometrics/g;
       if (
-        name &&
-        position.line > 1 &&
-        decoratorRegex.test(document.lineAt(position.line - 1).text)
+        name
+        && position.line > 1
+        && decoratorRegex.test(document.lineAt(position.line - 1).text)
       ) {
         return new vscode.Hover(getContent(name));
       }
