@@ -10,17 +10,9 @@ More languages will be supported in the future.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
+After decorating your code with autometrics, this extension will enrich the information displayed for a given function on hover.
 
 ![Enhanced autometrics information](./images/demo.gif)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
 ## Extension Settings
 
@@ -30,7 +22,25 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Right now, the detection for the `@autometrics` decorator is fairly simplistic. This means that the detection will sometimes fail if you use multiple decorators on a single function (the autometrics decorator should be right above the function definition).
+
+So this will work:
+
+```python
+@app.get("/")
+@autometrics
+def read_root():
+    return {"Hello": "World"}
+```
+
+However won't:
+
+```python
+@autometrics
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+```
 
 ## Release Notes
 
@@ -38,11 +48,11 @@ Users appreciate release notes as you update your extension.
 
 ### 0.0.1
 
-Initial release of ...
+Initial release which brings in basic Python support
 
 ---
 
-## Working on this extension
+## Developing this extension
 
 This extension is build using:
 
@@ -54,24 +64,3 @@ In order to avoid test the extension locally, you may want to install the follow
 
 - [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `yarn format` before committing so all code is correctly formatted.
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-- [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-- Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-- Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-- Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-- [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
