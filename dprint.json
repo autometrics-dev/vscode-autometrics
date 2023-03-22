@@ -1,18 +1,15 @@
 {
-  "typescript": {
-  },
-  "json": {
-  },
-  "markdown": {
-  },
-  "toml": {
-  },
+  "typescript": {},
+  "json": {},
+  "markdown": {},
+  "toml": {},
   "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md,toml}"],
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
     "**/out",
-    "**/dist"
+    "**/dist",
+    "**/.vscode-test"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.84.0.wasm",
