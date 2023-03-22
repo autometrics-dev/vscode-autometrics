@@ -9,7 +9,9 @@
     "**/*-lock.json",
     "**/out",
     "**/dist",
-    "**/.vscode-test"
+    "**/.vscode-test",
+    "**/.yarn"
+
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.84.0.wasm",
