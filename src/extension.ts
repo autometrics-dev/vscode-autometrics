@@ -7,7 +7,7 @@ import { getContent } from "./content";
  * Returns either a string or undefined if the document/position
  * don't justify showing a tooltip
  */
-export function getFunctionName(
+function getFunctionName(
   document: vscode.TextDocument,
   position: vscode.Position,
 ): string | void {
