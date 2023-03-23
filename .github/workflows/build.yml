@@ -40,5 +40,11 @@ jobs:
       - name: Run test (other platforms)
         run: yarn test
         if: runner.os != 'Linux'
-      - name: Package code
-        run: yarn package
+      - name: Package extension
+        run: yarn run vsce package --no-dependencies
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: visx file
+          path: |
+            *.visx
