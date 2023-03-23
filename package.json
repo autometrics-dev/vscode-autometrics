@@ -1,0 +1,68 @@
+{
+  "name": "autometrics",
+  "displayName": "Autometrics",
+  "license": "MIT",
+  "description": "Show enhanced autometrics information from your code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.76.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": [
+      {
+        "id": "General",
+        "title": "Autometrics",
+        "order": 1,
+        "properties": {
+          "autometrics.prometheusUrl": {
+            "type": "string",
+            "title": "Prometheus URL",
+            "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
+            "default": "http://localhost:9090"
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "package",
+    "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "yarn run compile -- --sourcemap --watch",
+    "package": "yarn run compile -- --minify",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "yarn run lint-code & yarn run fmt-check",
+    "lint-code": "eslint src --ext ts",
+    "fmt-check": "dprint check",
+    "format": "dprint fmt",
+    "test": "node ./out/test/run-test.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.76.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "@vscode/test-electron": "^2.2.3",
+    "dprint": "^0.35.3",
+    "esbuild": "^0.17.12",
+    "eslint": "^8.36.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "eslint-plugin-unicorn": "^46.0.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5"
+  },
+  "packageManager": "yarn@3.5.0"
+}
