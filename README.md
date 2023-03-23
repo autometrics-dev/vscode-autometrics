@@ -33,7 +33,7 @@ def read_root():
     return {"Hello": "World"}
 ```
 
-However won't:
+However this won't work:
 
 ```python
 @autometrics
@@ -41,10 +41,6 @@ However won't:
 def read_root():
     return {"Hello": "World"}
 ```
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
 
 ### 0.0.1
 
@@ -60,7 +56,7 @@ This extension is build using:
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
 - [dprint](https://github.com/dprint/dprint) as the formatter
 
-In order to avoid test the extension locally, you may want to install the following extensions:
+In order to test the extension locally, you may want to install the following extensions:
 
 - [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `yarn format` before committing so all code is correctly formatted.
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
