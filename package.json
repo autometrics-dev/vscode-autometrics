@@ -1,5 +1,8 @@
 {
+  "icon": "images/logo.png",
   "name": "autometrics",
+  "author": "Fiberplane",
+  "publisher": "fiberplane",
   "displayName": "Autometrics",
   "license": "MIT",
   "description": "Show enhanced autometrics information from your code",
