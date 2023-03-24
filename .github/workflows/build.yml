@@ -21,6 +21,8 @@ jobs:
           node-version: 19.x
           cache: yarn
           cache-dependency-path: yarn.lock
+      - name: install dependencies
+        run: yarn install --immutable
       - name: Prepare test
         run: yarn pretest
       - name: Run test (linux)
