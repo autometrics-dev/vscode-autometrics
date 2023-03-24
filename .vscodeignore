@@ -13,4 +13,4 @@ vsc-extension-quickstart.md
 **/*.ts
 .github/**
 .yarn/**
-images/**
+images/demo.gif
