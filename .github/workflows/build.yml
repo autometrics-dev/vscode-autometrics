@@ -23,6 +23,7 @@ jobs:
           cache-dependency-path: yarn.lock
       - name: install dependencies
         run: yarn install --immutable
+
       - name: Prepare test
         run: yarn pretest
       - name: Run test (linux)
@@ -31,10 +32,12 @@ jobs:
       - name: Run test (other platforms)
         run: yarn test
         if: runner.os != 'Linux'
+
       - name: Package extension
         run: yarn run vsce package --no-dependencies
-      - name: Archive production artifacts
+      - name: Store production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Extension bundle
           path: autometrics**.*
+          retention-days: 14
