@@ -22,25 +22,26 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Right now, the detection for the `@autometrics` decorator is fairly simplistic. This means that the detection will sometimes fail if you use multiple decorators on a single function (the autometrics decorator should be right above the function definition).
+If you mix tabs and spaces in your document, the detection of the autometrics might fall as it is assumed that the whole document is indented the same way
 
-So this will work:
-
-```python
-@app.get("/")
-@autometrics
-def read_root():
-    return {"Hello": "World"}
-```
-
-However this won't work:
+So if you have the following code
 
 ```python
-@autometrics
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class Operations():
+    def __init__(self, **args):
+        self.args = args
+
+    @autometrics
+    @lru_cache(maxsize=None,
+      typed=True)
+    def add(self, num1, num2):
 ```
+
+And mix spaces and tabs in the line with `@autometrics` until and including the line `def add` in an inconsistent way, the extension will assume the indentation has changed and won't detect the decorator
+
+### Unreleased
+
+[python] Improved detection logic: Now multiple decorators are supported
 
 ### 0.0.1
 
@@ -60,3 +61,7 @@ In order to test the extension locally, you may want to install the following ex
 
 - [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `yarn format` before committing so all code is correctly formatted.
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
+
+# How to release a new version
+
+Create a new release using the github which matches the version number it should be released under.
