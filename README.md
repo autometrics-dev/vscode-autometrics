@@ -20,25 +20,6 @@ This extension contributes the following settings:
 
 - `autometrics.prometheusUrl`: configure your Prometheus URL. This URL is used to create links to your Prometheus including useful autometrics based queries
 
-## Known Issues
-
-If you mix tabs and spaces in your document, the detection of the autometrics might fall as it is assumed that the whole document is indented the same way
-
-So if you have the following code
-
-```python
-class Operations():
-    def __init__(self, **args):
-        self.args = args
-
-    @autometrics
-    @lru_cache(maxsize=None,
-      typed=True)
-    def add(self, num1, num2):
-```
-
-And mix spaces and tabs in the line with `@autometrics` until and including the line `def add` in an inconsistent way, the extension will assume the indentation has changed and won't detect the decorator
-
 ### Unreleased
 
 [python] Improved detection logic: Now multiple decorators are supported
