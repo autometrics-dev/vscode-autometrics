@@ -18,9 +18,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
           node-version: 19.x
+          
       - name: install dependencies
-        run: npm install --prefer-offline
+        run: npm ci
 
       - name: Prepare test
         run: npm run pretest
