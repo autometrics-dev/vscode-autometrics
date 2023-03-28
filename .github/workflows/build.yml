@@ -19,22 +19,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 19.x
-          cache: yarn
-          cache-dependency-path: yarn.lock
+          cache: npm
+          cache-dependency-path: package-json.lock
       - name: install dependencies
-        run: yarn install --immutable
+        run: npm install --prefer-offline
 
       - name: Prepare test
-        run: yarn pretest
+        run: npm run pretest
       - name: Run test (linux)
-        run: xvfb-run -a yarn test
+        run: xvfb-run -a npm test
         if: runner.os == 'Linux'
       - name: Run test (other platforms)
-        run: yarn test
+        run: npm test
         if: runner.os != 'Linux'
 
       - name: Package extension
-        run: yarn run vsce package --no-dependencies
+        run: npx vsce package
       - name: Store production artifacts
         uses: actions/upload-artifact@v3
         with:
