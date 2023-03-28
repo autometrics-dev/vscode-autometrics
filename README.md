@@ -56,7 +56,7 @@ Initial release which brings in basic Python support
 
 This extension is build using:
 
-- [yarn](yarnpkg.com)
+- [npm](https://docs.npmjs.com/cli/v9)
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
 - [dprint](https://github.com/dprint/dprint) as the formatter
 
