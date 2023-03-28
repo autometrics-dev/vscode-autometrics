@@ -42,6 +42,10 @@ def read_root():
     return {"Hello": "World"}
 ```
 
+### Unreleased
+
+Change build: use npm instead of yarn 3.x. This is so we can use dependencies (required so we can support typescript)
+
 ### 0.0.1
 
 Initial release which brings in basic Python support
