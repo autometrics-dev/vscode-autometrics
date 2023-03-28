@@ -19,8 +19,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 19.x
-          cache: npm
-          cache-dependency-path: package-json.lock
       - name: install dependencies
         run: npm install --prefer-offline
 
