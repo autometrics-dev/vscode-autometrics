@@ -2,44 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { getContent } from "./content";
-
-function lineUnindented(text: string, indentation: string) {
-  return text === "" || text.startsWith(indentation) === false;
-}
-
-function extractDecoratorName(
-  text: string,
-) {
-  const decoratorRegex = /@(?<name>[\dA-z]+)/;
-  const match = text.match(decoratorRegex);
-  const name = match?.groups?.name;
-
-  if (name) {
-    return name;
-  }
-}
-
-function hasAutometricsDecorator(
-  document: vscode.TextDocument,
-  line: number,
-  indentation: string,
-) {
-  let currentLine = line;
-
-  while (currentLine >= 0) {
-    const text = document.lineAt(currentLine).text;
-    if (lineUnindented(text, indentation)) {
-      return false;
-    }
-
-    const decorator = extractDecoratorName(text);
-    if (decorator === "autometrics") {
-      return true;
-    }
-
-    currentLine -= 1;
-  }
-}
+import { hasAutometricsDecorator } from "./decorator";
 
 /**
  * Returns either a string or undefined if the document/position

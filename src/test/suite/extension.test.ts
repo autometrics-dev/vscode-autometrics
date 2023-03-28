@@ -117,4 +117,69 @@ class Operations():
     const hover = myExtension.PythonHover.provideHover(document, position);
     assert.ok(hover);
   });
+
+  test("should support a mix of tabs and spaces", async () => {
+    const content = `from autometrics.autometrics import autometrics
+from functools import lru_cache
+
+class Operations():
+        def __init__(self, **args):
+                self.args = args
+
+        @autometrics
+        @lru_cache(maxsize=None,
+          typed=True)
+\t\tdef add(self, num1, num2):
+                self.num1 = num1
+                self.num2 = num2
+                return self.num1 + self.num2
+
+        @autometrics
+        @lru_cache(maxsize=None,
+          typed=True)
+    \tdef subtract(self, num1, num2):
+                self.num1 = num1
+                self.num2 = num2
+                return self.num1 - self.num2
+
+        @autometrics
+    \t@lru_cache(maxsize=None,
+          typed=True)
+    \tdef multiply(self, num1, num2):
+                self.num1 = num1
+                self.num2 = num2
+                return self.num1 * self.num2
+
+\t\t@autometrics
+    \t@lru_cache(maxsize=None,
+          typed=True)
+    \tdef divide(self, num1, num2):
+                self.num1 = num1
+                self.num2 = num2
+                return self.num1 / self.num2
+`;
+
+    const document = await createTestDocument(content);
+
+    let line = 10;
+    const character = 9;
+    let position = new vscode.Position(line, character);
+    let hover = myExtension.PythonHover.provideHover(document, position);
+    assert.ok(hover);
+
+    line = 18;
+    position = new vscode.Position(line, character);
+    hover = myExtension.PythonHover.provideHover(document, position);
+    assert.ok(hover);
+
+    line = 26;
+    position = new vscode.Position(line, character);
+    hover = myExtension.PythonHover.provideHover(document, position);
+    assert.ok(hover);
+
+    line = 34;
+    position = new vscode.Position(line, character);
+    hover = myExtension.PythonHover.provideHover(document, position);
+    assert.ok(hover);
+  });
 });
