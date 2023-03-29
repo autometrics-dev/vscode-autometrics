@@ -22,7 +22,8 @@ This extension contributes the following settings:
 
 ### Unreleased
 
-[python] Improved detection logic: Now multiple decorators are supported
+- [python] Improved detection logic: Now multiple decorators are supported
+- Change build: use npm instead of yarn 3.x. This is so we can use dependencies (required so we can support typescript)
 
 ### 0.0.1
 
@@ -34,13 +35,13 @@ Initial release which brings in basic Python support
 
 This extension is build using:
 
-- [yarn](yarnpkg.com)
+- [npm](https://docs.npmjs.com/cli/v9)
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
 - [dprint](https://github.com/dprint/dprint) as the formatter
 
 In order to test the extension locally, you may want to install the following extensions:
 
-- [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `yarn format` before committing so all code is correctly formatted.
+- [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `npm run format` before committing so all code is correctly formatted.
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
 
 # How to release a new version
