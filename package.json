@@ -24,7 +24,8 @@
   "contributes": {
     "typescriptServerPlugins": [
       {
-        "name": "@autometrics/typescript-plugin"
+        "name": "@autometrics/typescript-plugin",
+        "enableForWorkspaceTypeScriptVersions": true
       }
     ],
     "configuration": [
