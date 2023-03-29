@@ -1,9 +1,10 @@
 # Autometrics
 
-This extension enhances tooltips for projects that use autometrics.
+This extension writes PromQL queries for instrumented functions or methods using autometrics libraries.
 
 Current supported languages:
 
+- [TypeScript](https://www.npmjs.com/package/autometrics)
 - [Python](https://pypi.org/project/autometrics/)
 
 More languages will be supported in the future.
@@ -24,6 +25,7 @@ This extension contributes the following settings:
 
 - [python] Improved detection logic: Now multiple decorators are supported
 - Change build: use npm instead of yarn 3.x. This is so we can use dependencies (required so we can support typescript)
+- [typescript] Added TypeScript support
 
 ### 0.0.1
 
@@ -33,7 +35,7 @@ Initial release which brings in basic Python support
 
 ## Developing this extension
 
-This extension is build using:
+This extension is built using:
 
 - [npm](https://docs.npmjs.com/cli/v9)
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
