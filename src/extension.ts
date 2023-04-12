@@ -14,7 +14,7 @@ const configSection = "autometrics";
  */
 function getFunctionName(
   document: vscode.TextDocument,
-  position: vscode.Position
+  position: vscode.Position,
 ): string | void {
   const textLine = document.lineAt(position.line);
   const functionRegex = /^(?<indentation>\s*)def\s*(?<name>[\dA-z]+)?\s*\(/;
@@ -23,9 +23,9 @@ function getFunctionName(
   const indentation = match?.groups?.indentation ?? "";
 
   if (
-    name &&
-    position.line > 1 &&
-    hasAutometricsDecorator(document, position.line - 1, indentation)
+    name
+    && position.line > 1
+    && hasAutometricsDecorator(document, position.line - 1, indentation)
   ) {
     return name;
   }
@@ -46,10 +46,10 @@ export const PythonHover = {
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate() {
-  //Python
+  // Python
   vscode.languages.registerHoverProvider("python", PythonHover);
 
-  //Typescript
+  // Typescript
   const tsExtension = vscode.extensions.getExtension(typescriptExtensionId);
 
   if (!tsExtension) {
@@ -77,7 +77,7 @@ export async function activate() {
   configureTSPlugin(tsExtensionApi);
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function configureTSPlugin(api: any) {
   const config = vscode.workspace.getConfiguration(configSection);
   console.log(`Configuring TS plugin with ${config.prometheusUrl}`);
