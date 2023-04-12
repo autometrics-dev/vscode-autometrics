@@ -39,11 +39,10 @@ This extension is built using:
 
 - [npm](https://docs.npmjs.com/cli/v9)
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
-- [dprint](https://github.com/dprint/dprint) as the formatter
 
 In order to test the extension locally, you may want to install the following extensions:
 
-- [Dprint code](https://marketplace.visualstudio.com/items?itemName=dprint.dprint). So vscode can format the code for you. You can also run `npm run format` before committing so all code is correctly formatted.
+- [Rome](https://marketplace.visualstudio.com/items?itemName=rome.rome).
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
 
 # How to release a new version

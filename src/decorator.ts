@@ -7,7 +7,8 @@ function lineUnindented(text: string, indentation: string) {
 const DEFAULT_TAB_SIZE = 8;
 
 function expandIndentationVariants(indentation: string) {
-  let tabSize = vscode.window.activeTextEditor?.options.tabSize ?? DEFAULT_TAB_SIZE;
+  let tabSize =
+    vscode.window.activeTextEditor?.options.tabSize ?? DEFAULT_TAB_SIZE;
   if (typeof tabSize === "string") {
     try {
       tabSize = Number.parseInt(tabSize, 10);
@@ -35,16 +36,14 @@ function generateSpaceOrTab(spaces: string, depth: number): string[] {
     return [spaces, "\t"];
   }
 
-  const results = generateSpaceOrTab(spaces, depth - 1).map(value => {
+  const results = generateSpaceOrTab(spaces, depth - 1).map((value) => {
     return [`${value}${spaces}`, `${value}\t`];
   });
 
   return results.flat();
 }
 
-function extractDecoratorName(
-  text: string,
-) {
+function extractDecoratorName(text: string) {
   const decoratorRegex = /@(?<name>[\dA-z]+)/;
   const match = text.match(decoratorRegex);
   const name = match?.groups?.name;
@@ -67,10 +66,12 @@ export function hasAutometricsDecorator(
 
     if (
       indentations.some(
-        indentation => (lineUnindented(text, indentation) === false),
+        (indentation) => lineUnindented(text, indentation) === false,
       )
     ) {
-      console.log(indentations.map(value => encodeURIComponent(value)).join("\n"));
+      console.log(
+        indentations.map((value) => encodeURIComponent(value)).join("\n"),
+      );
       console.log("unindented!", encodeURIComponent(text), currentLine);
       return false;
     }

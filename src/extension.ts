@@ -23,9 +23,9 @@ function getFunctionName(
   const indentation = match?.groups?.indentation ?? "";
 
   if (
-    name
-    && position.line > 1
-    && hasAutometricsDecorator(document, position.line - 1, indentation)
+    name &&
+    position.line > 1 &&
+    hasAutometricsDecorator(document, position.line - 1, indentation)
   ) {
     return name;
   }
@@ -38,7 +38,6 @@ export const PythonHover = {
       return new vscode.Hover(getContent(name));
     }
 
-    // eslint-disable-next-line unicorn/no-useless-undefined
     return undefined;
   },
 };
@@ -87,5 +86,4 @@ function configureTSPlugin(api: any) {
 }
 
 // This method is called when your extension is deactivated
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function deactivate() {}

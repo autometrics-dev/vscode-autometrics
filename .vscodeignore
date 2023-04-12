@@ -7,7 +7,7 @@ src/**
 webpack.config.js
 vsc-extension-quickstart.md
 **/tsconfig.json
-**/.eslintrc.json
+**/rome.json
 **/*.map
 **/*.ts
 .github/**
