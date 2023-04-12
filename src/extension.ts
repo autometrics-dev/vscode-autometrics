@@ -1,8 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
+import vscode from "vscode";
 import { getContent } from "./content";
 import { hasAutometricsDecorator } from "./decorator";
+
+const typescriptExtensionId = "vscode.typescript-language-features";
+const tsPluginId = "@autometrics/typescript-plugin";
+const configSection = "autometrics";
 
 /**
  * Returns either a string or undefined if the document/position
@@ -10,7 +14,7 @@ import { hasAutometricsDecorator } from "./decorator";
  */
 function getFunctionName(
   document: vscode.TextDocument,
-  position: vscode.Position,
+  position: vscode.Position
 ): string | void {
   const textLine = document.lineAt(position.line);
   const functionRegex = /^(?<indentation>\s*)def\s*(?<name>[\dA-z]+)?\s*\(/;
@@ -19,9 +23,9 @@ function getFunctionName(
   const indentation = match?.groups?.indentation ?? "";
 
   if (
-    name
-    && position.line > 1
-    && hasAutometricsDecorator(document, position.line - 1, indentation)
+    name &&
+    position.line > 1 &&
+    hasAutometricsDecorator(document, position.line - 1, indentation)
   ) {
     return name;
   }
@@ -41,8 +45,45 @@ export const PythonHover = {
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate() {
+export async function activate() {
+  //Python
   vscode.languages.registerHoverProvider("python", PythonHover);
+
+  //Typescript
+  const tsExtension = vscode.extensions.getExtension(typescriptExtensionId);
+
+  if (!tsExtension) {
+    return;
+  }
+
+  await tsExtension.activate();
+
+  if (!tsExtension.exports || !tsExtension.exports.getAPI) {
+    return;
+  }
+
+  const tsExtensionApi = tsExtension.exports.getAPI(0);
+
+  if (!tsExtensionApi) {
+    return;
+  }
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    if (event.affectsConfiguration(configSection)) {
+      configureTSPlugin(tsExtensionApi);
+    }
+  });
+
+  configureTSPlugin(tsExtensionApi);
+}
+
+
+function configureTSPlugin(api: any) {
+  const config = vscode.workspace.getConfiguration(configSection);
+  console.log(`Configuring TS plugin with ${config.prometheusUrl}`);
+  api.configurePlugin(tsPluginId, {
+    prometheusUrl: config.prometheusUrl || "http://localhost:9090/",
+  });
 }
 
 // This method is called when your extension is deactivated
