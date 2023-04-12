@@ -76,7 +76,7 @@ export async function activate() {
   configureTSPlugin(tsExtensionApi);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// rome-ignore lint/suspicious/noExplicitAny: pluginAPI is not typed
 function configureTSPlugin(api: any) {
   const config = vscode.workspace.getConfiguration(configSection);
   console.log(`Configuring TS plugin with ${config.prometheusUrl}`);
