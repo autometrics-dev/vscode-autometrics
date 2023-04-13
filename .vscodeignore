@@ -1,7 +1,6 @@
 .vscode/**
 .vscode-test/**
 out/**
-node_modules/**
 src/**
 .gitignore
 .yarnrc
@@ -14,3 +13,8 @@ vsc-extension-quickstart.md
 .github/**
 .yarn/**
 images/demo.gif
+
+node_modules/
+!node_modules/@autometrics/**
+!node_modules/typescript/**
+

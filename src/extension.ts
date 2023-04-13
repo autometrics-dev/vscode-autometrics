@@ -4,6 +4,10 @@ import * as vscode from "vscode";
 import { getContent } from "./content";
 import { hasAutometricsDecorator } from "./decorator";
 
+const typescriptExtensionId = "vscode.typescript-language-features";
+const tsPluginId = "@autometrics/typescript-plugin";
+const configSection = "autometrics";
+
 /**
  * Returns either a string or undefined if the document/position
  * don't justify showing a tooltip
@@ -40,8 +44,45 @@ export const PythonHover = {
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate() {
+export async function activate() {
+  // Python
   vscode.languages.registerHoverProvider("python", PythonHover);
+
+  // Typescript
+  const tsExtension = vscode.extensions.getExtension(typescriptExtensionId);
+
+  if (!tsExtension) {
+    return;
+  }
+
+  await tsExtension.activate();
+
+  if (!tsExtension.exports || !tsExtension.exports.getAPI) {
+    return;
+  }
+
+  const tsExtensionApi = tsExtension.exports.getAPI(0);
+
+  if (!tsExtensionApi) {
+    return;
+  }
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    if (event.affectsConfiguration(configSection)) {
+      configureTSPlugin(tsExtensionApi);
+    }
+  });
+
+  configureTSPlugin(tsExtensionApi);
+}
+
+// rome-ignore lint/suspicious/noExplicitAny: pluginAPI is not typed
+function configureTSPlugin(api: any) {
+  const config = vscode.workspace.getConfiguration(configSection);
+  console.log(`Configuring TS plugin with ${config.prometheusUrl}`);
+  api.configurePlugin(tsPluginId, {
+    prometheusUrl: config.prometheusUrl || "http://localhost:9090/",
+  });
 }
 
 // This method is called when your extension is deactivated
