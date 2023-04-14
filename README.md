@@ -31,6 +31,10 @@ This extension contributes the following settings:
 
 Initial release which brings in basic Python support
 
+### 0.1.0
+
+Update which brings TypeScript support using the TypeScript plugin `@autometrics/typescript-plugin`
+
 ---
 
 ## Developing this extension
