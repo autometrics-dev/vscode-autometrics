@@ -56,6 +56,10 @@
     "views": {
       "autometrics": [
         {
+          "id": "functionList",
+          "name": "Functions"
+        },
+        {
           "id": "metricList",
           "name": "Metrics"
         }
@@ -82,15 +86,18 @@
     "@types/node": "16.x",
     "@types/vscode": "^1.76.0",
     "@vscode/test-electron": "^2.2.3",
+    "@vscode/vsce": "^2.18.0",
     "esbuild": "^0.17.14",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "rome": "^12.0.0",
-    "@vscode/vsce": "^2.18.0"
+    "rome": "^12.0.0"
   },
   "dependencies": {
-    "typescript": "^4.9.5",
-    "@autometrics/typescript-plugin": "^0.3.0"
+    "@autometrics/typescript-plugin": "^0.3.0",
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "byte-base64": "^1.1.0",
+    "node-fetch": "^3.3.1",
+    "typescript": "^4.9.5"
   },
   "packageManager": "npm@9.6.2"
 }

@@ -3,6 +3,8 @@ import * as vscode from "vscode";
 import { MetricListProvider } from "./metricListProvider";
 import { getContent } from "./content";
 import { hasAutometricsDecorator } from "./decorator";
+import { FunctionListProvider } from "./functionListProvider";
+import { loadPrometheusProvider } from "./prometheus";
 
 const typescriptExtensionId = "vscode.typescript-language-features";
 const tsPluginId = "@autometrics/typescript-plugin";
@@ -94,10 +96,12 @@ async function activateTypeScriptSupport() {
   });
 }
 
-function activateSidebar() {
+async function activateSidebar() {
+  const prometheus = await loadPrometheusProvider();
+
   vscode.commands.registerCommand(
     "autometrics.graph.open",
-    (metric: string) => {
+    (metric: string, labels: Record<string, string> = {}) => {
       const panel = vscode.window.createWebviewPanel(
         "autometricsGraph",
         metric,
@@ -330,7 +334,7 @@ function activateSidebar() {
                           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.125 15a.665.665 0 0 1-.445-.18l-4.375-4.375a.633.633 0 0 1 .89-.89l3.93 3.937L16.43 5.18a.633.633 0 0 1 .89.89l-8.75 8.75a.665.665 0 0 1-.445.18Z" fill="currentColor"></path></svg>
                         </div>
                         <div class="sc-kKUyCS dBnjpq">
-                          events_published_total: <span class="">channel: <span class="sc-beqWaB iyLSXk">apply_operation</span></span>,
+                          ${metric}: <span class="">channel: <span class="sc-beqWaB iyLSXk">apply_operation</span></span>,
                           <span class="">instance: localhost:3030</span>,
                           <span class="">job: my-app</span>
                         </div>
@@ -343,7 +347,7 @@ function activateSidebar() {
                         <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.125 15a.665.665 0 0 1-.445-.18l-4.375-4.375a.633.633 0 0 1 .89-.89l3.93 3.937L16.43 5.18a.633.633 0 0 1 .89.89l-8.75 8.75a.665.665 0 0 1-.445.18Z" fill="currentColor"></path></svg>
                       </div>
                         <div class="sc-kKUyCS dBnjpq">
-                          events_published_total: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_added</span></span>,
+                          ${metric}: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_added</span></span>,
                           <span class="">instance: localhost:3030</span>,
                           <span class="">job: my-app</span>
                         </div>
@@ -357,7 +361,7 @@ function activateSidebar() {
                           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.125 15a.665.665 0 0 1-.445-.18l-4.375-4.375a.633.633 0 0 1 .89-.89l3.93 3.937L16.43 5.18a.633.633 0 0 1 .89.89l-8.75 8.75a.665.665 0 0 1-.445.18Z" fill="currentColor"></path></svg>
                         </div>
                         <div class="sc-kKUyCS dBnjpq">
-                          events_published_total: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_changed_focus</span></span>,
+                          ${metric}: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_changed_focus</span></span>,
                           <span class="">instance: localhost:3030</span>,
                           <span class="">job: my-app</span>
                         </div>
@@ -371,7 +375,7 @@ function activateSidebar() {
                           <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.125 15a.665.665 0 0 1-.445-.18l-4.375-4.375a.633.633 0 0 1 .89-.89l3.93 3.937L16.43 5.18a.633.633 0 0 1 .89.89l-8.75 8.75a.665.665 0 0 1-.445.18Z" fill="currentColor"></path></svg>
                         </div>
                         <div class="sc-kKUyCS dBnjpq">
-                          events_published_total: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_removed</span></span>,
+                          ${metric}: <span class="">channel: <span class="sc-beqWaB iyLSXk">subscriber_removed</span></span>,
                           <span class="">instance: localhost:3030</span>,
                           <span class="">job: my-app</span>
                         </div>
@@ -395,14 +399,23 @@ function activateSidebar() {
   );
 
   const config = vscode.workspace.getConfiguration(configSection);
+  const prometheusUrl = getPrometheusUrl(config);
 
-  const metricListProvider = new MetricListProvider(getPrometheusUrl(config));
+  const functionListProvider = new FunctionListProvider(
+    prometheus,
+    prometheusUrl,
+  );
+  vscode.window.registerTreeDataProvider("functionList", functionListProvider);
+
+  const metricListProvider = new MetricListProvider(prometheus, prometheusUrl);
   vscode.window.registerTreeDataProvider("metricList", metricListProvider);
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(configSection)) {
       const config = vscode.workspace.getConfiguration(configSection);
-      metricListProvider.setPrometheusUrl(getPrometheusUrl(config));
+      const prometheusUrl = getPrometheusUrl(config);
+      functionListProvider.setPrometheusUrl(prometheusUrl);
+      metricListProvider.setPrometheusUrl(prometheusUrl);
     }
   });
 }
