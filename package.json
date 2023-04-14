@@ -43,7 +43,24 @@
           }
         }
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "autometrics",
+          "title": "Autometrics",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "autometrics": [
+        {
+          "id": "metricList",
+          "name": "Metrics"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
