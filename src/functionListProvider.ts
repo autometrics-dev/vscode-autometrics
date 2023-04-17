@@ -42,9 +42,12 @@ export class FunctionListProvider
       return Promise.resolve([]);
     }
 
+    const now = new Date();
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     const queryData = {
       query: "function_calls_count",
-      time_range: "2023-04-14T12:06:40Z 2023-04-14T12:12:00Z",
+      time_range: `${oneWeekAgo.toISOString()} ${now.toISOString()}`,
     };
 
     const invoke = this.prometheus.invoke2;
