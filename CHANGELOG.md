@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## 0.1.0
 
 - [chore] switch from yarn to npm
 - [feat] improved handling of multiple decorators

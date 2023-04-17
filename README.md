@@ -21,7 +21,7 @@ This extension contributes the following settings:
 
 - `autometrics.prometheusUrl`: configure your Prometheus URL. This URL is used to create links to your Prometheus including useful autometrics based queries
 
-### Unreleased
+### 0.1.0
 
 - [python] Improved detection logic: Now multiple decorators are supported
 - Change build: use npm instead of yarn 3.x. This is so we can use dependencies (required so we can support typescript)

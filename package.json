@@ -6,7 +6,7 @@
   "displayName": "Autometrics",
   "license": "MIT",
   "description": "Show enhanced autometrics information from your code",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/autometrics-dev/vscode-autometrics"
