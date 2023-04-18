@@ -31,7 +31,7 @@ async function makeHttpRequest(
     }
 
     const response = await fetch(request.url, {
-      body: request.body,
+      body: request.body ? Buffer.from(request.body) : undefined,
       headers,
       method: request.method,
     });
