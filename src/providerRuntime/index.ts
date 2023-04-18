@@ -212,7 +212,6 @@ export async function createRuntime(
 
   return {
     createCells: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_create_cells as any;
       if (!export_fn) return;
 
@@ -225,7 +224,6 @@ export async function createRuntime(
       };
     })(),
     extractData: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_extract_data as any;
       if (!export_fn) return;
 
@@ -239,14 +237,12 @@ export async function createRuntime(
       };
     })(),
     getConfigSchema: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_get_config_schema as any;
       if (!export_fn) return;
 
       return () => parseObject<types.ConfigSchema>(export_fn());
     })(),
     getSupportedQueryTypes: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports
         .__fp_gen_get_supported_query_types as any;
       if (!export_fn) return;
@@ -259,7 +255,6 @@ export async function createRuntime(
       };
     })(),
     invoke2: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_invoke2 as any;
       if (!export_fn) return;
 
@@ -271,7 +266,6 @@ export async function createRuntime(
       };
     })(),
     createCellsRaw: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_create_cells as any;
       if (!export_fn) return;
 
@@ -282,7 +276,6 @@ export async function createRuntime(
       };
     })(),
     extractDataRaw: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_extract_data as any;
       if (!export_fn) return;
 
@@ -300,14 +293,12 @@ export async function createRuntime(
       };
     })(),
     getConfigSchemaRaw: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_get_config_schema as any;
       if (!export_fn) return;
 
       return () => importFromMemory(export_fn());
     })(),
     getSupportedQueryTypesRaw: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports
         .__fp_gen_get_supported_query_types as any;
       if (!export_fn) return;
@@ -318,7 +309,6 @@ export async function createRuntime(
       };
     })(),
     invoke2Raw: (() => {
-      // rome-ignore lint/suspicious/noExplicitAny: generated code
       const export_fn = instance.exports.__fp_gen_invoke2 as any;
       if (!export_fn) return;
 
