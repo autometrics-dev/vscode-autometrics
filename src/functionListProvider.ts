@@ -1,14 +1,6 @@
 import * as vscode from "vscode";
 
-import type { Prometheus, Timeseries } from "./prometheus";
-import { encodeQueryData } from "./providerRuntime/queryData";
-import { fromQueryData, parseBlob } from "./providerRuntime/blobs";
-import {
-  TIMESERIES_MIME_TYPE,
-  TIMESERIES_QUERY_TYPE,
-} from "./providerRuntime/constants";
-import { unwrap } from "./providerRuntime/unwrap";
-import { matchesMimeTypeWithEncoding } from "./providerRuntime/matchesMimeTypes";
+import type { Prometheus } from "./prometheus";
 import { uniq } from "./uniq";
 
 export class FunctionListProvider
@@ -21,11 +13,8 @@ export class FunctionListProvider
   readonly onDidChangeTreeData: vscode.Event<FunctionItem | undefined | void> =
     this._onDidChangeTreeData.event;
 
-  constructor(private prometheus: Prometheus, private prometheusUrl: string) {}
-
-  setPrometheusUrl(prometheusUrl: string): void {
-    this.prometheusUrl = prometheusUrl;
-    this.refresh();
+  constructor(private prometheus: Prometheus) {
+    prometheus.onDidChangConfig(this.refresh.bind(this));
   }
 
   refresh(): void {
@@ -42,40 +31,10 @@ export class FunctionListProvider
       return Promise.resolve([]);
     }
 
-    const now = new Date();
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const queryData = {
-      query: "function_calls_count",
-      time_range: `${oneWeekAgo.toISOString()} ${now.toISOString()}`,
-    };
-
-    const invoke = this.prometheus.invoke2;
-    if (!invoke) {
-      throw new Error("invoke2() not loaded");
-    }
-
-    // return Promise.resolve([new FunctionItem("helaas")]);
-
-    return invoke({
-      config: { url: this.prometheusUrl },
-      queryData: fromQueryData(encodeQueryData(queryData)),
-      queryType: TIMESERIES_QUERY_TYPE,
-    })
-      .then(unwrap)
-      .then((blob) => {
-        if (!matchesMimeTypeWithEncoding(blob.mimeType, TIMESERIES_MIME_TYPE)) {
-          throw new Error(`Unexpected MIME type: ${blob.mimeType}`);
-        }
-
-        return parseBlob(blob) as Array<Timeseries>;
-      })
-      .then((array) =>
-        uniq(
-          array.map(
-            (series) => `${series.labels.module}::${series.labels.function}`,
-          ),
-        )
+    return this.prometheus
+      .fetchFunctionNames()
+      .then((functionNames) =>
+        functionNames
           .sort()
           .map((functionName) => new FunctionItem(functionName)),
       );

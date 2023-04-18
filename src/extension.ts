@@ -6,6 +6,9 @@ import { hasAutometricsDecorator } from "./decorator";
 import { FunctionListProvider } from "./functionListProvider";
 import { loadPrometheusProvider } from "./prometheus";
 
+// rome-ignore lint/suspicious/noExplicitAny: WASM is supported, the types just aren't complete...
+declare const WebAssembly: any;
+
 const typescriptExtensionId = "vscode.typescript-language-features";
 const tsPluginId = "@autometrics/typescript-plugin";
 const configSection = "autometrics";
@@ -97,7 +100,9 @@ async function activateTypeScriptSupport() {
 }
 
 async function activateSidebar() {
-  const prometheus = await loadPrometheusProvider();
+  const config = vscode.workspace.getConfiguration(configSection);
+  const prometheusUrl = getPrometheusUrl(config);
+  const prometheus = await loadPrometheusProvider(prometheusUrl);
 
   vscode.commands.registerCommand(
     "autometrics.graph.open",
@@ -398,24 +403,17 @@ async function activateSidebar() {
     },
   );
 
-  const config = vscode.workspace.getConfiguration(configSection);
-  const prometheusUrl = getPrometheusUrl(config);
-
-  const functionListProvider = new FunctionListProvider(
-    prometheus,
-    prometheusUrl,
-  );
+  const functionListProvider = new FunctionListProvider(prometheus);
   vscode.window.registerTreeDataProvider("functionList", functionListProvider);
 
-  const metricListProvider = new MetricListProvider(prometheus, prometheusUrl);
+  const metricListProvider = new MetricListProvider(prometheus);
   vscode.window.registerTreeDataProvider("metricList", metricListProvider);
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(configSection)) {
       const config = vscode.workspace.getConfiguration(configSection);
       const prometheusUrl = getPrometheusUrl(config);
-      functionListProvider.setPrometheusUrl(prometheusUrl);
-      metricListProvider.setPrometheusUrl(prometheusUrl);
+      prometheus.setUrl(prometheusUrl);
     }
   });
 }
