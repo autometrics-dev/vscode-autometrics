@@ -43,21 +43,18 @@ function generateSpaceOrTab(spaces: string, depth: number): string[] {
   return results.flat();
 }
 
-function extractDecoratorName(text: string) {
+function extractDecoratorName(text: string): string | undefined {
   const decoratorRegex = /@(?<name>[\dA-z]+)/;
   const match = text.match(decoratorRegex);
   const name = match?.groups?.name;
-
-  if (name) {
-    return name;
-  }
+  return name;
 }
 
 export function hasAutometricsDecorator(
   document: vscode.TextDocument,
   line: number,
   indentation: string,
-) {
+): boolean {
   let currentLine = line;
   const indentations = expandIndentationVariants(indentation);
 
@@ -83,4 +80,6 @@ export function hasAutometricsDecorator(
 
     currentLine -= 1;
   }
+
+  return false;
 }

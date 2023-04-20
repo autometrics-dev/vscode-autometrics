@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 
 import type { Prometheus } from "./prometheus";
-import { uniq } from "./uniq";
 
 export class FunctionListProvider
   implements vscode.TreeDataProvider<FunctionItem>

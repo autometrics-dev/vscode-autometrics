@@ -106,7 +106,7 @@ async function activateSidebar() {
 
   vscode.commands.registerCommand(
     "autometrics.graph.open",
-    (metric: string, labels: Record<string, string> = {}) => {
+    (metric: string, _labels: Record<string, string> = {}) => {
       const panel = vscode.window.createWebviewPanel(
         "autometricsGraph",
         metric,
