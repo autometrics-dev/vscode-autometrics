@@ -5,7 +5,7 @@ type Options = {
   baseUrl: string;
 };
 
-function getRequestRate(functionName: string, options: Options) {
+export function getRequestRate(functionName: string, options: Options) {
   const query = `# Rate of calls to the \`${functionName}\` function per second, averaged over 5 minute windows
   
 sum by (function, module) (rate(function_calls_count_total{function="${functionName}"}[5m]))`;
@@ -43,7 +43,10 @@ histogram_quantile(0.95, sum by (le, function, module) (rate(function_calls_dura
   return buildQuery(query, options);
 }
 
-function buildQuery(query: string, options: { baseUrl: string }): string {
+export function buildQuery(
+  query: string,
+  options: { baseUrl: string },
+): string {
   const parameters = new URLSearchParams();
   parameters.set("g0.expr", query);
   parameters.set("g0.tab", "0");
