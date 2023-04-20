@@ -86,33 +86,32 @@ export type Timeseries = {
 
 export type Timestamp = string;
 
-export class Prometheus {
-  private _onDidChangeConfig: vscode.EventEmitter<void> =
+export type Prometheus = Awaited<ReturnType<typeof loadPrometheusProvider>>;
+
+export async function loadPrometheusProvider(prometheusUrl: string) {
+  const bundle = await fs.readFile(
+    path.join(__dirname, "..", "wasm", "prometheus.wasm"),
+  );
+  const provider = await createRuntime(bundle, imports);
+
+  const _onDidChangeConfig: vscode.EventEmitter<void> =
     new vscode.EventEmitter<void>();
 
-  readonly onDidChangConfig: vscode.Event<void> = this._onDidChangeConfig.event;
-
-  /**
-   * Constructor.
-   *
-   * Please use `loadPrometheusProvider()`, since it will handle the provider
-   * instantiation for you.
-   */
-  constructor(private prometheusUrl: string, private provider: Exports) {}
+  const onDidChangConfig: vscode.Event<void> = _onDidChangeConfig.event;
 
   /**
    * Updates the Prometheus URL and fires the `onDidChangeConfig` event.
    */
-  setUrl(prometheusUrl: string) {
-    this.prometheusUrl = prometheusUrl;
-    this._onDidChangeConfig.fire();
+  function setUrl(url: string) {
+    prometheusUrl = url;
+    _onDidChangeConfig.fire();
   }
 
   /**
    * Fetches Autometrics function names tracked in this Prometheus instance.
    */
-  async fetchFunctionNames(): Promise<Array<string>> {
-    const blob = await this._invoke(INSTANTS_QUERY_TYPE, {
+  async function fetchFunctionNames(): Promise<Array<string>> {
+    const blob = await _invoke(INSTANTS_QUERY_TYPE, {
       query: "function_calls_count",
     });
     if (!matchesMimeTypeWithEncoding(blob.mimeType, INSTANTS_MIME_TYPE)) {
@@ -130,14 +129,14 @@ export class Prometheus {
   /**
    * Fetches the names of all metrics tracked in this Prometheus instance.
    */
-  async fetchMetricNames(): Promise<Array<string>> {
+  async function fetchMetricNames(): Promise<Array<string>> {
     const queryData: AutoSuggestRequest = {
       query_type: TIMESERIES_QUERY_TYPE,
       query: "",
       field: "query",
     };
 
-    const blob = await this._invoke(SUGGESTIONS_QUERY_TYPE, queryData);
+    const blob = await _invoke(SUGGESTIONS_QUERY_TYPE, queryData);
     if (!matchesMimeTypeWithEncoding(blob.mimeType, SUGGESTIONS_MIME_TYPE)) {
       throw new Error(`Unexpected MIME type: ${blob.mimeType}`);
     }
@@ -148,29 +147,26 @@ export class Prometheus {
       .map((suggestion) => suggestion.text);
   }
 
-  private _invoke(
+  function _invoke(
     queryType: string,
     queryData: Record<string, string>,
   ): Promise<Blob> {
-    const invoke = this.provider.invoke2;
+    const invoke = provider.invoke2;
     if (!invoke) {
       throw new Error("invoke2() not loaded");
     }
 
     return invoke({
-      config: { url: this.prometheusUrl },
+      config: { url: prometheusUrl },
       queryData: fromQueryData(encodeQueryData(queryData)),
       queryType,
     }).then(unwrap);
   }
-}
 
-export async function loadPrometheusProvider(
-  prometheusUrl: string,
-): Promise<Prometheus> {
-  const bundle = await fs.readFile(
-    path.join(__dirname, "..", "wasm", "prometheus.wasm"),
-  );
-  const provider = await createRuntime(bundle, imports);
-  return new Prometheus(prometheusUrl, provider);
+  return {
+    fetchFunctionNames,
+    fetchMetricNames,
+    onDidChangConfig,
+    setUrl,
+  };
 }
