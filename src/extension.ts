@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
 import { MetricListProvider } from "./metricListProvider";
-import { getContent } from "./content";
+import { buildQuery, getContent, getRequestRate } from "./content";
 import { hasAutometricsDecorator } from "./decorator";
 import { FunctionListProvider } from "./functionListProvider";
 import { loadPrometheusProvider } from "./prometheus";
@@ -106,7 +106,23 @@ async function activateSidebar() {
 
   vscode.commands.registerCommand(
     "autometrics.graph.open",
-    (metric: string, _labels: Record<string, string> = {}) => {
+    (metric: string, labels: Record<string, string> = {}) => {
+      const options = { baseUrl: prometheusUrl };
+
+      // Until graphs are ready, just redirect to Prometheus:
+      let url;
+      if (labels.functionName) {
+        url = getRequestRate(labels.functionName, options);
+      } else {
+        url = buildQuery(
+          `sum by (function, module) (rate(${metric}[5m]))`,
+          options,
+        );
+      }
+
+      vscode.env.openExternal(vscode.Uri.parse(url));
+
+      /*
       const panel = vscode.window.createWebviewPanel(
         "autometricsGraph",
         metric,
@@ -399,7 +415,7 @@ async function activateSidebar() {
     </div>
   </body>
 </html>
-`;
+`;*/
     },
   );
 
