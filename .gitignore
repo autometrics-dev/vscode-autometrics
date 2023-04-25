@@ -1,6 +1,8 @@
 out
 dist
 node_modules
+package-lock.json
+yarn-error.log
 .vscode-test/
 *.vsix
 prometheus.yml
