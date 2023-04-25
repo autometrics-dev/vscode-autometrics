@@ -1,8 +1,9 @@
 # Autometrics
 
-This extension writes PromQL queries for instrumented functions or methods using autometrics libraries.
+This extension writes PromQL queries for instrumented functions or methods using
+Autometrics libraries.
 
-Current supported languages:
+Currently supported languages:
 
 - [TypeScript](https://www.npmjs.com/package/autometrics)
 - [Python](https://pypi.org/project/autometrics/)
@@ -11,7 +12,8 @@ More languages will be supported in the future.
 
 ## Features
 
-After decorating your code with autometrics, this extension will enrich the information displayed for a given function on hover.
+After decorating your code with autometrics, this extension will enrich the
+information displayed for a given function on hover.
 
 ![Enhanced autometrics information](./images/demo.gif)
 
@@ -19,17 +21,8 @@ After decorating your code with autometrics, this extension will enrich the info
 
 This extension contributes the following settings:
 
-- `autometrics.prometheusUrl`: configure your Prometheus URL. This URL is used to create links to your Prometheus including useful autometrics based queries
-
-### 0.1.0
-
-- [python] Improved detection logic: Now multiple decorators are supported
-- Change build: use npm instead of yarn 3.x. This is so we can use dependencies (required so we can support typescript)
-- [typescript] Added TypeScript support
-
-### 0.0.1
-
-Initial release which brings in basic Python support
+- `autometrics.prometheusUrl`: configure your Prometheus URL. This URL is used
+  to create links to your Prometheus including useful autometrics based queries
 
 ---
 
@@ -37,14 +30,17 @@ Initial release which brings in basic Python support
 
 This extension is built using:
 
-- [npm](https://docs.npmjs.com/cli/v9)
+- [yarn](yarnpkg.com)
 - [esbuild](https://github.com/evanw/esbuild) as the bundler
 
-In order to test the extension locally, you may want to install the following extensions:
+In order to test the extension locally, you may want to install the following
+extensions:
 
 - [Rome](https://marketplace.visualstudio.com/items?itemName=rome.rome).
-- [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers) This is needed when vscode to debug the extension.
+- [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers)
+  This is needed when vscode to debug the extension.
 
 # How to release a new version
 
-Create a new release using the github which matches the version number it should be released under.
+Create a new release using Github which matches the version number it should be
+released under.

@@ -18,24 +18,24 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
           node-version: 16.x
           
       - name: install dependencies
-        run: npm ci
+        run: yarn install --immutable
 
       - name: Prepare test
-        run: npm run pretest
+        run: yarn pretest
       - name: Run test (linux)
         run: xvfb-run -a npm test
         if: runner.os == 'Linux'
       - name: Run test (other platforms)
-        run: npm test
+        run: yarn test
         if: runner.os != 'Linux'
 
       - name: Package extension
-        run: npx vsce package
+        run: yarn vsce package
       - name: Store production artifacts
         uses: actions/upload-artifact@v3
         with:
