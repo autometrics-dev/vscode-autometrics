@@ -761,7 +761,7 @@ __metadata:
     "@vscode/vsce": ^2.18.0
     byte-base64: ^1.1.0
     esbuild: ^0.17.14
-    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=fiberplane-charts&workspace=fiberplane-charts"
+    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts"
     glob: ^8.1.0
     mocha: ^10.2.0
     node-fetch: ^2.0.0
@@ -1513,9 +1513,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=fiberplane-charts&workspace=fiberplane-charts":
+"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=830a2d5f804cab684a4a63232df3cf4e161ab0a5"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=4ecfd482cf98e4aac999ef2e1918551d8cf9ba81"
   dependencies:
     "@visx/axis": ^3.1.0
     "@visx/event": ^3.0.1
