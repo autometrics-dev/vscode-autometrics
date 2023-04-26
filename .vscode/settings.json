@@ -16,5 +16,8 @@
   "typescript.tsc.autoDetect": "off",
   "[typescript]": {
     "editor.defaultFormatter": "rome.rome"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
   }
 }
