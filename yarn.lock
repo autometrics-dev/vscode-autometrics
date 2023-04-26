@@ -1021,7 +1021,7 @@ __metadata:
     "@vscode/vsce": ^2.18.0
     byte-base64: ^1.1.0
     esbuild: ^0.17.14
-    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts"
+    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=export-dependent-types&workspace=fiberplane-charts"
     glob: ^8.1.0
     mocha: ^10.2.0
     node-fetch: ^2.0.0
@@ -1824,9 +1824,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
+"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=export-dependent-types&workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=4ecfd482cf98e4aac999ef2e1918551d8cf9ba81"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=8b231211075005c572e6a2b3951bd501154d2de0"
   dependencies:
     "@visx/axis": ^3.1.0
     "@visx/event": ^3.0.1
@@ -1844,7 +1844,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: 15697e752b195a823b000a3488e4a7b694556b15fcc39154bb10633a89689ba1bdff9132bc31de83c342c3ad64c4e9e41dec0a4b23753210dfb5a5598aec2ef5
+  checksum: fc9478dd80e9152191c62a7df94a5123a8058ba8cc32dca94136ac3fe776245eeadcdb91a4b4b7de64a6dccfaa4e1f508aa5726e31a19a651f630e3166f5312f
   languageName: node
   linkType: hard
 

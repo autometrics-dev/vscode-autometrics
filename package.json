@@ -68,7 +68,7 @@
   },
   "scripts": {
     "compile": "yarn compile-charts && yarn compile-extension",
-    "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --jsx=automatic --platform=browser",
+    "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --format=esm --jsx=automatic --platform=browser",
     "compile-extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "compile-tests": "tsc -p . --outDir out",
     "fmt-check": "rome format .",
@@ -102,7 +102,7 @@
     "@autometrics/typescript-plugin": "^0.3.0",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "byte-base64": "^1.1.0",
-    "fiberplane-charts": "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts",
+    "fiberplane-charts": "git+https://git@github.com/fiberplane/fiberplane.git#head=export-dependent-types&workspace=fiberplane-charts",
     "node-fetch": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

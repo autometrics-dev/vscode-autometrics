@@ -5,7 +5,7 @@ import { buildQuery, getContent, getRequestRate } from "./content";
 import { hasAutometricsDecorator } from "./decorator";
 import { FunctionListProvider } from "./functionListProvider";
 import { loadPrometheusProvider } from "./prometheus";
-import { createChartPanel } from "./chartPanel";
+import { ChartPanel, createChartPanel } from "./chartPanel";
 
 // rome-ignore lint/suspicious/noExplicitAny: WASM is supported, the types just aren't complete...
 declare const WebAssembly: any;
@@ -105,10 +105,19 @@ async function activateSidebar(context: vscode.ExtensionContext) {
   const prometheusUrl = getPrometheusUrl(config);
   const prometheus = await loadPrometheusProvider(prometheusUrl);
 
+  let chartPanel: ChartPanel | null = null;
+
   vscode.commands.registerCommand(
     "autometrics.graph.open",
     (metric: string, labels: Record<string, string> = {}) => {
+      if (chartPanel) {
+      }
+
       const panel = createChartPanel(context, metric, labels);
+      panel.onDidDispose(() => {
+        chartPanel = null;
+      });
+      chartPanel = panel;
     },
   );
 

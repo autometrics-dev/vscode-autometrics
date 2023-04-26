@@ -1,10 +1,21 @@
 import * as vscode from "vscode";
 
+import type { MessageFromWebview, MessageToWebview } from "./charts";
+
+export type ChartPanel = {
+  /**
+   * Instructs the panel to display a new metric.
+   */
+  showMetric(metric: string, labels?: Record<string, string>): void;
+
+  onDidDispose: vscode.WebviewPanel["onDidDispose"];
+};
+
 export function createChartPanel(
   context: vscode.ExtensionContext,
   metric: string,
-  _labels: Record<string, string> = {},
-) {
+  labels: Record<string, string> = {},
+): ChartPanel {
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     metric,
@@ -12,9 +23,35 @@ export function createChartPanel(
     { enableScripts: true },
   );
 
+  function postMessage(message: MessageToWebview) {
+    panel.webview.postMessage(message);
+  }
+
+  function showMetric(metric: string, labels: Record<string, string> = {}) {
+    postMessage({ type: "show_metrics", metric, labels });
+  }
+
+  panel.webview.onDidReceiveMessage(
+    (message: MessageFromWebview) => {
+      switch (message.type) {
+        case "ready":
+          showMetric(metric, labels);
+          return;
+        case "request_data":
+          // TODO
+          return;
+      }
+    },
+    undefined,
+    context.subscriptions,
+  );
+
   panel.webview.html = getHtmlForWebview(context, panel.webview);
 
-  return panel;
+  return {
+    showMetric,
+    onDidDispose: panel.onDidDispose.bind(panel),
+  };
 }
 
 function getHtmlForWebview(
@@ -47,7 +84,7 @@ function getHtmlForWebview(
     </head>
     <body>
         <div id="root"></div>
-        <script nonce="${nonce}" src="${scriptUri}"></script>
+        <script nonce="${nonce}" src="${scriptUri}" type="module"></script>
     </body>
     </html>`;
 }
