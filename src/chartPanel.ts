@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
 import type { MessageFromWebview, MessageToWebview } from "./charts";
+import type { Prometheus } from "./prometheus";
 
 export type ChartPanel = {
   /**
@@ -13,6 +14,7 @@ export type ChartPanel = {
 
 export function createChartPanel(
   context: vscode.ExtensionContext,
+  prometheus: Prometheus,
   metric: string,
   labels: Record<string, string> = {},
 ): ChartPanel {
@@ -38,7 +40,21 @@ export function createChartPanel(
           showMetric(metric, labels);
           return;
         case "request_data":
-          // TODO
+          const { query, timeRange } = message;
+          prometheus
+            .fetchTimeseries(query, timeRange)
+            .then((data) => {
+              postMessage({ type: "show_data", timeRange, data });
+            })
+            .catch((error: unknown) => {
+              vscode.window.showErrorMessage(
+                `Could not query Prometheus. Query: ${query} Error: ${
+                  error && typeof error === "object" && "message" in error
+                    ? error.message
+                    : error?.toString()
+                }`,
+              );
+            });
           return;
       }
     },
@@ -77,7 +93,7 @@ function getHtmlForWebview(
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="${styleVSCodeUri}" rel="stylesheet">
         <title>Autometrics Chart</title>

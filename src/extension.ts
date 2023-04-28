@@ -113,7 +113,7 @@ async function activateSidebar(context: vscode.ExtensionContext) {
       if (chartPanel) {
       }
 
-      const panel = createChartPanel(context, metric, labels);
+      const panel = createChartPanel(context, prometheus, metric, labels);
       panel.onDidDispose(() => {
         chartPanel = null;
       });

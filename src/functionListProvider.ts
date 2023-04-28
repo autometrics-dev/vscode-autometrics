@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-import type { Prometheus } from "./prometheus";
+import type { FunctionMetric, Prometheus } from "./prometheus";
 
 export class FunctionListProvider
   implements vscode.TreeDataProvider<FunctionItem>
@@ -31,11 +31,14 @@ export class FunctionListProvider
     }
 
     return this.prometheus
-      .fetchFunctionNames()
-      .then((functionNames) =>
-        functionNames
-          .sort()
-          .map((functionName) => new FunctionItem(functionName)),
+      .fetchFunctions()
+      .then((functions) =>
+        functions
+          .sort(compareFunctions)
+          .map(
+            ({ functionName, moduleName }) =>
+              new FunctionItem(moduleName, functionName),
+          ),
       );
   }
 }
@@ -45,13 +48,28 @@ export class FunctionItem extends vscode.TreeItem {
 
   contextValue = "function";
 
-  constructor(functionName: string) {
-    super(functionName);
+  constructor(moduleName: string, functionName: string) {
+    super(`${moduleName}::${functionName}`);
 
     this.command = {
       title: "Open chart",
       command: "autometrics.graph.open",
-      arguments: ["function_calls_count", { functionName }],
+      arguments: [
+        "function_calls_count",
+        { function: functionName, module: moduleName },
+      ],
     };
   }
+}
+
+function compareFunctions(a: FunctionMetric, b: FunctionMetric) {
+  if (a.moduleName < b.moduleName) {
+    return -1;
+  }
+
+  if (a.moduleName > b.moduleName) {
+    return 1;
+  }
+
+  return a.functionName < b.functionName ? -1 : 1;
 }

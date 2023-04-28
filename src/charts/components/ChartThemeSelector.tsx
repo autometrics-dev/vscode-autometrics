@@ -1,7 +1,7 @@
 import type { ChartTheme } from "fiberplane-charts";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 
-import * as defaultTheme from "./themeValues";
+import * as defaultTheme from "../themeValues";
 
 // Reassign to make sure all `ChartTheme` properties are covered.
 const theme: ChartTheme & DefaultTheme = { ...defaultTheme };
