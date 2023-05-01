@@ -5,6 +5,11 @@ import type { Prometheus } from "./prometheus";
 
 export type ChartPanel = {
   /**
+   * Reveals the panel.
+   */
+  reveal(): void;
+
+  /**
    * Instructs the panel to display a new metric.
    */
   showMetric(metric: string, labels?: Record<string, string>): void;
@@ -65,6 +70,7 @@ export function createChartPanel(
   panel.webview.html = getHtmlForWebview(context, panel.webview);
 
   return {
+    reveal: panel.reveal.bind(panel),
     showMetric,
     onDidDispose: panel.onDidDispose.bind(panel),
   };

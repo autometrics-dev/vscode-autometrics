@@ -37,6 +37,10 @@ function getFunctionName(
   }
 }
 
+function getChartsEnabled(config: vscode.WorkspaceConfiguration): boolean {
+  return config.experimentalChartsEnabled ?? false;
+}
+
 function getPrometheusUrl(config: vscode.WorkspaceConfiguration): string {
   return config.prometheusUrl || "http://localhost:9090/";
 }
@@ -110,7 +114,29 @@ async function activateSidebar(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     "autometrics.graph.open",
     (metric: string, labels: Record<string, string> = {}) => {
+      // Redirect to Prometheus if charts are disabled.
+      if (!getChartsEnabled(config)) {
+        const options = { baseUrl: prometheusUrl };
+
+        let url;
+        if (labels.functionName) {
+          url = getRequestRate(labels.functionName, options);
+        } else {
+          url = buildQuery(
+            `sum by (function, module) (rate(${metric}[5m]))`,
+            options,
+          );
+        }
+
+        vscode.env.openExternal(vscode.Uri.parse(url));
+        return;
+      }
+
+      // Reuse existing panel if available.
       if (chartPanel) {
+        chartPanel.showMetric(metric, labels);
+        chartPanel.reveal();
+        return;
       }
 
       const panel = createChartPanel(context, prometheus, metric, labels);
