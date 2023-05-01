@@ -40,6 +40,12 @@
             "title": "Prometheus URL",
             "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
             "default": "http://localhost:9090"
+          },
+          "autometrics.experimentalChartsEnabled": {
+            "type": "boolean",
+            "title": "Charts enabled [EXPERIMENTAL]",
+            "description": "Whether chart viewing in the extension is enabled",
+            "default": false
           }
         }
       }
@@ -86,24 +92,29 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn package",
-    "compile": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-    "watch": "yarn compile --sourcemap --watch",
-    "package": "yarn compile --minify",
+    "compile": "yarn compile-extension && yarn compile-charts",
+    "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --format=esm --jsx=automatic --platform=browser",
+    "compile-extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn compile-tests && yarn compile && yarn lint",
-    "lint": "rome ci .",
-    "lint-code": "rome check .",
     "fmt-check": "rome format .",
     "format": "rome format --write .",
-    "test": "node ./out/test/run-test.js"
+    "lint": "rome ci .",
+    "lint-code": "rome check .",
+    "package": "yarn compile-extension --minify && yarn compile-charts --minify",
+    "pretest": "yarn compile-tests && yarn compile && yarn lint",
+    "test": "node ./out/test/run-test.js",
+    "vscode:prepublish": "yarn package",
+    "watch": "yarn compile --sourcemap --watch",
+    "watch-tests": "tsc -p . -w --outDir out"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "^16.18.23",
     "@types/node-fetch": "^2.6.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "@types/styled-components": "^5.1.26",
     "@types/vscode": "^1.76.0",
     "@vscode/test-electron": "^2.2.3",
     "@vscode/vsce": "^2.18.0",
@@ -118,6 +129,10 @@
     "byte-base64": "^1.1.0",
     "fiberplane-charts": "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts",
     "node-fetch": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^5.3.10",
     "typescript": "^4.9.5"
   },
   "packageManager": "yarn@3.5.0"

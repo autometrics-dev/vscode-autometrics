@@ -1,23 +1,30 @@
 import * as fs from "fs/promises";
 import * as path from "path";
+import type { TimeRange } from "fiberplane-charts";
 import * as vscode from "vscode";
 
-import { createRuntime, Exports } from "./providerRuntime";
+import type {
+  AutoSuggestRequest,
+  Suggestion,
+} from "./providerRuntime/suggestions";
+import type { Blob } from "./providerRuntime/types";
+import { createRuntime } from "./providerRuntime";
+import { encodeQueryData } from "./providerRuntime/queryData";
+import { formatTimeRange, uniqBy } from "./utils";
+import { fromQueryData, parseBlob } from "./providerRuntime/blobs";
 import { imports } from "./providerRuntime/imports";
 import {
   INSTANTS_MIME_TYPE,
   INSTANTS_QUERY_TYPE,
   SUGGESTIONS_MIME_TYPE,
   SUGGESTIONS_QUERY_TYPE,
+  TIMESERIES_MIME_TYPE,
   TIMESERIES_QUERY_TYPE,
 } from "./providerRuntime/constants";
-import { fromQueryData, parseBlob } from "./providerRuntime/blobs";
-import { encodeQueryData } from "./providerRuntime/queryData";
-import { unwrap } from "./providerRuntime/unwrap";
 import { matchesMimeTypeWithEncoding } from "./providerRuntime/matchesMimeTypes";
-import { Blob } from "./providerRuntime/types";
-import { AutoSuggestRequest, Suggestion } from "./providerRuntime/suggestions";
-import { uniq } from "./uniq";
+import { unwrap } from "./providerRuntime/unwrap";
+
+export type FunctionMetric = { moduleName: string; functionName: string };
 
 /**
  * A single data-point in time, with meta-data about the metric it was taken
@@ -110,7 +117,7 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
   /**
    * Fetches Autometrics function names tracked in this Prometheus instance.
    */
-  async function fetchFunctionNames(): Promise<Array<string>> {
+  async function fetchFunctions(): Promise<Array<FunctionMetric>> {
     const blob = await _invoke(INSTANTS_QUERY_TYPE, {
       query: "function_calls_count",
     });
@@ -119,10 +126,12 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
     }
 
     const instants = parseBlob(blob) as Array<Instant>;
-    return uniq(
-      instants.map(
-        (instant) => `${instant.labels.module}::${instant.labels.function}`,
-      ),
+    return uniqBy(
+      instants.map((instant) => ({
+        moduleName: instant.labels.module,
+        functionName: instant.labels.function,
+      })),
+      ({ moduleName, functionName }) => `${moduleName}::${functionName}`,
     );
   }
 
@@ -147,6 +156,23 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
       .map((suggestion) => suggestion.text);
   }
 
+  async function fetchTimeseries(
+    query: string,
+    timeRange: TimeRange,
+  ): Promise<Array<Timeseries>> {
+    const queryData = {
+      query,
+      time_range: formatTimeRange(timeRange),
+    };
+
+    const blob = await _invoke(TIMESERIES_QUERY_TYPE, queryData);
+    if (!matchesMimeTypeWithEncoding(blob.mimeType, TIMESERIES_MIME_TYPE)) {
+      throw new Error(`Unexpected MIME type: ${blob.mimeType}`);
+    }
+
+    return parseBlob(blob) as Array<Timeseries>;
+  }
+
   function _invoke(
     queryType: string,
     queryData: Record<string, string>,
@@ -164,8 +190,9 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
   }
 
   return {
-    fetchFunctionNames,
+    fetchFunctions,
     fetchMetricNames,
+    fetchTimeseries,
     onDidChangConfig,
     setUrl,
   };
