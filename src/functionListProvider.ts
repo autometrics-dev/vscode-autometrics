@@ -26,7 +26,7 @@ export class FunctionListProvider
 
   getChildren(element?: FunctionItem): Thenable<FunctionItem[]> {
     if (element) {
-      // Metrics have no children.
+      // Functions have no children.
       return Promise.resolve([]);
     }
 

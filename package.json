@@ -44,6 +44,25 @@
         }
       }
     ],
+    "commands": [
+      {
+        "command": "autometrics.refreshFunctions",
+        "title": "Refresh Autometrics functions",
+        "icon": {
+          "light": "images/light/refresh.svg",
+          "dark": "images/dark/refresh.svg"
+        }
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "autometrics.refreshFunctions",
+          "when": "view == functionList",
+          "group": "navigation"
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {
