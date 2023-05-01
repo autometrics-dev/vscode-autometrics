@@ -425,6 +425,11 @@ async function activateSidebar() {
   const metricListProvider = new MetricListProvider(prometheus);
   vscode.window.registerTreeDataProvider("metricList", metricListProvider);
 
+  vscode.commands.registerCommand("autometrics.refreshFunctions", () => {
+    functionListProvider.refresh();
+    metricListProvider.refresh();
+  });
+
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(configSection)) {
       const config = vscode.workspace.getConfiguration(configSection);
