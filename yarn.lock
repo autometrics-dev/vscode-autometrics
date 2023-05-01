@@ -121,11 +121,11 @@ __metadata:
   linkType: hard
 
 "@babel/runtime@npm:^7.0.0":
-  version: 7.21.0
-  resolution: "@babel/runtime@npm:7.21.0"
+  version: 7.21.5
+  resolution: "@babel/runtime@npm:7.21.5"
   dependencies:
     regenerator-runtime: ^0.13.11
-  checksum: 7b33e25bfa9e0e1b9e8828bb61b2d32bdd46b41b07ba7cb43319ad08efc6fda8eb89445193e67d6541814627df0ca59122c0ea795e412b99c5183a0540d338ab
+  checksum: 358f2779d3187f5c67ad302e8f8d435412925d0b991d133c7d4a7b1ddd5a3fda1b6f34537cb64628dfd96a27ae46df105bed3895b8d754b88cacdded8d1129dd
   languageName: node
   linkType: hard
 
@@ -531,7 +531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-scale@npm:^4.0.2":
+"@types/d3-scale@npm:^4.0.2, @types/d3-scale@npm:^4.0.3":
   version: 4.0.3
   resolution: "@types/d3-scale@npm:4.0.3"
   dependencies:
@@ -1021,7 +1021,7 @@ __metadata:
     "@vscode/vsce": ^2.18.0
     byte-base64: ^1.1.0
     esbuild: ^0.17.14
-    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=export-dependent-types&workspace=fiberplane-charts"
+    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=promote-d3-scale-dep&workspace=fiberplane-charts"
     glob: ^8.1.0
     mocha: ^10.2.0
     node-fetch: ^2.0.0
@@ -1824,10 +1824,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=export-dependent-types&workspace=fiberplane-charts":
+"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=promote-d3-scale-dep&workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=8b231211075005c572e6a2b3951bd501154d2de0"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=7a2c20fc6d8a4a81b19d2860e2951f5d33b4a36d"
   dependencies:
+    "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
     "@visx/event": ^3.0.1
     "@visx/gradient": ^3.0.0
@@ -1844,7 +1845,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: fc9478dd80e9152191c62a7df94a5123a8058ba8cc32dca94136ac3fe776245eeadcdb91a4b4b7de64a6dccfaa4e1f508aa5726e31a19a651f630e3166f5312f
+  checksum: e389adc6755e225f51826defbb6c95a7c1c7a91805e30676b0caa4563da406126487c48b7371d129b5e85d87a9c7dc9bf5591961584af7525ac8e1fd1280ceff
   languageName: node
   linkType: hard
 
