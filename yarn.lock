@@ -1021,7 +1021,7 @@ __metadata:
     "@vscode/vsce": ^2.18.0
     byte-base64: ^1.1.0
     esbuild: ^0.17.14
-    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=promote-d3-scale-dep&workspace=fiberplane-charts"
+    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts"
     glob: ^8.1.0
     mocha: ^10.2.0
     node-fetch: ^2.0.0
@@ -1824,9 +1824,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=promote-d3-scale-dep&workspace=fiberplane-charts":
+"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=7a2c20fc6d8a4a81b19d2860e2951f5d33b4a36d"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=881660de586519417c0a03a9baf733b3e580ae54"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
