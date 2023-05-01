@@ -105,7 +105,7 @@ async function activateTypeScriptSupport() {
 }
 
 async function activateSidebar(context: vscode.ExtensionContext) {
-  const config = vscode.workspace.getConfiguration(configSection);
+  let config = vscode.workspace.getConfiguration(configSection);
   const prometheusUrl = getPrometheusUrl(config);
   const prometheus = await loadPrometheusProvider(prometheusUrl);
 
@@ -155,7 +155,7 @@ async function activateSidebar(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidChangeConfiguration((event) => {
     if (event.affectsConfiguration(configSection)) {
-      const config = vscode.workspace.getConfiguration(configSection);
+      config = vscode.workspace.getConfiguration(configSection);
       const prometheusUrl = getPrometheusUrl(config);
       prometheus.setUrl(prometheusUrl);
     }
