@@ -73,7 +73,7 @@
     }
   },
   "scripts": {
-    "compile": "yarn compile-charts && yarn compile-extension",
+    "compile": "yarn compile-extension && yarn compile-charts",
     "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --format=esm --jsx=automatic --platform=browser",
     "compile-extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "compile-tests": "tsc -p . --outDir out",
@@ -81,7 +81,7 @@
     "format": "rome format --write .",
     "lint": "rome ci .",
     "lint-code": "rome check .",
-    "package": "yarn compile-charts --minify && yarn compile-extension --minify",
+    "package": "yarn compile-extension --minify && yarn compile-charts --minify",
     "pretest": "yarn compile-tests && yarn compile && yarn lint",
     "test": "node ./out/test/run-test.js",
     "vscode:prepublish": "yarn package",
