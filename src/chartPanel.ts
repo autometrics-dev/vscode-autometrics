@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import type { Prometheus } from "./prometheus";
+import { formatProviderError } from "./providerRuntime/errors";
 
 export type ChartPanel = {
   /**
@@ -53,11 +54,9 @@ export function createChartPanel(
             })
             .catch((error: unknown) => {
               vscode.window.showErrorMessage(
-                `Could not query Prometheus. Query: ${query} Error: ${
-                  error && typeof error === "object" && "message" in error
-                    ? error.message
-                    : error?.toString()
-                }`,
+                `Could not query Prometheus. Query: ${query} Error: ${formatProviderError(
+                  error,
+                )}`,
               );
             });
           return;

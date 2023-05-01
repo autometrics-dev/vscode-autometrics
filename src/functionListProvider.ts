@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
 import type { FunctionMetric, Prometheus } from "./prometheus";
+import { formatProviderError } from "./providerRuntime/errors";
 
 export class FunctionListProvider
   implements vscode.TreeDataProvider<FunctionItem>
@@ -39,7 +40,15 @@ export class FunctionListProvider
             ({ functionName, moduleName }) =>
               new FunctionItem(moduleName, functionName),
           ),
-      );
+      )
+      .catch((error) => {
+        vscode.window.showErrorMessage(
+          `Could not fetch Autometrics functions from Prometheus: ${formatProviderError(
+            error,
+          )}`,
+        );
+        throw error;
+      });
   }
 }
 
