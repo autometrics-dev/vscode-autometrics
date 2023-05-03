@@ -19,6 +19,7 @@
   ],
   "activationEvents": [
     "onLanguage:python",
+    "onLanguage:rust",
     "onLanguage:typescript"
   ],
   "main": "./dist/extension.js",
@@ -103,6 +104,7 @@
     "package": "yarn compile-extension --minify && yarn compile-charts --minify",
     "pretest": "yarn compile-tests && yarn compile && yarn lint",
     "test": "node ./out/test/run-test.js",
+    "tsc": "tsc --noEmit",
     "vscode:prepublish": "yarn package",
     "watch": "yarn compile --sourcemap --watch",
     "watch-tests": "tsc -p . -w --outDir out"

@@ -3,7 +3,8 @@ import * as assert from "node:assert";
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from "vscode";
-import * as myExtension from "../../extension";
+
+import { PythonHover } from "../../languages/python/python";
 
 const BASIC_CONTENT = `from autometrics.autometrics import autometrics
 
@@ -40,7 +41,7 @@ suite("Extension Test Suite", () => {
     const line = 3;
     const character = 5;
     const position = new vscode.Position(line, character);
-    const hover = myExtension.PythonHover.provideHover(document, position);
+    const hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
   });
 
@@ -50,7 +51,7 @@ suite("Extension Test Suite", () => {
     const line = 2;
     const character = 5;
     const position = new vscode.Position(line, character);
-    const hover = myExtension.PythonHover.provideHover(document, position);
+    const hover = PythonHover.provideHover(document, position);
     assert.strictEqual(hover, undefined, "Should be undefined");
   });
 
@@ -70,7 +71,7 @@ def div_unhandled(num1, num2):
     let line = 5;
     let character = 5;
     let position = new vscode.Position(line, character);
-    let hover = myExtension.PythonHover.provideHover(document, position);
+    let hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
 
     const multilineContent = `from autometrics.autometrics import autometrics
@@ -88,7 +89,7 @@ def div_unhandled(num1, num2):
     line = 6;
     character = 5;
     position = new vscode.Position(line, character);
-    hover = myExtension.PythonHover.provideHover(document, position);
+    hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
   });
 
@@ -114,7 +115,7 @@ class Operations():
     const line = 10;
     const character = 9;
     const position = new vscode.Position(line, character);
-    const hover = myExtension.PythonHover.provideHover(document, position);
+    const hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
   });
 
@@ -164,22 +165,22 @@ class Operations():
     let line = 10;
     const character = 9;
     let position = new vscode.Position(line, character);
-    let hover = myExtension.PythonHover.provideHover(document, position);
+    let hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
 
     line = 18;
     position = new vscode.Position(line, character);
-    hover = myExtension.PythonHover.provideHover(document, position);
+    hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
 
     line = 26;
     position = new vscode.Position(line, character);
-    hover = myExtension.PythonHover.provideHover(document, position);
+    hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
 
     line = 34;
     position = new vscode.Position(line, character);
-    hover = myExtension.PythonHover.provideHover(document, position);
+    hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
   });
 });

@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 
-import type { FunctionMetric, Prometheus } from "./prometheus";
-import { formatProviderError } from "./providerRuntime/errors";
+import type { FunctionMetric, Prometheus } from "../prometheus";
+import { formatProviderError } from "../providerRuntime/errors";
+import { OPEN_CHART_COMMAND } from "../constants";
 
 export class FunctionListProvider
   implements vscode.TreeDataProvider<FunctionItem>
@@ -62,11 +63,8 @@ export class FunctionItem extends vscode.TreeItem {
 
     this.command = {
       title: "Open chart",
-      command: "autometrics.graph.open",
-      arguments: [
-        "function_calls_count",
-        { function: functionName, module: moduleName },
-      ],
+      command: OPEN_CHART_COMMAND,
+      arguments: [{ type: "function", functionName, moduleName }],
     };
   }
 }

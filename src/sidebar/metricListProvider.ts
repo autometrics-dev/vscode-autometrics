@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
-import type { Prometheus } from "./prometheus";
+import type { Prometheus } from "../prometheus";
+import { OPEN_CHART_COMMAND } from "../constants";
 
 export class MetricListProvider implements vscode.TreeDataProvider<MetricItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
@@ -39,13 +40,13 @@ export class MetricItem extends vscode.TreeItem {
 
   contextValue = "metric";
 
-  constructor(metric: string) {
-    super(metric);
+  constructor(metricName: string) {
+    super(metricName);
 
     this.command = {
       title: "Open chart",
-      command: "autometrics.graph.open",
-      arguments: [metric],
+      command: OPEN_CHART_COMMAND,
+      arguments: [{ type: "metric", metricName }],
     };
   }
 }
