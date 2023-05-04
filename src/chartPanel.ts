@@ -1,14 +1,7 @@
 import * as vscode from "vscode";
 
-import {
-  AutometricsConfig,
-  affectsAutometricsConfig,
-  getAutometricsConfig,
-  getChartsEnabled,
-  getPrometheusUrl,
-} from "./config";
+import { affectsAutometricsConfig, getAutometricsConfig } from "./config";
 import { formatProviderError } from "./providerRuntime/errors";
-import { getCalledByRequestRate, getRequestRate, getSumQuery } from "./queries";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_CHART_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
@@ -45,25 +38,6 @@ export function registerChartPanel(
   vscode.commands.registerCommand(
     OPEN_CHART_COMMAND,
     (options: ChartOptions) => {
-      // Redirect to Prometheus if charts are disabled.
-      if (!getChartsEnabled(config)) {
-        let query;
-        switch (options.type) {
-          case "called_by":
-            query = getCalledByRequestRate(options.functionName);
-            break;
-          case "function":
-            query = getRequestRate(options.functionName);
-            break;
-          case "metric":
-            query = getSumQuery(options.metricName);
-            break;
-        }
-
-        vscode.env.openExternal(getExternalPrometheusGraphUrl(config, query));
-        return;
-      }
-
       // Reuse existing panel if available.
       if (chartPanel) {
         chartPanel.showChart(options);
@@ -186,18 +160,6 @@ function getNonce() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-function getExternalPrometheusGraphUrl(
-  config: AutometricsConfig,
-  query: string,
-): vscode.Uri {
-  const parameters = new URLSearchParams();
-  parameters.set("g0.expr", query);
-  parameters.set("g0.tab", "0");
-  return vscode.Uri.parse(
-    `${getPrometheusUrl(config)}/graph?${parameters.toString()}`,
-  );
 }
 
 export function getTitle(options: ChartOptions) {

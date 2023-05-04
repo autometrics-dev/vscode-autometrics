@@ -19,10 +19,6 @@ export function getAutometricsConfig(): AutometricsConfig {
   return vscode.workspace.getConfiguration(configSection) as AutometricsConfig;
 }
 
-export function getChartsEnabled(config: AutometricsConfig): boolean {
-  return config.experimentalChartsEnabled ?? false;
-}
-
 export function getPrometheusUrl(config: AutometricsConfig): string {
   return config.prometheusUrl || "http://localhost:9090/";
 }

@@ -41,12 +41,6 @@
             "title": "Prometheus URL",
             "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
             "default": "http://localhost:9090"
-          },
-          "autometrics.experimentalChartsEnabled": {
-            "type": "boolean",
-            "title": "Charts enabled [EXPERIMENTAL]",
-            "description": "Whether chart viewing in the extension is enabled",
-            "default": false
           }
         }
       }
