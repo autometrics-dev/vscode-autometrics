@@ -1,10 +1,20 @@
 import * as vscode from "vscode";
 
-import type { MessageFromWebview, MessageToWebview } from "./charts";
-import type { Prometheus } from "./prometheus";
+import { affectsAutometricsConfig, getAutometricsConfig } from "./config";
 import { formatProviderError } from "./providerRuntime/errors";
+import type { MessageFromWebview, MessageToWebview } from "./charts";
+import { OPEN_CHART_COMMAND } from "./constants";
+import type { Prometheus } from "./prometheus";
 
-export type ChartPanel = {
+/**
+ * Options for the kind of chart to display.
+ */
+export type ChartOptions =
+  | { type: "function"; functionName: string; moduleName?: string }
+  | { type: "called_by"; functionName: string; moduleName?: string }
+  | { type: "metric"; metricName: string };
+
+type ChartPanel = {
   /**
    * Reveals the panel.
    */
@@ -13,20 +23,51 @@ export type ChartPanel = {
   /**
    * Instructs the panel to display a new metric.
    */
-  showMetric(metric: string, labels?: Record<string, string>): void;
+  showChart(chart: ChartOptions): void;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
 };
 
-export function createChartPanel(
+export function registerChartPanel(
   context: vscode.ExtensionContext,
   prometheus: Prometheus,
-  metric: string,
-  labels: Record<string, string> = {},
+) {
+  let chartPanel: ChartPanel | null = null;
+  let config = getAutometricsConfig();
+
+  vscode.commands.registerCommand(
+    OPEN_CHART_COMMAND,
+    (options: ChartOptions) => {
+      // Reuse existing panel if available.
+      if (chartPanel) {
+        chartPanel.showChart(options);
+        chartPanel.reveal();
+        return;
+      }
+
+      const panel = createChartPanel(context, prometheus, options);
+      panel.onDidDispose(() => {
+        chartPanel = null;
+      });
+      chartPanel = panel;
+    },
+  );
+
+  vscode.workspace.onDidChangeConfiguration((event) => {
+    if (affectsAutometricsConfig(event)) {
+      config = getAutometricsConfig();
+    }
+  });
+}
+
+function createChartPanel(
+  context: vscode.ExtensionContext,
+  prometheus: Prometheus,
+  options: ChartOptions,
 ): ChartPanel {
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
-    metric,
+    getTitle(options),
     vscode.ViewColumn.One,
     { enableScripts: true },
   );
@@ -35,15 +76,16 @@ export function createChartPanel(
     panel.webview.postMessage(message);
   }
 
-  function showMetric(metric: string, labels: Record<string, string> = {}) {
-    postMessage({ type: "show_metrics", metric, labels });
+  function showChart(options: ChartOptions) {
+    panel.title = getTitle(options);
+    postMessage({ type: "show_chart", options });
   }
 
   panel.webview.onDidReceiveMessage(
     (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
-          showMetric(metric, labels);
+          showChart(options);
           return;
         case "request_data":
           const { query, timeRange } = message;
@@ -70,7 +112,7 @@ export function createChartPanel(
 
   return {
     reveal: panel.reveal.bind(panel),
-    showMetric,
+    showChart,
     onDidDispose: panel.onDidDispose.bind(panel),
   };
 }
@@ -118,4 +160,15 @@ function getNonce() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
+}
+
+export function getTitle(options: ChartOptions) {
+  switch (options.type) {
+    case "called_by":
+      return `Called by ${options.functionName}`;
+    case "function":
+      return options.functionName;
+    case "metric":
+      return options.metricName;
+  }
 }
