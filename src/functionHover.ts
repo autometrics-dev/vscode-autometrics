@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
-import type { ChartOptions } from "./chartPanel";
-import { OPEN_CHART_COMMAND } from "./constants";
+import { OPEN_PANEL_COMMAND } from "./constants";
+import { PanelOptions } from "./chartPanel";
 
 /**
  * Creates a VS Code hover for the given function.
@@ -9,10 +9,10 @@ import { OPEN_CHART_COMMAND } from "./constants";
 export function createFunctionHover(functionName: string): vscode.Hover {
   const content = `## Autometrics
   
-  * [View the live metrics for the \`${functionName}\` function](${getOpenChartCommand(
+  * [View the live metrics for the \`${functionName}\` function](${getOpenPenelCommand(
     { type: "function", functionName },
   )})
-  * [View metrics of functions called by \`${functionName}\`](${getOpenChartCommand(
+  * [View metrics of functions called by \`${functionName}\`](${getOpenPenelCommand(
     { type: "called_by", functionName },
   )})`;
 
@@ -22,8 +22,8 @@ export function createFunctionHover(functionName: string): vscode.Hover {
   return new vscode.Hover(markdown);
 }
 
-function getOpenChartCommand(options: ChartOptions): string {
-  return `command:${OPEN_CHART_COMMAND}?${encodeURIComponent(
+function getOpenPenelCommand(options: PanelOptions): string {
+  return `command:${OPEN_PANEL_COMMAND}?${encodeURIComponent(
     JSON.stringify([options]),
   )}`;
 }

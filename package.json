@@ -88,7 +88,7 @@
   },
   "scripts": {
     "compile": "yarn compile-extension && yarn compile-charts",
-    "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --format=esm --jsx=automatic --platform=browser",
+    "compile-charts": "cp src/charts/vscode.css dist && esbuild ./src/charts/chart.tsx --bundle --outfile=dist/chart.js --format=esm --jsx=automatic --platform=browser ",
     "compile-extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "compile-tests": "tsc -p . --outDir out",
     "fmt-check": "rome format .",

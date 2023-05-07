@@ -3,16 +3,22 @@ import * as vscode from "vscode";
 import { affectsAutometricsConfig, getAutometricsConfig } from "./config";
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
-import { OPEN_CHART_COMMAND } from "./constants";
+import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
+import { getNonce } from "./utils";
 
 /**
  * Options for the kind of chart to display.
  */
-export type ChartOptions =
+
+export type SingleChartOptions =
   | { type: "function"; functionName: string; moduleName?: string }
   | { type: "called_by"; functionName: string; moduleName?: string }
   | { type: "metric"; metricName: string };
+
+export type PanelOptions =
+  | SingleChartOptions
+  | { type: "function_graphs"; functionName: string; moduleName?: string };
 
 type ChartPanel = {
   /**
@@ -23,7 +29,7 @@ type ChartPanel = {
   /**
    * Instructs the panel to display a new metric.
    */
-  showChart(chart: ChartOptions): void;
+  update(options: PanelOptions): void;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
 };
@@ -36,11 +42,11 @@ export function registerChartPanel(
   let config = getAutometricsConfig();
 
   vscode.commands.registerCommand(
-    OPEN_CHART_COMMAND,
-    (options: ChartOptions) => {
+    OPEN_PANEL_COMMAND,
+    (options: PanelOptions) => {
       // Reuse existing panel if available.
       if (chartPanel) {
-        chartPanel.showChart(options);
+        chartPanel.update(options);
         chartPanel.reveal();
         return;
       }
@@ -63,7 +69,7 @@ export function registerChartPanel(
 function createChartPanel(
   context: vscode.ExtensionContext,
   prometheus: Prometheus,
-  options: ChartOptions,
+  options: PanelOptions,
 ): ChartPanel {
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
@@ -73,26 +79,28 @@ function createChartPanel(
   );
 
   function postMessage(message: MessageToWebview) {
+    console.log("function postMessage", message);
     panel.webview.postMessage(message);
   }
 
-  function showChart(options: ChartOptions) {
+  function update(options: PanelOptions) {
     panel.title = getTitle(options);
-    postMessage({ type: "show_chart", options });
+    // panel.iconPath = logo;
+    postMessage({ type: "show_panel", options });
   }
 
   panel.webview.onDidReceiveMessage(
     (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
-          showChart(options);
+          update(options);
           return;
         case "request_data":
-          const { query, timeRange } = message;
+          const { query, timeRange, id } = message;
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              postMessage({ type: "show_data", timeRange, data });
+              postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {
               vscode.window.showErrorMessage(
@@ -112,7 +120,7 @@ function createChartPanel(
 
   return {
     reveal: panel.reveal.bind(panel),
-    showChart,
+    update,
     onDidDispose: panel.onDidDispose.bind(panel),
   };
 }
@@ -152,17 +160,7 @@ function getHtmlForWebview(
     </html>`;
 }
 
-function getNonce() {
-  let text = "";
-  const possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-}
-
-export function getTitle(options: ChartOptions) {
+export function getTitle(options: PanelOptions) {
   switch (options.type) {
     case "called_by":
       return `Called by ${options.functionName}`;
@@ -170,5 +168,7 @@ export function getTitle(options: ChartOptions) {
       return options.functionName;
     case "metric":
       return options.metricName;
+    case "function_graphs":
+      return options.functionName;
   }
 }

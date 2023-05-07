@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 import type { FunctionMetric, Prometheus } from "../prometheus";
 import { formatProviderError } from "../providerRuntime/errors";
-import { OPEN_CHART_COMMAND } from "../constants";
+import { OPEN_PANEL_COMMAND } from "../constants";
 
 export class FunctionListProvider
   implements vscode.TreeDataProvider<FunctionItem>
@@ -63,7 +63,7 @@ export class FunctionItem extends vscode.TreeItem {
 
     this.command = {
       title: "Open chart",
-      command: OPEN_CHART_COMMAND,
+      command: OPEN_PANEL_COMMAND,
       arguments: [{ type: "function", functionName, moduleName }],
     };
   }

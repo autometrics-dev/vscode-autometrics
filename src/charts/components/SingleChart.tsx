@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   GraphType,
   MetricsChart,
@@ -5,60 +6,53 @@ import {
   TimeRange,
   Timeseries,
 } from "fiberplane-charts";
-import { useEffect, useState } from "react";
 
-import { ChartOptions, getTitle } from "../../chartPanel";
+import { PanelOptions, SingleChartOptions } from "../../chartPanel";
 import {
   getCalledByRequestRate,
   getRequestRate,
   getSumQuery,
 } from "../../queries";
-import { getCurrentTimeRange } from "../utils";
-import { isSameTimeRange } from "../../utils";
-import type { MessageToWebview } from "../types";
 import { vscode } from "../chart";
+import { useRequestData } from "../hooks/useRequestData";
+import { useHandler, useMessage } from "../hooks";
 
-export function Chart() {
+export function SingleChart(props: {
+  options: SingleChartOptions;
+  timeRange: TimeRange;
+  setTimeRange: (TimeRange) => void;
+}) {
+  const { options, timeRange, setTimeRange } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [query, setQuery] = useState<string | null>(null);
   const [stackingType, setStackingType] = useState<StackingType>("none");
-  const [timeRange, setTimeRange] = useState<TimeRange>(() =>
-    getCurrentTimeRange(),
-  );
   const [timeseriesData, setTimeseriesData] = useState<Array<Timeseries>>([]);
 
-  useEffect(() => {
-    window.onmessage = (event: MessageEvent<MessageToWebview>) => {
-      switch (event.data.type) {
-        case "show_chart": {
-          const { options } = event.data;
-          const query = getQuery(options);
-
-          setQuery(query);
-          setTimeseriesData([]);
-          requestData(query, timeRange);
-          break;
-        }
-
-        case "show_data":
-          if (isSameTimeRange(event.data.timeRange, timeRange)) {
-            setTimeseriesData(event.data.data);
-          }
-          break;
-      }
-    };
-  }, []);
-
-  function onChangeTimeRange(timeRange: TimeRange) {
-    setTimeRange(timeRange);
-
-    if (query) {
-      requestData(query, timeRange);
+  const handleMessage = useHandler((event: MessageEvent) => {
+    if (event.data.type === "show_data") {
+      // if (event.data.id === "1") {
+      // setTimeseriesData(event.data.data);
+      console.log("event.data.data", event.data.data);
+      // }
     }
-  }
+  });
+  useMessage(handleMessage);
+
+  const requestData = useRequestData();
+  useEffect(() => {
+    const query = getQuery(options);
+
+    if (!query) {
+      return;
+    }
+
+    setQuery(query);
+    // setTimeseriesData();
+    requestData(timeRange, query).then(setTimeseriesData);
+  }, [options, timeRange]);
 
   return (
-    <div>
+    <>
       <h1>{query}</h1>
       <MetricsChart
         graphType={graphType}
@@ -67,9 +61,10 @@ export function Chart() {
         timeseriesData={timeseriesData}
         onChangeGraphType={setGraphType}
         onChangeStackingType={setStackingType}
-        onChangeTimeRange={onChangeTimeRange}
+        onChangeTimeRange={setTimeRange}
+        // onChangeTimeRange={onChangeTimeRange}
       />
-    </div>
+    </>
   );
 }
 
@@ -77,7 +72,7 @@ export function Chart() {
  * TODO: For the new design, we should show multiple queries for a given chart
  *       options.
  */
-function getQuery(options: ChartOptions) {
+function getQuery(options: PanelOptions) {
   switch (options.type) {
     case "called_by":
       return getCalledByRequestRate(options.functionName);
@@ -85,9 +80,16 @@ function getQuery(options: ChartOptions) {
       return getRequestRate(options.functionName);
     case "metric":
       return getSumQuery(options.metricName);
+    default:
+      throw Error("This shouldn't happen");
   }
 }
 
 function requestData(query: string, timeRange: TimeRange) {
-  vscode.postMessage({ type: "request_data", query, timeRange });
+  vscode.postMessage({
+    type: "request_data",
+    query,
+    timeRange,
+    id: "1",
+  });
 }
