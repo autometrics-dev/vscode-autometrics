@@ -1,12 +1,10 @@
 import { TimeRange } from "fiberplane-charts";
 import { useState } from "react";
 
-import { PanelOptions } from "../../chartPanel";
+import { PanelOptions, SingleChartOptions } from "../../chartPanel";
 import { getCurrentTimeRange } from "../utils";
 import type { MessageToWebview } from "../types";
-import { vscode } from "../chart";
-import { useHandler } from "../hooks/useHandler";
-import { SingleChart } from "./SingleChart";
+import { SingleChart } from "./SingleChart/SingleChart";
 import { useMessage } from "../hooks";
 
 export function PanelContent() {
@@ -15,27 +13,6 @@ export function PanelContent() {
   );
   const [panelOptions, setPanelOptions] = useState<PanelOptions | null>(null);
 
-  // useMessagageListener(type: MessageToWebview["type"], handler: (event: MessageToWebview & {type: Type]) => void
-
-  // const onMessage = useHandler((event: MessageEvent<MessageToWebview>) => {
-  //   switch (event.data.type) {
-  //     case "show_panel": {
-  //       const { options } = event.data;
-  //       setPanelOptions(options);
-  //       break;
-  //     }
-
-  //     // case "show_data":
-  //     //   if (isSameTimeRange(event.data.timeRange, timeRange)) {
-  //     //     setTimeseriesData(event.data.data);
-  //     //   }
-  //     //   break;
-  //   }
-  // });
-  // useEffect(() => {
-  //   window.onmessage = onMessage;
-  // }, [onMessage]);
-
   useMessage<MessageToWebview>((event) => {
     if (event.data.type === "show_panel") {
       const { options } = event.data;
@@ -43,17 +20,37 @@ export function PanelContent() {
     }
   });
 
-  // const onChangeTimeRange = useHandler((query: string) => {
-  //   setTimeRange(timeRange);
-
-  //   //   if (query) {
-  //   //     requestData(query, timeRange);
-  //   //   }
-  // });
-
-  console.log("panelOptions", panelOptions);
-  if (panelOptions === null || panelOptions.type === "function_graphs") {
+  if (panelOptions === null) {
     return <div>Nothing to show</div>;
+  }
+
+  if (panelOptions.type === "function_graphs") {
+    const functionChartOptions: SingleChartOptions = {
+      ...panelOptions,
+      type: "function",
+    };
+    const calledByOptions: SingleChartOptions = {
+      ...panelOptions,
+      type: "called_by",
+    };
+
+    return (
+      <div>
+        <h1>{panelOptions.functionName}</h1>
+        <SingleChart
+          key="function"
+          options={functionChartOptions}
+          timeRange={timeRange}
+          setTimeRange={setTimeRange}
+        />
+        <SingleChart
+          key="called_by"
+          options={calledByOptions}
+          timeRange={timeRange}
+          setTimeRange={setTimeRange}
+        />
+      </div>
+    );
   }
 
   return (

@@ -79,7 +79,6 @@ function createChartPanel(
   );
 
   function postMessage(message: MessageToWebview) {
-    console.log("function postMessage", message);
     panel.webview.postMessage(message);
   }
 
@@ -100,6 +99,7 @@ function createChartPanel(
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
+              console.log("calling show_data", { query, data, id });
               postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {

@@ -7,20 +7,18 @@ import {
   Timeseries,
 } from "fiberplane-charts";
 
-import { PanelOptions, SingleChartOptions } from "../../chartPanel";
+import { PanelOptions, SingleChartOptions } from "../../../chartPanel";
 import {
   getCalledByRequestRate,
   getRequestRate,
   getSumQuery,
-} from "../../queries";
-import { vscode } from "../chart";
-import { useRequestData } from "../hooks/useRequestData";
-import { useHandler, useMessage } from "../hooks";
+} from "../../../queries";
+import { useRequestData } from "../../hooks/useRequestData";
 
 export function SingleChart(props: {
   options: SingleChartOptions;
   timeRange: TimeRange;
-  setTimeRange: (TimeRange) => void;
+  setTimeRange: (timeRange: TimeRange) => void;
 }) {
   const { options, timeRange, setTimeRange } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
@@ -28,17 +26,8 @@ export function SingleChart(props: {
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const [timeseriesData, setTimeseriesData] = useState<Array<Timeseries>>([]);
 
-  const handleMessage = useHandler((event: MessageEvent) => {
-    if (event.data.type === "show_data") {
-      // if (event.data.id === "1") {
-      // setTimeseriesData(event.data.data);
-      console.log("event.data.data", event.data.data);
-      // }
-    }
-  });
-  useMessage(handleMessage);
-
   const requestData = useRequestData();
+
   useEffect(() => {
     const query = getQuery(options);
 
@@ -47,8 +36,9 @@ export function SingleChart(props: {
     }
 
     setQuery(query);
-    // setTimeseriesData();
-    requestData(timeRange, query).then(setTimeseriesData);
+    requestData(timeRange, query).then((data) => {
+      setTimeseriesData(data);
+    });
   }, [options, timeRange]);
 
   return (
@@ -62,7 +52,6 @@ export function SingleChart(props: {
         onChangeGraphType={setGraphType}
         onChangeStackingType={setStackingType}
         onChangeTimeRange={setTimeRange}
-        // onChangeTimeRange={onChangeTimeRange}
       />
     </>
   );
@@ -83,13 +72,4 @@ function getQuery(options: PanelOptions) {
     default:
       throw Error("This shouldn't happen");
   }
-}
-
-function requestData(query: string, timeRange: TimeRange) {
-  vscode.postMessage({
-    type: "request_data",
-    query,
-    timeRange,
-    id: "1",
-  });
 }

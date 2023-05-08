@@ -1,12 +1,10 @@
 import { useRef } from "react";
-// import crypto from "crypto";
-
 import { TimeRange, Timeseries } from "fiberplane-charts";
+
 import { useHandler } from "./useHandler";
 import { MessageToWebview, vscode } from "..";
 import { useMessage } from "./useMessage";
 import { getNonce } from "../../utils";
-// import { rejects } from "assert";
 
 export type Result<T, E> =
   /**
@@ -25,13 +23,11 @@ export function useRequestData() {
 
   useMessage<MessageToWebview>((event) => {
     if (event.data.type === "show_data") {
-      // return
       const { data, id } = event.data;
       const request = requests.current[id];
       if (request) {
         request({ Ok: data });
       }
-      // if (event.data.)
     }
   });
 
@@ -57,6 +53,5 @@ export function useRequestData() {
     });
 
     return result;
-    // requests.current[query] =
   });
 }
