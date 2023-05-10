@@ -6,6 +6,7 @@ import { getCurrentTimeRange } from "../utils";
 import type { MessageToWebview } from "../types";
 import { SingleChart } from "./SingleChart/SingleChart";
 import { useMessage } from "../hooks";
+import { FunctionCharts } from "./FunctionCharts";
 
 export function PanelContent() {
   const [timeRange, setTimeRange] = useState<TimeRange>(() =>
@@ -25,31 +26,22 @@ export function PanelContent() {
   }
 
   if (panelOptions.type === "function_graphs") {
-    const functionChartOptions: SingleChartOptions = {
-      ...panelOptions,
-      type: "function",
-    };
-    const calledByOptions: SingleChartOptions = {
-      ...panelOptions,
-      type: "called_by",
-    };
+    // const functionChartOptions: SingleChartOptions = {
+    //   ...panelOptions,
+    //   type: "function",
+    // };
+    // const calledByOptions: SingleChartOptions = {
+    //   ...panelOptions,
+    //   type: "called_by",
+    // };
 
     return (
-      <div>
-        <h1>{panelOptions.functionName}</h1>
-        <SingleChart
-          key="function"
-          options={functionChartOptions}
-          timeRange={timeRange}
-          setTimeRange={setTimeRange}
-        />
-        <SingleChart
-          key="called_by"
-          options={calledByOptions}
-          timeRange={timeRange}
-          setTimeRange={setTimeRange}
-        />
-      </div>
+      <FunctionCharts
+        timeRange={timeRange}
+        setTimeRange={setTimeRange}
+        functionName={panelOptions.functionName}
+        moduleName={panelOptions.moduleName}
+      />
     );
   }
 

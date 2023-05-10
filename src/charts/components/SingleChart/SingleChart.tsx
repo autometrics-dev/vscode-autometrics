@@ -3,7 +3,6 @@ import {
   GraphType,
   MetricsChart,
   StackingType,
-  TimeRange,
   Timeseries,
 } from "fiberplane-charts";
 
@@ -14,12 +13,13 @@ import {
   getSumQuery,
 } from "../../../queries";
 import { useRequestData } from "../../hooks/useRequestData";
+import { TimeRangeProps } from "../types";
 
-export function SingleChart(props: {
+type Props = {
   options: SingleChartOptions;
-  timeRange: TimeRange;
-  setTimeRange: (timeRange: TimeRange) => void;
-}) {
+} & TimeRangeProps;
+
+export function SingleChart(props: Props) {
   const { options, timeRange, setTimeRange } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [query, setQuery] = useState<string | null>(null);

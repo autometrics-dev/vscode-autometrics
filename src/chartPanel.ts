@@ -99,7 +99,7 @@ function createChartPanel(
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              console.log("calling show_data", { query, data, id });
+              console.log("calling show_data", { query, data, id, timeRange });
               postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {
