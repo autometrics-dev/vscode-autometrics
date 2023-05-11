@@ -99,7 +99,7 @@ function createChartPanel(
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              console.log("calling show_data", { query, data, id, timeRange });
+              // console.log("calling show_data", { query, data, id, timeRange });
               postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {
@@ -138,7 +138,7 @@ function getHtmlForWebview(
 
   // Do the same for the stylesheet.
   const styleVSCodeUri = webview.asWebviewUri(
-    vscode.Uri.joinPath(distUri, "vscode.css"),
+    vscode.Uri.joinPath(distUri, "styles", "vscode.css"),
   );
 
   // Use a nonce to only allow a specific script to be run.
@@ -148,7 +148,7 @@ function getHtmlForWebview(
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="${styleVSCodeUri}" rel="stylesheet">
         <title>Autometrics Chart</title>
