@@ -28,6 +28,12 @@ export function useRequestData() {
       if (request) {
         request({ Ok: data });
       }
+    } else if (event.data.type === "show_error") {
+      const { error, id } = event.data;
+      const request = requests.current[id];
+      if (request) {
+        request({ Err: error });
+      }
     }
   });
 

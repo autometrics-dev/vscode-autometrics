@@ -103,10 +103,15 @@ function createChartPanel(
               postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {
+              const errorMessage = formatProviderError(error);
+
+              postMessage({
+                type: "show_error",
+                id,
+                error: errorMessage,
+              });
               vscode.window.showErrorMessage(
-                `Could not query Prometheus. Query: ${query} Error: ${formatProviderError(
-                  error,
-                )}`,
+                `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
               );
             });
           return;

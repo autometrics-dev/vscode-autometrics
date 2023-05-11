@@ -9,6 +9,11 @@ export type MessageToWebview =
       timeRange: TimeRange;
       data: Array<Timeseries>;
       id: string;
+    }
+  | {
+      type: "show_error";
+      id: string;
+      error: string;
     };
 
 export type MessageFromWebview =
