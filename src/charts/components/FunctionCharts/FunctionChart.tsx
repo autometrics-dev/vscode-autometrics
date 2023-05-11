@@ -33,7 +33,7 @@ export function FunctionChart(props: Props) {
     <>
       <div>
         <Title>{title}</Title>
-        <Description>{description}</Description>
+        {description && <Description>{description}</Description>}
       </div>
       <div>
         <MetricsChart
@@ -45,6 +45,10 @@ export function FunctionChart(props: Props) {
           onChangeStackingType={setStackingType}
           onChangeTimeRange={setTimeRange}
           showChartControls={false}
+          showGridColumns={false}
+          showFooter={false}
+          showGridBorders={false}
+          gridDashArray="2"
         />
       </div>
       <textarea defaultValue={query} />
@@ -66,7 +70,7 @@ const Description = styled.div`
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 0.9291em;// 12px over 13px base;
-  line-height: 1.5;
+  font-size: 0.7692em;// 10px over 13px base;
+  line-height: 1.6; // 16px;
   padding: 0.3em 0;
 `;

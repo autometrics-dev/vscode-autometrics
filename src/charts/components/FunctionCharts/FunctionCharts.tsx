@@ -82,6 +82,6 @@ const Container = styled.div`
 const ChartContainer = styled.div`
   display: grid;
   grid-template-rows: min-content auto 100px;
-  gap: 1.92em; // 25px on 13px base;
+  gap: 1.692em; // 22px on 13px base;
   height: 100%;
 `;

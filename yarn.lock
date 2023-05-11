@@ -1867,7 +1867,7 @@ __metadata:
 
 "fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=extension_tweaks&workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=ccdcf11754996d8d510aa3d65db648929cf0a7be"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=5a4a5ddb308257542fc4cb7c40e82a76465ff69c"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
@@ -1886,7 +1886,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: e570095470087ed5568dd23753f26dd69c8bfc51790ee9f7aad6b08d2edd260af1d15c7557751c2e5f65a1894a27980cb53bb91a7e7507acd18c27d5d64e1dab
+  checksum: 7290edcac1894ca36029cf66d2e4c5b4d401c82b0452f0e7ce01060abeab2598ff195f01f812a02d03dbb5ebd4f7ab744f114bbfd465a6539603c666cbff079c
   languageName: node
   linkType: hard
 
@@ -1930,8 +1930,8 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^10.12.4":
-  version: 10.12.4
-  resolution: "framer-motion@npm:10.12.4"
+  version: 10.12.10
+  resolution: "framer-motion@npm:10.12.10"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     tslib: ^2.4.0
@@ -1946,7 +1946,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: c131b546539937b5dbec6a89f2e3db946d5127f1cbf2f88268ef75089df30e81cdd0f4a5786f84b1bc98397d43a99aa6f7e187e6bba178548a9eeb3d39df7b91
+  checksum: d4bdca5bc891534d6e4852a5725d1d0e8c29270a79927b50d8136d71e3d3affdca66dcb3a74e8c252fb4508292c4901cce20d93c3a35a4acdfa9a3f6ad9b57bb
   languageName: node
   linkType: hard
 

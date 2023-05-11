@@ -1,8 +1,11 @@
+// TODO: (JF) merge this file with the other queries.ts file
+// TODO: (JF) add comments to explain what each query does
+
 export function generateRequestRateQuery(
-  functionName: string,
-  moduleName?: string,
+	functionName: string,
+	moduleName?: string,
 ): string {
-  return `sum by (function, module, version, commit) (
+	return `sum by (function, module, version, commit) (
   rate(
     { 
       __name__=~"function_calls_count(?:_total)?",
@@ -19,10 +22,10 @@ export function generateRequestRateQuery(
 }
 
 export function generateErrorRatioQuery(
-  functionName: string,
-  moduleName?: string,
+	functionName: string,
+	moduleName?: string,
 ): string {
-  return `(  
+	return `(  
   sum by(function, module, version, commit) (
     rate(      
       {        
@@ -57,10 +60,10 @@ export function generateErrorRatioQuery(
 }
 
 export function generateLatencyQuery(
-  functionName: string,
-  moduleName?: string,
+	functionName: string,
+	moduleName?: string,
 ): string {
-  return `label_replace(
+	return `label_replace(
   histogram_quantile(
     0.99, 
     sum by (le, function, module, commit, version) (
