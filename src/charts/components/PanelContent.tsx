@@ -26,15 +26,6 @@ export function PanelContent() {
   }
 
   if (panelOptions.type === "function_graphs") {
-    // const functionChartOptions: SingleChartOptions = {
-    //   ...panelOptions,
-    //   type: "function",
-    // };
-    // const calledByOptions: SingleChartOptions = {
-    //   ...panelOptions,
-    //   type: "called_by",
-    // };
-
     return (
       <FunctionCharts
         timeRange={timeRange}
