@@ -30,7 +30,7 @@ function getFunctionName(
   // FIXME: We should replace this with a proper parsing solution.
   // - https://github.com/autometrics-dev/vscode-autometrics/issues/29
   const functionRegex =
-    /^(?<indentation>\s*)(?async\s*)def\s*(?<name>[\dA-z]+)?\s*\(/;
+    /^(?<indentation>\s*)(async\s*)?def\s*(?<name>[\dA-z]+)?\s*\(/;
   const match = textLine.text.match(functionRegex);
   const name = match?.groups?.name;
   const indentation = match?.groups?.indentation ?? "";
