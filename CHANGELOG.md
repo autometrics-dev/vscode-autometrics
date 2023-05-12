@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.1
+
+- [chore] update TS plugin dependency to `v0.4.0`
+
 ## 0.2.0
 
 - [fix] add support for async functions in python
