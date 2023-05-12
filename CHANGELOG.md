@@ -6,6 +6,13 @@
   `fiberplane-charts` directly from a workspace repository. The problem with
   packaging has been solved with a Yarn plugin.
 
+# 0.2.1
+
+- [chore] update TS plugin dependency to `v0.4.0`
+
+## 0.2.0
+
+- [fix] add support for async functions in python
 ## 0.1.0
 
 - [python] Improved detection logic: Now multiple decorators are supported
