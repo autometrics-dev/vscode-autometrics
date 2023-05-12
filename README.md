@@ -44,3 +44,5 @@ extensions:
 
 Create a new release using Github which matches the version number it should be
 released under.
+
+After tagging and releasing, merge `main` into the `release` branch. (The `release` branch should always reflect the latest released version on VSCode marketplate.)
