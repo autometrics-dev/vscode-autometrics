@@ -35,6 +35,11 @@ Initial release which brings in basic Python support
 
 Update which brings TypeScript support using the TypeScript plugin `@autometrics/typescript-plugin`
 
+### 0.1.0
+
+Update to support tooltips over autometrics-decorated async python functions 
+
+
 ---
 
 ## Developing this extension
