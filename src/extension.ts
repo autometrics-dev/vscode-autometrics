@@ -17,7 +17,8 @@ function getFunctionName(
   position: vscode.Position,
 ): string | void {
   const textLine = document.lineAt(position.line);
-  const functionRegex = /^(?<indentation>\s*)def\s*(?<name>[\dA-z]+)?\s*\(/;
+  const functionRegex =
+    /^(?<indentation>\s*)(async\s*)?def\s*(?<name>[\dA-z]+)?\s*\(/;
   const match = textLine.text.match(functionRegex);
   const name = match?.groups?.name;
   const indentation = match?.groups?.indentation ?? "";
