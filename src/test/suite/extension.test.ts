@@ -14,6 +14,14 @@ def div_unhandled(num1, num2):
   return result 
 `;
 
+const ASYNC_FUNC_CONTENT = `from autometrics.autometrics import autometrics
+
+@autometrics
+async def div_unhandled(num1, num2):
+  result = num1 / num2
+  return result 
+`;
+
 async function createTestDocument(content: string) {
   const document = await vscode.workspace.openTextDocument({
     language: "python",
@@ -40,6 +48,16 @@ suite("Extension Test Suite", () => {
 
     const line = 3;
     const character = 5;
+    const position = new vscode.Position(line, character);
+    const hover = PythonHover.provideHover(document, position);
+    assert.ok(hover);
+  });
+
+  test("should return hover content when hovering over an async function", async () => {
+    const document = await createTestDocument(ASYNC_FUNC_CONTENT);
+
+    const line = 3;
+    const character = 11;
     const position = new vscode.Position(line, character);
     const hover = PythonHover.provideHover(document, position);
     assert.ok(hover);
