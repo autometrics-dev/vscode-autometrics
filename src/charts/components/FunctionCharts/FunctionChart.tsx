@@ -8,6 +8,8 @@ import {
   Timeseries,
 } from "fiberplane-charts";
 import styled from "styled-components";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { styles } from "./prismStyles";
 
 type Props = {
   query: string;
@@ -44,14 +46,16 @@ export function FunctionChart(props: Props) {
           onChangeGraphType={setGraphType}
           onChangeStackingType={setStackingType}
           onChangeTimeRange={setTimeRange}
-          showChartControls={false}
-          showGridColumns={false}
-          showFooter={false}
-          showGridBorders={false}
+          chartControlsShown={false}
+          gridColumnsShown={false}
+          footerShown={false}
+          gridBordersShown={false}
           gridDashArray="2"
         />
       </div>
-      <textarea defaultValue={query} />
+      <SyntaxHighlighter language="promql" style={styles}>
+        {query}
+      </SyntaxHighlighter>
     </>
   );
 }
