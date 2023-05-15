@@ -673,10 +673,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:^1.78.0":
-  version: 1.78.0
-  resolution: "@types/vscode@npm:1.78.0"
-  checksum: b58423f3f5efdbad26c06b60749eaafb47c0f907d7b66dd6f5064257603ce5b08c4f0d243ce747e0bed19d36ce7ef9c68e122ded4ec35115282f2a444e95533a
+"@types/vscode@npm:1.76.0":
+  version: 1.76.0
+  resolution: "@types/vscode@npm:1.76.0"
+  checksum: f53f185a47a7479d698c0736fda9693aa2a511bd003e0546e17c39d50dd638edb4161efd1265364ec10ea1dbf3f1fd658834b6a5a39053877e2e1f27180e177e
   languageName: node
   linkType: hard
 
@@ -1016,7 +1016,7 @@ __metadata:
     "@types/react": ^18.2.6
     "@types/react-dom": ^18.2.4
     "@types/styled-components": ^5.1.26
-    "@types/vscode": ^1.78.0
+    "@types/vscode": 1.76.0
     "@vscode/test-electron": ^2.3.2
     "@vscode/vsce": ^2.19.0
     byte-base64: ^1.1.0
