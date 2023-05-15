@@ -86,7 +86,6 @@ export const fontLegendShortHand = "normal 400 10px / 12px Inter, sans-serif";
 export const fontResultsSummaryLetterSpacing = "0";
 export const fontResultsSummaryShortHand =
   "normal 600 12px / 12px Inter, sans-serif";
-("normal 500 10px / 12px Inter, sans-serif");
 export const effectFocusOutline = "rgb(183, 201, 255) solid 2px";
 export const effectFocus = "0px 0px 0px 2px rgb(183, 201, 255)";
 export const effectShadowHoverFilter =
