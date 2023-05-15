@@ -5,10 +5,10 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@autometrics/typescript-plugin@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@autometrics/typescript-plugin@npm:0.3.0"
-  checksum: f5705b8323d16c589331a5de9d6fa6aad99bfdc2201042b853c47711b3818f910770a3a1a3f86e5d8bf9c767b5e7b2b564f1a1e070e7e5f151b696576459406d
+"@autometrics/typescript-plugin@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@autometrics/typescript-plugin@npm:0.4.0"
+  checksum: faffdd21642e9308627d258ff25d427971bbade091946ed9dc386894a5428d48d9bd5cd7625347270f535f68cc958edd318cfeed0f58ff024947741be3826f8b
   languageName: node
   linkType: hard
 
@@ -1032,7 +1032,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "autometrics@workspace:."
   dependencies:
-    "@autometrics/typescript-plugin": ^0.3.0
+    "@autometrics/typescript-plugin": ^0.4.0
     "@msgpack/msgpack": ^3.0.0-beta2
     "@types/glob": ^8.1.0
     "@types/mocha": ^10.0.1
