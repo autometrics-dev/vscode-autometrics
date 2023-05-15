@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- [chore] Upgrade several dependencies
 - [chore] We now use Yarn again instead of NPM. This is necessary to pull in
   `fiberplane-charts` directly from a workspace repository. The problem with
   packaging has been solved with a Yarn plugin.
