@@ -1,11 +1,11 @@
 import { FunctionChart } from "./FunctionChart";
 import { TimeRangeProps } from "../types";
+import styled from "styled-components";
 import {
   generateErrorRatioQuery,
   generateLatencyQuery,
   generateRequestRateQuery,
-} from "./queries";
-import styled from "styled-components";
+} from "../../../queries";
 
 type Props = TimeRangeProps & {
   functionName: string;
