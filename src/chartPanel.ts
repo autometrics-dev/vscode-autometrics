@@ -87,7 +87,7 @@ function createChartPanel(
         case "ready":
           showChart(options);
           return;
-        case "request_data":
+        case "request_data": {
           const { query, timeRange } = message;
           prometheus
             .fetchTimeseries(query, timeRange)
@@ -102,6 +102,7 @@ function createChartPanel(
               );
             });
           return;
+        }
       }
     },
     undefined,

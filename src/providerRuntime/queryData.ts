@@ -138,13 +138,13 @@ export function unsetQueryField(
   queryData: string | undefined,
   fieldName: string,
 ): string | undefined {
-  fieldName = encodeFormComponent(fieldName);
+  const encodedFieldName = encodeFormComponent(fieldName);
 
   if (!queryData?.startsWith(MIME_TYPE_PREFIX)) {
     return MIME_TYPE_PREFIX;
   }
 
-  const prefix = `${fieldName}=`;
+  const prefix = `${encodedFieldName}=`;
   const fields = queryData.slice(MIME_TYPE_PREFIX.length).split("&");
   for (let i = 0; i < fields.length; i++) {
     if (fields[i]?.startsWith(prefix)) {
