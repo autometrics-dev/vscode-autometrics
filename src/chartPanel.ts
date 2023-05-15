@@ -84,7 +84,6 @@ function createChartPanel(
 
   function update(options: PanelOptions) {
     panel.title = getTitle(options);
-    // panel.iconPath = logo;
     postMessage({ type: "show_panel", options });
   }
 
