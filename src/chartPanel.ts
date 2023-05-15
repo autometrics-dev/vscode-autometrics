@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 
-import { affectsAutometricsConfig, getAutometricsConfig } from "./config";
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
@@ -39,7 +38,6 @@ export function registerChartPanel(
   prometheus: Prometheus,
 ) {
   let chartPanel: ChartPanel | null = null;
-  let config = getAutometricsConfig();
 
   vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
@@ -58,12 +56,6 @@ export function registerChartPanel(
       chartPanel = panel;
     },
   );
-
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    if (affectsAutometricsConfig(event)) {
-      config = getAutometricsConfig();
-    }
-  });
 }
 
 function createChartPanel(
@@ -93,7 +85,7 @@ function createChartPanel(
         case "ready":
           update(options);
           return;
-        case "request_data":
+        case "request_data": {
           const { query, timeRange, id } = message;
           prometheus
             .fetchTimeseries(query, timeRange)
@@ -114,6 +106,7 @@ function createChartPanel(
               );
             });
           return;
+        }
       }
     },
     undefined,
