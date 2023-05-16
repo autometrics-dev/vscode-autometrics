@@ -1,1 +1,1 @@
-export const OPEN_CHART_COMMAND = "autometrics.chart.open";
+export const OPEN_PANEL_COMMAND = "autometrics.chart.open";

@@ -5,3 +5,4 @@
 // which gets bundled and loaded into the webview.
 
 export type { MessageFromWebview, MessageToWebview } from "./types";
+export { vscode } from "./chart";

@@ -1,5 +1,5 @@
-export const colorBackground = "#ffffff";
-export const colorForeground = "#000000";
+export const colorBackground = "--vscode-editor-background";
+export const colorForeground = "--vscode-foreground";
 export const colorBase100 = "#f9f9f9";
 export const colorBase200 = "#f3f3f3";
 export const colorBase300 = "#e7e7e7";
@@ -32,7 +32,7 @@ export const colorSupport2300 = "#364b74";
 export const colorSupport2400 = "#23304a";
 export const colorSupport3100 = "#fff0ec";
 export const colorSupport3200 = "#f1c2b8";
-export const colorSupport3300 = "#de7159";
+export const colorSupport3300 = "var(--vscode-charts-orange)";
 export const colorSupport3400 = "#cf3411";
 export const colorSupport4100 = "#ffefc8";
 export const colorSupport4200 = "#cfc7b5";
@@ -86,7 +86,6 @@ export const fontLegendShortHand = "normal 400 10px / 12px Inter, sans-serif";
 export const fontResultsSummaryLetterSpacing = "0";
 export const fontResultsSummaryShortHand =
   "normal 600 12px / 12px Inter, sans-serif";
-("normal 500 10px / 12px Inter, sans-serif");
 export const effectFocusOutline = "rgb(183, 201, 255) solid 2px";
 export const effectFocus = "0px 0px 0px 2px rgb(183, 201, 255)";
 export const effectShadowHoverFilter =
