@@ -59,6 +59,7 @@ export class FunctionItem extends vscode.TreeItem {
   contextValue = "function";
 
   constructor(moduleName: string, functionName: string) {
+    // rome-ignore lint/correctness/noInvalidConstructorSuper: rome doesn't understand that vscode.TreeItem is a class
     super(`${moduleName}::${functionName}`);
 
     this.command = {

@@ -41,6 +41,7 @@ export class MetricItem extends vscode.TreeItem {
   contextValue = "metric";
 
   constructor(metricName: string) {
+    // rome-ignore lint/correctness/noInvalidConstructorSuper: Rome doesn't understand that vscode.TreeItem is a class.
     super(metricName);
 
     this.command = {

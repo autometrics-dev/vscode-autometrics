@@ -96,6 +96,7 @@ export type Timestamp = string;
 export type Prometheus = Awaited<ReturnType<typeof loadPrometheusProvider>>;
 
 export async function loadPrometheusProvider(prometheusUrl: string) {
+  let currentUrl = prometheusUrl;
   const bundle = await fs.readFile(
     path.join(__dirname, "..", "wasm", "prometheus.wasm"),
   );
@@ -110,7 +111,7 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
    * Updates the Prometheus URL and fires the `onDidChangeConfig` event.
    */
   function setUrl(url: string) {
-    prometheusUrl = url;
+    currentUrl = url;
     _onDidChangeConfig.fire();
   }
 
@@ -183,7 +184,7 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
     }
 
     return invoke({
-      config: { url: prometheusUrl },
+      config: { url: currentUrl },
       queryData: fromQueryData(encodeQueryData(queryData)),
       queryType,
     }).then(unwrap);
