@@ -17,8 +17,8 @@ body {
 
 @font-face {
   font-family: "Inter";
-  src: local(""), url("./inter.woff2") format("woff2") tech("variations"),
-    url("./inter.woff2") format("woff2-variations");
+  src: local(""), url("./inter-roman.woff2") format("woff2") tech("variations"),
+    url("./inter-roman.woff2") format("woff2-variations");
   font-display: swap;
   font-weight: 100 900;
 }
