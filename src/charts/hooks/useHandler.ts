@@ -2,8 +2,7 @@ import { useCallback, useRef } from "react";
 
 const noDeps: Array<void> = [];
 
-// rome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function useHandler<Handler extends (...args: Array<any>) => any>(
+export function useHandler<Handler extends Function>(
   handler: Handler,
 ): Handler {
   const handlerRef = useRef(handler);
