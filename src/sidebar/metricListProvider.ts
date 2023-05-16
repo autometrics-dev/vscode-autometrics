@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
 import type { Prometheus } from "../prometheus";
-import { OPEN_CHART_COMMAND } from "../constants";
+import { OPEN_PANEL_COMMAND } from "../constants";
 
 export class MetricListProvider implements vscode.TreeDataProvider<MetricItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<
@@ -46,7 +46,7 @@ export class MetricItem extends vscode.TreeItem {
 
     this.command = {
       title: "Open chart",
-      command: OPEN_CHART_COMMAND,
+      command: OPEN_PANEL_COMMAND,
       arguments: [{ type: "metric", metricName }],
     };
   }

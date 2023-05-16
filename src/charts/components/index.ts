@@ -1,2 +1,2 @@
-export * from "./Chart";
-export * from "./ChartThemeSelector";
+export * from "./PanelContent";
+export * from "./ChartThemeSelector/ChartThemeSelector";

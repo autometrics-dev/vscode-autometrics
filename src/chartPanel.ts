@@ -1,18 +1,23 @@
 import * as vscode from "vscode";
 
-import { affectsAutometricsConfig, getAutometricsConfig } from "./config";
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
-import { OPEN_CHART_COMMAND } from "./constants";
+import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
+import { getNonce } from "./utils";
 
 /**
  * Options for the kind of chart to display.
  */
-export type ChartOptions =
+
+export type SingleChartOptions =
   | { type: "function"; functionName: string; moduleName?: string }
   | { type: "called_by"; functionName: string; moduleName?: string }
   | { type: "metric"; metricName: string };
+
+export type PanelOptions =
+  | SingleChartOptions
+  | { type: "function_graphs"; functionName: string; moduleName?: string };
 
 type ChartPanel = {
   /**
@@ -23,7 +28,7 @@ type ChartPanel = {
   /**
    * Instructs the panel to display a new metric.
    */
-  showChart(chart: ChartOptions): void;
+  update(options: PanelOptions): void;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
 };
@@ -33,14 +38,13 @@ export function registerChartPanel(
   prometheus: Prometheus,
 ) {
   let chartPanel: ChartPanel | null = null;
-  let config = getAutometricsConfig();
 
   vscode.commands.registerCommand(
-    OPEN_CHART_COMMAND,
-    (options: ChartOptions) => {
+    OPEN_PANEL_COMMAND,
+    (options: PanelOptions) => {
       // Reuse existing panel if available.
       if (chartPanel) {
-        chartPanel.showChart(options);
+        chartPanel.update(options);
         chartPanel.reveal();
         return;
       }
@@ -52,18 +56,12 @@ export function registerChartPanel(
       chartPanel = panel;
     },
   );
-
-  vscode.workspace.onDidChangeConfiguration((event) => {
-    if (affectsAutometricsConfig(event)) {
-      config = getAutometricsConfig();
-    }
-  });
 }
 
 function createChartPanel(
   context: vscode.ExtensionContext,
   prometheus: Prometheus,
-  options: ChartOptions,
+  options: PanelOptions,
 ): ChartPanel {
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
@@ -76,29 +74,34 @@ function createChartPanel(
     panel.webview.postMessage(message);
   }
 
-  function showChart(options: ChartOptions) {
+  function update(options: PanelOptions) {
     panel.title = getTitle(options);
-    postMessage({ type: "show_chart", options });
+    postMessage({ type: "show_panel", options });
   }
 
   panel.webview.onDidReceiveMessage(
     (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
-          showChart(options);
+          update(options);
           return;
         case "request_data": {
-          const { query, timeRange } = message;
+          const { query, timeRange, id } = message;
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              postMessage({ type: "show_data", timeRange, data });
+              postMessage({ type: "show_data", timeRange, data, id });
             })
             .catch((error: unknown) => {
+              const errorMessage = formatProviderError(error);
+
+              postMessage({
+                type: "show_error",
+                id,
+                error: errorMessage,
+              });
               vscode.window.showErrorMessage(
-                `Could not query Prometheus. Query: ${query} Error: ${formatProviderError(
-                  error,
-                )}`,
+                `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
               );
             });
           return;
@@ -113,7 +116,7 @@ function createChartPanel(
 
   return {
     reveal: panel.reveal.bind(panel),
-    showChart,
+    update,
     onDidDispose: panel.onDidDispose.bind(panel),
   };
 }
@@ -131,7 +134,7 @@ function getHtmlForWebview(
 
   // Do the same for the stylesheet.
   const styleVSCodeUri = webview.asWebviewUri(
-    vscode.Uri.joinPath(distUri, "vscode.css"),
+    vscode.Uri.joinPath(distUri, "styles", "vscode.css"),
   );
 
   // Use a nonce to only allow a specific script to be run.
@@ -141,7 +144,7 @@ function getHtmlForWebview(
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="${styleVSCodeUri}" rel="stylesheet">
         <title>Autometrics Chart</title>
@@ -153,17 +156,7 @@ function getHtmlForWebview(
     </html>`;
 }
 
-function getNonce() {
-  let text = "";
-  const possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-}
-
-export function getTitle(options: ChartOptions) {
+export function getTitle(options: PanelOptions) {
   switch (options.type) {
     case "called_by":
       return `Called by ${options.functionName}`;
@@ -171,5 +164,7 @@ export function getTitle(options: ChartOptions) {
       return options.functionName;
     case "metric":
       return options.metricName;
+    case "function_graphs":
+      return options.functionName;
   }
 }

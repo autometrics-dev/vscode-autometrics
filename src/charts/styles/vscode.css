@@ -1,5 +1,5 @@
 :root {
-  --container-paddding: 20px;
+  --container-padding: 20px;
   --input-padding-vertical: 6px;
   --input-padding-horizontal: 4px;
   --input-margin-vertical: 4px;
@@ -7,7 +7,7 @@
 }
 
 body {
-  padding: 0 var(--container-paddding);
+  padding: 0 var(--container-padding);
   color: var(--vscode-foreground);
   font-size: var(--vscode-font-size);
   font-weight: var(--vscode-font-weight);
@@ -15,9 +15,25 @@ body {
   background-color: var(--vscode-editor-background);
 }
 
+@font-face {
+  font-family: "Inter";
+  src: local(""), url("./inter-roman.woff2") format("woff2") tech("variations"),
+    url("./inter-roman.woff2") format("woff2-variations");
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Inconsolata";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""), url("./Inconsolata-VariableFont.woff2") format("woff2");
+  font-display: swap;
+}
+
 ol,
 ul {
-  padding-left: var(--container-paddding);
+  padding-left: var(--container-padding);
 }
 
 body>*,
