@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 import { useHandler } from "./useHandler";
 
@@ -13,7 +13,7 @@ export function useMessage<EventData extends {}>(
     callback(event),
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
   }, []);
