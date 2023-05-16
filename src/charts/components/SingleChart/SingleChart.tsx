@@ -57,10 +57,6 @@ export function SingleChart(props: Props) {
   );
 }
 
-/**
- * TODO: For the new design, we should show multiple queries for a given chart
- *       options.
- */
 function getQuery(options: PanelOptions) {
   switch (options.type) {
     case "called_by":
