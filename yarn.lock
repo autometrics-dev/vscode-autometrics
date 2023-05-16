@@ -1048,7 +1048,7 @@ __metadata:
     byte-base64: ^1.1.0
     concurrently: ^8.0.1
     esbuild: ^0.17.19
-    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#head=extension_tweaks&workspace=fiberplane-charts"
+    fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts"
     glob: ^8.1.0
     mocha: ^10.2.0
     node-fetch: ^2.0.0
@@ -1929,9 +1929,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#head=extension_tweaks&workspace=fiberplane-charts":
+"fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=4902fe505c2806b68fa6195d3dbd84f87814fee1"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=06b1031f60c9067ef76c3f0be44bfdbc027b847d"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
