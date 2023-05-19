@@ -1931,7 +1931,7 @@ __metadata:
 
 "fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=06b1031f60c9067ef76c3f0be44bfdbc027b847d"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=c84d3ac1fa6509bc8451f0681504fc0b4929f927"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
@@ -1950,7 +1950,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: 1fa7d4042ef374ab939b0a4ae7862dc0fe2c7b8f27014f0fc9efc20588ce65ec5c02fbc4afd74a6b298176e04348495d5448d34a57788c6762a076c4440d295b
+  checksum: 50b9bcf488a67b1b9b9125a4c1a17b7a2e68ab414e2d84e7cf13be2cf6c0d1fefebf7c2484ee069b3c996df5cd415d56adcedab241ab7be648176dd4e37aae6f
   languageName: node
   linkType: hard
 
@@ -2001,8 +2001,8 @@ __metadata:
   linkType: hard
 
 "framer-motion@npm:^10.12.4":
-  version: 10.12.10
-  resolution: "framer-motion@npm:10.12.10"
+  version: 10.12.12
+  resolution: "framer-motion@npm:10.12.12"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     tslib: ^2.4.0
@@ -2017,7 +2017,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: d4bdca5bc891534d6e4852a5725d1d0e8c29270a79927b50d8136d71e3d3affdca66dcb3a74e8c252fb4508292c4901cce20d93c3a35a4acdfa9a3f6ad9b57bb
+  checksum: 28ff7202b79833c0aa2fc412e64055b34f6405dc5b025eceb6fa737725f4005a2b29bec31011dd5c1c4cd44af2430b3d622e4a77a11a032e7b08e1e108456430
   languageName: node
   linkType: hard
 
@@ -3884,10 +3884,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.1.0":
   version: 2.5.0
   resolution: "tslib@npm:2.5.0"
   checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.4.0":
+  version: 2.5.2
+  resolution: "tslib@npm:2.5.2"
+  checksum: 4d3c1e238b94127ed0e88aa0380db3c2ddae581dc0f4bae5a982345e9f50ee5eda90835b8bfba99b02df10a5734470be197158c36f9129ac49fdc14a6a9da222
   languageName: node
   linkType: hard
 

@@ -14,6 +14,9 @@ import {
 } from "../../../queries";
 import { useRequestData } from "../../hooks/useRequestData";
 import { TimeRangeProps } from "../types";
+import { getTitle } from "../../../utils";
+import { CodeBlock } from "../CodeBlock";
+import { colors } from "../../utils";
 
 type Props = {
   options: SingleChartOptions;
@@ -41,9 +44,11 @@ export function SingleChart(props: Props) {
     });
   }, [options, timeRange]);
 
+  const title = `${options.type} chart for ${getTitle(options)}`;
+
   return (
     <>
-      <h1>{query}</h1>
+      <h1>{title}</h1>
       <MetricsChart
         graphType={graphType}
         stackingType={stackingType}
@@ -52,7 +57,14 @@ export function SingleChart(props: Props) {
         onChangeGraphType={setGraphType}
         onChangeStackingType={setStackingType}
         onChangeTimeRange={setTimeRange}
+        chartControlsShown={false}
+        gridColumnsShown={false}
+        footerShown={false}
+        gridBordersShown={false}
+        gridDashArray="2"
+        colors={colors}
       />
+      <CodeBlock query={query || ""} />
     </>
   );
 }

@@ -8,8 +8,8 @@ import {
   Timeseries,
 } from "fiberplane-charts";
 import styled from "styled-components";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { styles } from "./prismStyles";
+import { CodeBlock } from "../CodeBlock";
+import { colors } from "../../utils";
 
 type Props = {
   query: string;
@@ -51,11 +51,10 @@ export function FunctionChart(props: Props) {
           footerShown={false}
           gridBordersShown={false}
           gridDashArray="2"
+          colors={colors}
         />
       </div>
-      <SyntaxHighlighter language="promql" style={styles}>
-        {query}
-      </SyntaxHighlighter>
+      <CodeBlock query={query} />
     </>
   );
 }

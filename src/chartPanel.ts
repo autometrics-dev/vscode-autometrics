@@ -4,7 +4,7 @@ import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
-import { getNonce } from "./utils";
+import { getNonce, getTitle } from "./utils";
 
 /**
  * Options for the kind of chart to display.
@@ -156,17 +156,4 @@ function getHtmlForWebview(
         <script nonce="${nonce}" src="${scriptUri}" type="module"></script>
     </body>
     </html>`;
-}
-
-export function getTitle(options: PanelOptions) {
-  switch (options.type) {
-    case "called_by":
-      return `Called by ${options.functionName}`;
-    case "function":
-      return options.functionName;
-    case "metric":
-      return options.metricName;
-    case "function_graphs":
-      return options.functionName;
-  }
 }

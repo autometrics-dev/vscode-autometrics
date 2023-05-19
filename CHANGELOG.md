@@ -2,8 +2,11 @@
 
 ## [Unreleased]
 
+# 0.3.0
 - [chore] Upgrade several dependencies
 - Update panel to support showing multiple graphs
+- Update styling for single graph charts
+- Use more of the vscode theme colors for graphs
 - [chore] We now use Yarn again instead of NPM. This is necessary to pull in
   `fiberplane-charts` directly from a workspace repository. The problem with
   packaging has been solved with a Yarn plugin.

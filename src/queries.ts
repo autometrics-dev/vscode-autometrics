@@ -43,9 +43,16 @@ export function getSumQuery(
   metricName: string,
   labels: Record<string, string> = {},
 ) {
-  return `sum by (function, module) (rate(${metricName}{${Object.entries(labels)
-    .map(([key, value]) => `${key}="${value}"`)
-    .join(",")}}[5m]))`;
+  return `sum by (function, module) (
+    rate(
+      ${metricName}{${Object.entries(labels)
+    .map(
+      ([key, value]) => `        ${key}="${value}"
+`,
+    )
+    .join(",")}
+  }[5m])
+)`;
 }
 
 export function generateRequestRateQuery(
