@@ -5,6 +5,8 @@ import {
   generateErrorRatioQuery,
   generateLatencyQuery,
   generateRequestRateQuery,
+  getCalledByErrorRatio,
+  getCalledByRequestRate,
 } from "../../../queries";
 
 type Props = TimeRangeProps & {
@@ -18,6 +20,9 @@ export function FunctionCharts(props: Props) {
   const requestRateQuery = generateRequestRateQuery(functionName, moduleName);
   const errorRatioQuery = generateErrorRatioQuery(functionName, moduleName);
   const latencyQuery = generateLatencyQuery(functionName, moduleName);
+
+  const calledByRequestQuery = getCalledByRequestRate(functionName);
+  const calledByErrorRatioQuery = getCalledByErrorRatio(functionName);
 
   return (
     <div>
@@ -51,6 +56,29 @@ export function FunctionCharts(props: Props) {
             timeRange={timeRange}
             setTimeRange={setTimeRange}
             key="latency_query"
+          />
+        </ChartContainer>
+      </Container>
+      <hr />
+      <h5>"Called by" metrics</h5>
+      <hr />
+      <Container>
+        <ChartContainer>
+          <FunctionChart
+            title="Request Rate"
+            query={calledByRequestQuery}
+            timeRange={timeRange}
+            setTimeRange={setTimeRange}
+            key="request_rate"
+          />
+        </ChartContainer>
+        <ChartContainer>
+          <FunctionChart
+            title="Error Ratio"
+            query={calledByErrorRatioQuery}
+            timeRange={timeRange}
+            setTimeRange={setTimeRange}
+            key="error_ratio"
           />
         </ChartContainer>
       </Container>
