@@ -44,7 +44,7 @@ export function SingleChart(props: Props) {
     });
   }, [options, timeRange]);
 
-  const title = getTitle(options);
+  const title = `${options.type} chart for ${getTitle(options)}`;
 
   return (
     <>
