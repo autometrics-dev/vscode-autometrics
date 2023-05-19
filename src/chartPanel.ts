@@ -63,6 +63,7 @@ function createChartPanel(
   prometheus: Prometheus,
   options: PanelOptions,
 ): ChartPanel {
+  let currentOptions = options;
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     getTitle(options),
@@ -75,6 +76,7 @@ function createChartPanel(
   }
 
   function update(options: PanelOptions) {
+    currentOptions = options;
     panel.title = getTitle(options);
     postMessage({ type: "show_panel", options });
   }
@@ -83,7 +85,7 @@ function createChartPanel(
     (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
-          update(options);
+          update(currentOptions);
           return;
         case "request_data": {
           const { query, timeRange, id } = message;
