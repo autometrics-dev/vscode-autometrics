@@ -40,6 +40,8 @@ extensions:
 - [esbuild Problem Matchers](https://marketplace.visualstudio.com/items?itemName=connor4312.esbuild-problem-matchers)
   This is needed when vscode to debug the extension.
 
+If you want to install a release from GitHub manually, open the command palette via `cmd + shift + p` and pick the `install visx` option and point the filepicker to your local extension.
+
 # How to release a new version
 
 Create a new release using Github which matches the version number it should be
