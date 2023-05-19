@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TimeRangeProps } from "../types";
 import { useRequestData } from "../../hooks/useRequestData";
 import {
@@ -31,6 +31,18 @@ export function FunctionChart(props: Props) {
     });
   }, [query, timeRange]);
 
+  const colors = useMemo(
+    () => [
+      "var(--vscode-charts-red)",
+      "var(vscode-charts-blue)",
+      "var(vscode-charts-yellow)",
+      "var(vscode-charts-orange)",
+      "var(vscode-charts-green)",
+      "var(vscode-charts-purple)",
+    ],
+    [],
+  );
+
   return (
     <>
       <div>
@@ -51,6 +63,7 @@ export function FunctionChart(props: Props) {
           footerShown={false}
           gridBordersShown={false}
           gridDashArray="2"
+          colors={colors}
         />
       </div>
       <SyntaxHighlighter language="promql" style={styles}>
