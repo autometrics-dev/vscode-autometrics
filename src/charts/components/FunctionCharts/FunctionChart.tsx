@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TimeRangeProps } from "../types";
 import { useRequestData } from "../../hooks/useRequestData";
 import {
@@ -9,6 +9,7 @@ import {
 } from "fiberplane-charts";
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
+import { colors } from "../../utils";
 
 type Props = {
   query: string;
@@ -29,18 +30,6 @@ export function FunctionChart(props: Props) {
       setTimeseriesData(data);
     });
   }, [query, timeRange]);
-
-  const colors = useMemo(
-    () => [
-      "var(--vscode-charts-red)",
-      "var(--vscode-charts-blue)",
-      "var(--vscode-charts-yellow)",
-      "var(--vscode-charts-orange)",
-      "var(--vscode-charts-green)",
-      "var(--vscode-charts-purple)",
-    ],
-    [],
-  );
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GraphType,
   MetricsChart,
@@ -16,6 +16,7 @@ import { useRequestData } from "../../hooks/useRequestData";
 import { TimeRangeProps } from "../types";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
+import { colors } from "../../utils";
 
 type Props = {
   options: SingleChartOptions;
@@ -42,18 +43,6 @@ export function SingleChart(props: Props) {
       setTimeseriesData(data);
     });
   }, [options, timeRange]);
-
-  const colors = useMemo(
-    () => [
-      "var(--vscode-charts-red)",
-      "var(--vscode-charts-blue)",
-      "var(--vscode-charts-yellow)",
-      "var(--vscode-charts-orange)",
-      "var(--vscode-charts-green)",
-      "var(--vscode-charts-purple)",
-    ],
-    [],
-  );
 
   const title = getTitle(options);
 
