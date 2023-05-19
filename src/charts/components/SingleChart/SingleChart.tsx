@@ -46,11 +46,11 @@ export function SingleChart(props: Props) {
   const colors = useMemo(
     () => [
       "var(--vscode-charts-red)",
-      "var(vscode-charts-blue)",
-      "var(vscode-charts-yellow)",
-      "var(vscode-charts-orange)",
-      "var(vscode-charts-green)",
-      "var(vscode-charts-purple)",
+      "var(--vscode-charts-blue)",
+      "var(--vscode-charts-yellow)",
+      "var(--vscode-charts-orange)",
+      "var(--vscode-charts-green)",
+      "var(--vscode-charts-purple)",
     ],
     [],
   );
