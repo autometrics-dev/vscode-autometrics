@@ -1931,7 +1931,7 @@ __metadata:
 
 "fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&head=chart-line-colors":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=a249c15b43f535107a7693eb553ccc33f533d7b8"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=2f025e069c47cf012bed65046a5f1090f32d4281"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
@@ -1950,7 +1950,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: 6c39b7139516a5957076685f129b62f160c977260170c4872df37f7a3d826648535c653c0696ff8f502ea3616c60b94e36875a92c19a80746f15d1ee53ee25dd
+  checksum: 50b9bcf488a67b1b9b9125a4c1a17b7a2e68ab414e2d84e7cf13be2cf6c0d1fefebf7c2484ee069b3c996df5cd415d56adcedab241ab7be648176dd4e37aae6f
   languageName: node
   linkType: hard
 
