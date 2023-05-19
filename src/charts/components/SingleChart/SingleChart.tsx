@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   GraphType,
   MetricsChart,
@@ -14,6 +14,8 @@ import {
 } from "../../../queries";
 import { useRequestData } from "../../hooks/useRequestData";
 import { TimeRangeProps } from "../types";
+import { getTitle } from "../../../utils";
+import { CodeBlock } from "../CodeBlock";
 
 type Props = {
   options: SingleChartOptions;
@@ -41,9 +43,23 @@ export function SingleChart(props: Props) {
     });
   }, [options, timeRange]);
 
+  const colors = useMemo(
+    () => [
+      "var(--vscode-charts-red)",
+      "var(vscode-charts-blue)",
+      "var(vscode-charts-yellow)",
+      "var(vscode-charts-orange)",
+      "var(vscode-charts-green)",
+      "var(vscode-charts-purple)",
+    ],
+    [],
+  );
+
+  const title = getTitle(options);
+
   return (
     <>
-      <h1>{query}</h1>
+      <h1>{title}</h1>
       <MetricsChart
         graphType={graphType}
         stackingType={stackingType}
@@ -52,7 +68,14 @@ export function SingleChart(props: Props) {
         onChangeGraphType={setGraphType}
         onChangeStackingType={setStackingType}
         onChangeTimeRange={setTimeRange}
+        chartControlsShown={false}
+        gridColumnsShown={false}
+        footerShown={false}
+        gridBordersShown={false}
+        gridDashArray="2"
+        colors={colors}
       />
+      <CodeBlock query={query || ""} />
     </>
   );
 }
