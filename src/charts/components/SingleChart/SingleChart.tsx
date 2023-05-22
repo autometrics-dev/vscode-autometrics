@@ -12,7 +12,7 @@ import {
   getRequestRate,
   getSumQuery,
 } from "../../../queries";
-import { useRequestData } from "../../hooks/useRequestData";
+import { useRequestData } from "../../hooks";
 import { TimeRangeProps } from "../types";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";

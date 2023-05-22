@@ -1,3 +1,5 @@
+import { pxToEm } from "./utils";
+
 export const colorBackground = "--vscode-editor-background";
 export const colorForeground = "--vscode-foreground";
 export const colorBase100 = "#f9f9f9";
@@ -83,6 +85,34 @@ export const fontControlsLetterSpacing = "0";
 export const fontControlsShortHand = "normal 400 12px / 20px Inter, sans-serif";
 export const fontLegendLetterSpacing = "0";
 export const fontLegendShortHand = "normal 400 10px / 12px Inter, sans-serif";
+export const fontStudioHeadingsH5FontSize = pxToEm(14);
+export const fontStudioHeadingsH5TextDecoration = "none";
+export const fontStudioHeadingsH5FontFamily = "Inter";
+export const fontStudioHeadingsH5FontWeight = "500";
+export const fontStudioHeadingsH5FontStyle = "normal";
+export const fontStudioHeadingsH5FontStretch = "normal";
+export const fontStudioHeadingsH5FontStyleOld = "Medium";
+export const fontStudioHeadingsH5LetterSpacing = "0";
+export const fontStudioHeadingsH5LineHeight = (18 / 14).toFixed(4);
+export const fontStudioHeadingsH5ParagraphIndent = "0";
+export const fontStudioHeadingsH5ParagraphSpacing = "0";
+export const fontStudioHeadingsH5TextCase = "none";
+export const fontStudioHeadingsH5ShortHand = `${fontStudioHeadingsH5FontStyle} ${fontStudioHeadingsH5FontWeight} ${fontStudioHeadingsH5FontSize} / ${fontStudioHeadingsH5LineHeight} ${fontStudioHeadingsH5FontFamily}, sans-serif`;
+export const fontStudioBodyCopySmallFontSize = "12px";
+export const fontStudioBodyCopySmallTextDecoration = "none";
+export const fontStudioBodyCopySmallFontFamily = "Inter";
+export const fontStudioBodyCopySmallFontWeight = "400";
+export const fontStudioBodyCopySmallFontStyle = "normal";
+export const fontStudioBodyCopySmallFontStretch = "normal";
+export const fontStudioBodyCopySmallFontStyleOld = "Regular";
+export const fontStudioBodyCopySmallLetterSpacing = "0";
+export const fontStudioBodyCopySmallLineHeight = "20px";
+export const fontStudioBodyCopySmallParagraphIndent = "0";
+export const fontStudioBodyCopySmallParagraphSpacing = "0";
+export const fontStudioBodyCopySmallTextCase = "none";
+export const fontStudioBodyCopySmallShortHand = `${fontStudioBodyCopySmallFontStyle} ${fontStudioBodyCopySmallFontWeight} ${fontStudioBodyCopySmallFontSize} / ${fontStudioBodyCopySmallLineHeight} ${fontStudioBodyCopySmallFontFamily}, sans-serif`;
+
+console.log("fontStudioHeadingsH5ShortHand", fontStudioHeadingsH5ShortHand);
 export const fontResultsSummaryLetterSpacing = "0";
 export const fontResultsSummaryShortHand =
   "normal 600 12px / 12px Inter, sans-serif";

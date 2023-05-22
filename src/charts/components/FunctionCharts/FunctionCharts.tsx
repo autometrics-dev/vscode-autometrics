@@ -8,6 +8,9 @@ import {
   getCalledByErrorRatio,
   getCalledByRequestRate,
 } from "../../../queries";
+import { DatePicker } from "../DatePicker";
+import { useHandler } from "../../hooks";
+import { Timestamp } from "fiberplane-charts";
 
 type Props = TimeRangeProps & {
   functionName: string;
@@ -29,6 +32,7 @@ export function FunctionCharts(props: Props) {
       <Title>
         Live metrics for <FunctionName>{functionName}</FunctionName>
       </Title>
+      <DatePicker timeRange={timeRange} onChange={setTimeRange} />
       <Container>
         <ChartContainer>
           <FunctionChart
