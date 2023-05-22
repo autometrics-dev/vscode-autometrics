@@ -9,8 +9,6 @@ import {
   getCalledByRequestRate,
 } from "../../../queries";
 import { DatePicker } from "../DatePicker";
-import { useHandler } from "../../hooks";
-import { Timestamp } from "fiberplane-charts";
 
 type Props = TimeRangeProps & {
   functionName: string;

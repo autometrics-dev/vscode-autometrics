@@ -20,6 +20,18 @@ export function DatePickerContent(props: Props) {
   const [start, setStart] = useState<Timestamp>(from);
   const [end, setEnd] = useState<Timestamp>(to);
 
+  const [key, setKey] = useState<number>(0);
+
+  const setStartTime = (time: Timestamp) => {
+    setKey(key + 1);
+    setStart(time);
+  };
+
+  const setEndTime = (time: Timestamp) => {
+    setKey(key + 1);
+    setEnd(time);
+  };
+
   const startRef = useRef<HTMLInputElement | null>(null);
   const endRef = useRef<HTMLInputElement | null>(null);
 
@@ -75,8 +87,8 @@ export function DatePickerContent(props: Props) {
   return (
     <Section>
       <MonthTable
-        setStartTime={setStart}
-        setEndTime={setEnd}
+        setStartTime={setStartTime}
+        setEndTime={setEndTime}
         startTime={start}
         endTime={end}
       />
@@ -102,7 +114,7 @@ export function DatePickerContent(props: Props) {
                   setStart(values.from);
                 }
               }}
-              key={start}
+              key={`from-${key}`}
               defaultValue={start}
               ref={startRef}
             />
@@ -112,7 +124,7 @@ export function DatePickerContent(props: Props) {
             <input
               placeholder="To"
               type="text"
-              key={end}
+              key={`end-${key}`}
               defaultValue={end}
               className={endError || globalError ? "error" : ""}
               name="endTime"

@@ -157,10 +157,11 @@ export const MonthTable = memo(function MonthTable(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {weeks.map((week) => (
-            <tr>
-              {week.map((day) => (
+          {weeks.map((week, index) => (
+            <tr key={index}>
+              {week.map((day, index) => (
                 <Day
+                  key={index}
                   day={day}
                   currentMonth={currentMonth}
                   onClick={onClick}
