@@ -62,8 +62,6 @@ export function pxToEm(px: number, baseSize = 13): string {
   return `${px / baseSize}em`;
 }
 
-// import { secondsToTimestamp, timestampToSeconds } from "./timestamps";
-
 type Keys = keyof TimeRange | "global";
 
 type ValidationResult = {
