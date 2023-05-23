@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
-import { pxToEm } from "../../utils";
+import { msToTimestamp, pxToEm } from "../../utils";
+import { Timestamp } from "fiberplane-charts";
 
 type Option = {
   label: string;
@@ -81,13 +82,29 @@ const options: Array<Option> = [
   },
 ];
 
-export function TimeRangePresets() {
+type Props = {
+  setDraftTo: (value: Timestamp) => void;
+  setDraftFrom: (value: Timestamp) => void;
+};
+
+export function TimeRangePresets(props: Props) {
+  const { setDraftTo, setDraftFrom } = props;
+
   return (
     <Container>
       <HeaderText>Time range</HeaderText>
       <OptionsList>
         {options.map((option) => (
-          <TimeOption key={option.label}>{option.label}</TimeOption>
+          <TimeOption
+            key={option.label}
+            onClick={() => {
+              const now = Date.now();
+              setDraftFrom(msToTimestamp(now - option.value));
+              setDraftTo(msToTimestamp(now));
+            }}
+          >
+            {option.label}
+          </TimeOption>
         ))}
       </OptionsList>
     </Container>

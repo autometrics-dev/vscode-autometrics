@@ -107,3 +107,6 @@ export const secondsToTimestamp = (seconds: number): Timestamp =>
 
 export const timestampToSeconds = (timestamp: Timestamp): number =>
   new Date(timestamp).getTime() / 1000;
+
+export const msToTimestamp = (ms: number): Timestamp =>
+  new Date(ms).toISOString();
