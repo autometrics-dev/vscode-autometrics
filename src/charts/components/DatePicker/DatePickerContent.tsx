@@ -40,7 +40,7 @@ export function DatePickerContent(props: Props) {
         />
       </Section>
       <Section>
-        <TimeRangePresets setDraftFrom={setDraftFrom} setDraftTo={setDraftTo} />
+        <TimeRangePresets onChange={onChange} />
       </Section>
     </Container>
   );

@@ -83,12 +83,11 @@ const options: Array<Option> = [
 ];
 
 type Props = {
-  setDraftTo: (value: Timestamp) => void;
-  setDraftFrom: (value: Timestamp) => void;
+  onChange: (timeRange: TimeRange) => void;
 };
 
 export function TimeRangePresets(props: Props) {
-  const { setDraftTo, setDraftFrom } = props;
+  const { onChange } = props;
 
   return (
     <Container>
@@ -99,8 +98,10 @@ export function TimeRangePresets(props: Props) {
             key={option.label}
             onClick={() => {
               const now = Date.now();
-              setDraftFrom(msToTimestamp(now - option.value));
-              setDraftTo(msToTimestamp(now));
+              onChange({
+                from: msToTimestamp(now - option.value),
+                to: msToTimestamp(now),
+              });
             }}
           >
             {option.label}

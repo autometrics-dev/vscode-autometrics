@@ -20,9 +20,9 @@ export function DatePicker(props: Props) {
 
   return (
     <>
-      <Button buttonStyle="secondary" onClick={() => setOpened(!opened)}>
-        Time Range
-      </Button>
+      <StyledButton buttonStyle="secondary" onClick={() => setOpened(!opened)}>
+        {props.timeRange.from} - {props.timeRange.to}
+      </StyledButton>
       {opened && (
         <Content>
           <DatePickerContent timeRange={props.timeRange} onChange={handler} />
@@ -35,4 +35,14 @@ export function DatePicker(props: Props) {
 const Content = styled.div`
   position: absolute;
   z-index: 1;
+`;
+
+const StyledButton = styled(Button)`
+  background: var(--vscode-editorWidget-background, transparent);
+  color: var(--vscode-editorWidget-foreground, transparent);
+  border: 1px solid var(--vscode-editorWidget-border, transparent);
+
+  &:hover {
+    background: var(--vscode-editorWidget-border, transparent);
+  }
 `;

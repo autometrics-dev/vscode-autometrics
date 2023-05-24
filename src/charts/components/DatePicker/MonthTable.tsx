@@ -8,8 +8,6 @@ import { Button } from "../Button";
 import CaretLeft from "./CaretLeft";
 import CaretRight from "./CaretRight";
 
-console.log("CaretLeft", CaretLeft);
-
 const MONTHS = [
   "January",
   "February",
