@@ -132,7 +132,7 @@ const OptionsList = styled.div`
   display: flex;
   gap: ${pxToEm(10)};
   flex-direction: column;
-  padding: ${pxToEm(10)} 0;
+  padding: ${pxToEm(10)} ${pxToEm(10)} ${pxToEm(10)} 0;
   overflow: auto;
 `;
 
