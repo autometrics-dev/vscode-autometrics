@@ -136,7 +136,7 @@ const OptionsList = styled.div`
   overflow: auto;
 `;
 
-const TimeOption = styled.a`
+const TimeOption = styled.button`
   font-size: ${pxToEm(12)};  
   display: block;
   color: var(--vscode-menu-foreground);
@@ -144,6 +144,9 @@ const TimeOption = styled.a`
   text-decoration: none;
   line-height: ${(21 / 12).toFixed(2)};
   padding: 0 ${pxToEm(10)};
+  cursor: pointer;
+  border: 0;
+  text-align: left;
 
 
   &:hover {
