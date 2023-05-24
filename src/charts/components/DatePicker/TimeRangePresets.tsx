@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { msToTimestamp, pxToEm } from "../../utils";
-import { Timestamp } from "fiberplane-charts";
+import { TimeRange } from "fiberplane-charts";
 
 type Option = {
   label: string;

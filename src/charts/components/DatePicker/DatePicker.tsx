@@ -55,6 +55,7 @@ const StyledButton = styled(Button)`
   gap: ${pxToEm(10)};
   padding: ${pxToEm(10)};
   border-radius: ${pxToEm(8)};
+  width: fit-content;
 
   &:hover {
     background: var(--vscode-editorWidget-foreground, transparent);
