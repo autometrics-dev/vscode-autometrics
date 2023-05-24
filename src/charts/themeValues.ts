@@ -112,8 +112,6 @@ export const fontStudioBodyCopySmallParagraphIndent = "0";
 export const fontStudioBodyCopySmallParagraphSpacing = "0";
 export const fontStudioBodyCopySmallTextCase = "none";
 export const fontStudioBodyCopySmallShortHand = `${fontStudioBodyCopySmallFontStyle} ${fontStudioBodyCopySmallFontWeight} ${fontStudioBodyCopySmallFontSize} / ${fontStudioBodyCopySmallLineHeight} ${fontStudioBodyCopySmallFontFamily}, sans-serif`;
-
-console.log("fontStudioHeadingsH5ShortHand", fontStudioHeadingsH5ShortHand);
 export const fontResultsSummaryLetterSpacing = "0";
 export const fontResultsSummaryShortHand =
   "normal 600 12px / 12px Inter, sans-serif";

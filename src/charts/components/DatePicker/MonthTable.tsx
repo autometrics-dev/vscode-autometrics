@@ -1,12 +1,12 @@
 import { memo, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 
-import { Day } from "./Day";
+import { Day, StyledDay } from "./Day";
 import { Timestamp } from "fiberplane-charts";
 import { getDateParts, pxToEm, timestampToDate } from "../../utils";
 import { Button } from "../Button";
-import CaretLeft from "./CaretLeft";
-import CaretRight from "./CaretRight";
+import { CaretLeft } from "./CaretLeft";
+import { CaretRight } from "./CaretRight";
 
 const MONTHS = [
   "January",
@@ -145,13 +145,27 @@ export const MonthTable = memo(function MonthTable(props: Props) {
       <Table role="presentation">
         <thead aria-hidden="true">
           <tr>
-            <th>M</th>
-            <th>T</th>
-            <th>W</th>
-            <th>T</th>
-            <th>F</th>
-            <th>S</th>
-            <th>S</th>
+            <th>
+              <StyledDay>M</StyledDay>
+            </th>
+            <th>
+              <StyledDay>T</StyledDay>
+            </th>
+            <th>
+              <StyledDay>W</StyledDay>
+            </th>
+            <th>
+              <StyledDay>T</StyledDay>
+            </th>
+            <th>
+              <StyledDay>F</StyledDay>
+            </th>
+            <th>
+              <StyledDay>S</StyledDay>
+            </th>
+            <th>
+              <StyledDay>S</StyledDay>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -223,9 +237,8 @@ function getMonthWeeks(monthTimestamp: Timestamp): Date[][] {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${pxToEm(20)};
+  display: grid;
+  grid-row-gap: ${pxToEm(20)};
 `;
 
 const Header = styled.div`
@@ -270,10 +283,14 @@ const Table = styled.table(
       padding: 0;
     }
 
+    /* thead  tr{
+      display: flex;
+      flex-direction: row;
+      /* grid-row-gap: ${pxToEm(4)};
+    } */
+
     th {
       color: var(--vscode-editorHoverWidget-foreground);
-      width:  ${pxToEm(28)};
-      height:  ${pxToEm(28)};
     }
   `,
 );

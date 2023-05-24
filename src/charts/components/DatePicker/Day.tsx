@@ -71,7 +71,7 @@ const DateItem = styled.td<{
   ({ theme, outside, isStartDay, isEndDay }) => css`
     text-align: center;
     cursor: pointer;
-    color: ${outside ? theme.colorBase400 : "inherit"};
+    opacity: ${outside ? "0.5" : "1.0"};
     
 
     &.selected ${StyledDay} {
@@ -158,7 +158,7 @@ const DateItem = styled.td<{
   `,
 );
 
-const StyledDay = styled.span(
+export const StyledDay = styled.span(
   ({ theme }) => css`
     z-index: 2;
     position: sticky;

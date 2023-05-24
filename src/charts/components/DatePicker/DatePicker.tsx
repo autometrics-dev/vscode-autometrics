@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import { DatePickerContent } from "./DatePickerContent";
 import { useHandler } from "../../hooks";
+import { Clock } from "./Clock";
+import { CaretDown } from "./CaretDown";
+import { pxToEm } from "../../utils";
 
 type Props = {
   timeRange: TimeRange;
@@ -21,7 +24,9 @@ export function DatePicker(props: Props) {
   return (
     <>
       <StyledButton buttonStyle="secondary" onClick={() => setOpened(!opened)}>
+        <Clock />
         {props.timeRange.from} - {props.timeRange.to}
+        <CaretDown />
       </StyledButton>
       {opened && (
         <Content>
@@ -41,8 +46,18 @@ const StyledButton = styled(Button)`
   background: var(--vscode-editorWidget-background, transparent);
   color: var(--vscode-editorWidget-foreground, transparent);
   border: 1px solid var(--vscode-editorWidget-border, transparent);
+  /* background: var(--vscode-dropdown-background, transparent);
+  color: var(--vscode-dropdown-foreground, transparent);
+  border: 1px solid var(--vscode-dropdown-border, transparent); */
+  display: flex;
+  align-items: center;
+  gap: ${pxToEm(10)};
+  padding: ${pxToEm(10)};
+  border-radius: ${pxToEm(8)};
 
   &:hover {
-    background: var(--vscode-editorWidget-border, transparent);
+    background: var(--vscode-editorWidget-foreground, transparent);
+    color: var(--vscode-editorWidget-background, transparent);    
+    /* background: var(--vscode-editorWidget-border, transparent); */
   }
 `;

@@ -25,6 +25,8 @@ export function DatePickerContent(props: Props) {
   return (
     <Container>
       <Section>
+        <Header>Absolute time range</Header>
+
         <MonthTable
           setStartTime={setDraftFrom}
           setEndTime={setDraftTo}
@@ -62,3 +64,11 @@ const Section = styled.div`
   display: grid;
   gap: ${pxToEm(20)};
 `;
+
+export const Header = styled.div(
+  ({ theme }) => css`
+    font: ${theme.fontStudioHeadingsH5ShortHand};
+    letter-spacing: ${theme.fontStudioHeadingsH5LetterSpacing};
+    padding: 0 6px;
+  `,
+);
