@@ -40,6 +40,7 @@ export function DatePicker(props: Props) {
 const Content = styled.div`
   position: absolute;
   z-index: 1;
+  transform: translateY(${pxToEm(5)});
 `;
 
 const StyledButton = styled(Button)`
