@@ -137,7 +137,6 @@ const DateItem = styled.td<{
     ${
       isStartDay &&
       css`
-      /* stylelint-disable-next-line no-duplicate-selectors */
       & {
         border-top-left-radius: ${theme.borderRadius600};
         border-bottom-left-radius: ${theme.borderRadius600};
@@ -148,7 +147,6 @@ const DateItem = styled.td<{
     ${
       isEndDay &&
       css`
-      /* stylelint-disable-next-line no-duplicate-selectors */
       & {
         border-top-right-radius: ${theme.borderRadius600};
         border-bottom-right-radius: ${theme.borderRadius600};
