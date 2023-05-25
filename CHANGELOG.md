@@ -1,6 +1,7 @@
 # Change Log
 
 ## [Unreleased]
+- Add date picker to the function metrics panel
 
 # 0.3.0
 - [chore] Upgrade several dependencies
@@ -18,6 +19,7 @@
 ## 0.2.0
 
 - [fix] add support for async functions in python
+
 ## 0.1.0
 
 - [python] Improved detection logic: Now multiple decorators are supported
