@@ -16,7 +16,8 @@ import { useRequestData } from "../../hooks";
 import { TimeRangeProps } from "../types";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
-import { colors } from "../../utils";
+import { colors, pxToEm } from "../../utils";
+import styled from "styled-components";
 
 type Props = {
   options: SingleChartOptions;
@@ -47,7 +48,7 @@ export function SingleChart(props: Props) {
   const title = `${options.type} chart for ${getTitle(options)}`;
 
   return (
-    <>
+    <Container>
       <h1>{title}</h1>
       <MetricsChart
         graphType={graphType}
@@ -65,7 +66,7 @@ export function SingleChart(props: Props) {
         colors={colors}
       />
       <CodeBlock query={query || ""} />
-    </>
+    </Container>
   );
 }
 
@@ -81,3 +82,7 @@ function getQuery(options: PanelOptions) {
       throw Error("This shouldn't happen");
   }
 }
+
+const Container = styled.div`
+  padding: ${pxToEm(20)};
+`;
