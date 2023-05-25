@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TimeRangeProps } from "../types";
-import { useRequestData } from "../../hooks/useRequestData";
+import { useRequestData } from "../../hooks";
 import {
   GraphType,
   MetricsChart,
