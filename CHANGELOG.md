@@ -1,7 +1,8 @@
-# Change Log
+# Changelog
 
-## [Unreleased]
+## [0.4.0]
 - Add date picker to the function metrics panel
+- [chore] update TypeScript plugin dependency
 
 # 0.3.0
 - [chore] Upgrade several dependencies
