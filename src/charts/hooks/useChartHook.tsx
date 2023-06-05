@@ -55,6 +55,5 @@ export function useChartHook(id: string, query: string) {
       });
   }, [loading, query, timeRange]);
 
-  // const { loading = false, timeSeries = null, error = null } = graphs[id] || {};
-  return { loading, timeSeries, error };
+  return { loading, timeSeries, error, timeRange };
 }

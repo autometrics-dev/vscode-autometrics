@@ -14,7 +14,6 @@ import {
   getSumQuery,
 } from "../../../queries";
 import { useHandler } from "../../hooks";
-import { TimeRangeProps } from "../types";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
@@ -35,8 +34,11 @@ export function SingleChart(props: Props) {
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const state = useContext(GraphContext);
 
-  const { showingQuery, timeRange } = useSnapshot(state);
-  const { error, loading, timeSeries } = useChartHook("single", query || "");
+  const { showingQuery } = useSnapshot(state);
+  const { error, loading, timeSeries, timeRange } = useChartHook(
+    "single",
+    query || "",
+  );
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;

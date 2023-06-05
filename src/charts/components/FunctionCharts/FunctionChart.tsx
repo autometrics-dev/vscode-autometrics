@@ -24,16 +24,14 @@ type Props = {
   id: string;
 };
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export const FunctionChart = function FunctionChart(props: Props) {
   const { query, title, description = "", id } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [stackingType, setStackingType] = useState<StackingType>("none");
 
   const state = useContext(GraphContext);
-  const { showingQuery, timeRange } = useSnapshot(state);
-  const { error, loading, timeSeries } = useChartHook(id, query);
+  const { showingQuery } = useSnapshot(state);
+  const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;
