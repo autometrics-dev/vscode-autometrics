@@ -5,16 +5,7 @@ import { useHandler } from "./useHandler";
 import { MessageToWebview, vscode } from "..";
 import { useMessage } from "./useMessage";
 import { getNonce } from "../../utils";
-
-export type Result<T, E> =
-  /**
-   * Represents a successful result.
-   */
-  | { Ok: T }
-  /**
-   * Represents an error.
-   */
-  | { Err: E };
+import type { Result } from "../../providerRuntime/types";
 
 export function useRequestData() {
   const requests = useRef<

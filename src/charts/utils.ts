@@ -1,5 +1,9 @@
+// import * as vscode from "vscode";
 import * as React from "react";
-import type { TimeRange, Timestamp } from "fiberplane-charts";
+import type { TimeRange, Timeseries, Timestamp } from "fiberplane-charts";
+import { getNonce } from "../utils";
+import { Result } from "../providerRuntime/types";
+import { vscode } from "./chart";
 
 export function getCurrentTimeRange(): TimeRange {
   const now = new Date();
@@ -110,3 +114,48 @@ export const timestampToSeconds = (timestamp: Timestamp): number =>
 
 export const msToTimestamp = (ms: number): Timestamp =>
   new Date(ms).toISOString();
+
+const requests: Record<string, (result: Result<Timeseries[], String>) => void> =
+  {};
+
+window.addEventListener("message", (event) => {
+  if (event.data.type === "show_data") {
+    const { data, id } = event.data;
+    const request = requests[id];
+    if (request) {
+      request({ Ok: data });
+    }
+  } else if (event.data.type === "show_error") {
+    const { error, id } = event.data;
+    const request = requests[id];
+    if (request) {
+      request({ Err: error });
+    }
+  }
+});
+
+export function loadGraph(query: string, timeRange: TimeRange) {
+  // window.addEventListener("message", handler);
+  // return new Promise
+  const id = getNonce();
+
+  const result = new Promise<Timeseries[]>((resolve, rejects) => {
+    requests[id] = (result: Result<Timeseries[], String>) => {
+      delete requests[id];
+      if ("Ok" in result) {
+        resolve(result.Ok);
+      } else {
+        rejects(result.Err);
+      }
+    };
+  });
+
+  vscode.postMessage({
+    type: "request_data",
+    query,
+    timeRange,
+    id,
+  });
+
+  return result;
+}

@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import type { TimeRange } from "fiberplane-charts";
 
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
@@ -42,6 +43,7 @@ export function registerChartPanel(
   vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     (options: PanelOptions) => {
+      // let timeRange: TimeRange = null;
       // Reuse existing panel if available.
       if (chartPanel) {
         chartPanel.update(options);
@@ -102,9 +104,12 @@ function createChartPanel(
                 id,
                 error: errorMessage,
               });
-              vscode.window.showErrorMessage(
-                `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
-              );
+
+              if (options.type !== "function_graphs") {
+                vscode.window.showErrorMessage(
+                  `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
+                );
+              }
             });
           return;
         }

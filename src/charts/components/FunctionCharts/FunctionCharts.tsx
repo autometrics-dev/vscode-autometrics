@@ -10,6 +10,11 @@ import {
 } from "../../../queries";
 import { DatePicker } from "../DatePicker";
 import { pxToEm } from "../../utils";
+import { Button } from "../Button";
+import { Refresh } from "./Refresh";
+import { useContext } from "react";
+import { useSnapshot } from "valtio";
+import { GlobalLoadingContext, GraphContext } from "../../state";
 
 type Props = TimeRangeProps & {
   functionName: string;
@@ -25,6 +30,9 @@ export function FunctionCharts(props: Props) {
 
   const calledByRequestQuery = getCalledByRequestRate(functionName);
   const calledByErrorRatioQuery = getCalledByErrorRatio(functionName);
+  const state = useContext(GraphContext);
+  const loadingState = useContext(GlobalLoadingContext);
+  const { loading } = useSnapshot(loadingState);
 
   return (
     <div>
@@ -34,6 +42,17 @@ export function FunctionCharts(props: Props) {
         </Title>
         <Controls>
           <DatePicker timeRange={timeRange} onChange={setTimeRange} />
+          <Button
+            buttonStyle="secondary"
+            disabled={loading}
+            onClick={() => {
+              Object.values(state.graphs).forEach((graph) => {
+                graph.loading = true;
+              });
+            }}
+          >
+            <Refresh />
+          </Button>
         </Controls>
       </TopSection>
       <MainContent>
@@ -45,6 +64,7 @@ export function FunctionCharts(props: Props) {
               timeRange={timeRange}
               setTimeRange={setTimeRange}
               key="request_rate"
+              id="request_rate"
             />
           </ChartContainer>
           <ChartContainer>
@@ -54,6 +74,7 @@ export function FunctionCharts(props: Props) {
               timeRange={timeRange}
               setTimeRange={setTimeRange}
               key="error_ratio"
+              id="error_ratio"
             />
           </ChartContainer>
           <ChartContainer>
@@ -64,6 +85,7 @@ export function FunctionCharts(props: Props) {
               timeRange={timeRange}
               setTimeRange={setTimeRange}
               key="latency_query"
+              id="latency_query"
             />
           </ChartContainer>
         </Container>
@@ -78,6 +100,7 @@ export function FunctionCharts(props: Props) {
               timeRange={timeRange}
               setTimeRange={setTimeRange}
               key="request_rate"
+              id="called_by_request_rate"
             />
           </ChartContainer>
           <ChartContainer>
@@ -87,6 +110,7 @@ export function FunctionCharts(props: Props) {
               timeRange={timeRange}
               setTimeRange={setTimeRange}
               key="error_ratio"
+              id="called_by_error_ratio"
             />
           </ChartContainer>
         </Container>
@@ -102,6 +126,7 @@ const TopSection = styled.div`
   padding: ${pxToEm(10)};
   border-bottom: 1px solid var(--vscode-menu-border, transparent);
   align-items: center;
+  z-index: 1;
 `;
 
 const Title = styled.h1`
@@ -117,6 +142,7 @@ const Title = styled.h1`
 const Controls = styled.div`
   display: grid;
   height: fit-content;
+  grid-template-columns: repeat(2, max-content);
 `;
 
 const FunctionName = styled.code`
@@ -135,8 +161,5 @@ const Container = styled.div`
 `;
 
 const ChartContainer = styled.div`
-  display: grid;
-  grid-template-rows: min-content auto 100px;
-  gap: 1.692em; // 22px on 13px base;
   height: 100%;
 `;
