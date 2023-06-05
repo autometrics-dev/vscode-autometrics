@@ -13,6 +13,20 @@ export function useChartHook(id: string, query: string) {
   // const setTimeRange = useHandler((timeRange: TimeRange) => {
   //   state.timeRange = timeRange;
   // });
+  useEffect(() => {
+    const graph = state.graphs[id];
+    if (!graph) {
+      state.graphs[id] = {
+        timeSeries: null,
+        loading: true,
+        error: null,
+      };
+    }
+
+    return () => {
+      delete state.graphs[id];
+    };
+  }, [id]);
 
   useEffect(() => {
     // Time range changed
@@ -36,7 +50,7 @@ export function useChartHook(id: string, query: string) {
       return;
     }
 
-    loadGraph(query, timeRange)
+    loadGraph(query, { ...timeRange })
       .then(async (data) => {
         graph.timeSeries = data;
         graph.error = null;

@@ -4,6 +4,7 @@ import type { TimeRange, Timeseries, Timestamp } from "fiberplane-charts";
 import { getNonce } from "../utils";
 import { Result } from "../providerRuntime/types";
 import { vscode } from "./chart";
+// import { vscode } from "./chart";
 
 export function getCurrentTimeRange(): TimeRange {
   const now = new Date();
