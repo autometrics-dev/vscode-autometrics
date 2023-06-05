@@ -148,13 +148,14 @@ const Title = styled.h1`
 const Controls = styled.div`
   display: grid;
   height: fit-content;
-  grid-template-columns: repeat(2, max-content);
+  grid-template-columns: repeat(3, max-content);
 `;
 
 const ToggleContainer = styled.div`
   display: flex;
-  flex: 0 0 min-content;
+  align-items: center;
 `;
+
 const FunctionName = styled.code`
   font-size: inherit;
 `;
