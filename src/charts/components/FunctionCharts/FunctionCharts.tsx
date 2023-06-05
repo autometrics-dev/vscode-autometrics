@@ -15,6 +15,7 @@ import { Refresh } from "./Refresh";
 import { useContext } from "react";
 import { useSnapshot } from "valtio";
 import { GlobalLoadingContext, GraphContext } from "../../state";
+import { Toggle } from "../Toggle";
 
 type Props = TimeRangeProps & {
   functionName: string;
@@ -31,9 +32,9 @@ export function FunctionCharts(props: Props) {
   const calledByRequestQuery = getCalledByRequestRate(functionName);
   const calledByErrorRatioQuery = getCalledByErrorRatio(functionName);
   const state = useContext(GraphContext);
+  const { showingQuery } = useSnapshot(state);
   const loadingState = useContext(GlobalLoadingContext);
   const { loading } = useSnapshot(loadingState);
-
   return (
     <div>
       <TopSection>
@@ -41,6 +42,15 @@ export function FunctionCharts(props: Props) {
           Live metrics for <FunctionName>{functionName}</FunctionName>
         </Title>
         <Controls>
+          <ToggleContainer>
+            Showing PromQL
+            <Toggle
+              onChange={(on) => {
+                state.showingQuery = on;
+              }}
+              on={showingQuery}
+            />
+          </ToggleContainer>
           <DatePicker timeRange={timeRange} onChange={setTimeRange} />
           <Button
             buttonStyle="secondary"
@@ -145,6 +155,10 @@ const Controls = styled.div`
   grid-template-columns: repeat(2, max-content);
 `;
 
+const ToggleContainer = styled.div`
+  display: flex;
+  flex: 0 0 min-content;
+`;
 const FunctionName = styled.code`
   font-size: inherit;
 `;

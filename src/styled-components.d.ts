@@ -27,6 +27,7 @@ export interface AdditionalThemeValues extends ChartTheme {
   fontStudioBodyCopySmallParagraphSpacing: string;
   fontStudioBodyCopySmallTextCase: string;
   fontStudioBodyCopySmallShortHand: string;
+  effectShadowMainFilter: string;
 }
 
 declare module "styled-components" {

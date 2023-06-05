@@ -86,7 +86,7 @@ export const FunctionChart = function FunctionChart(props: Props) {
   }, [loading, query, timeRange]);
 
   return (
-    <Container>
+    <Container showingQuery={showingQuery}>
       {loading && <Loading />}
       <div>
         <Title>{title}</Title>
@@ -120,11 +120,13 @@ export const FunctionChart = function FunctionChart(props: Props) {
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ showingQuery: boolean }>`
   display: grid;
-  grid-template-rows: min-content auto auto;
+  grid-template-rows: ${({ showingQuery }) =>
+    showingQuery ? "min-content auto 100px" : "min-content auto"};
   gap: ${pxToEm(22)}; // 22px on 13px base;
   position: relative;
+  height: 100%;
 `;
 
 const Title = styled.h2`
