@@ -28,8 +28,8 @@ export function PanelContent() {
   if (panelOptions.type === "function_graphs") {
     return (
       <FunctionCharts
-        timeRange={timeRange}
-        setTimeRange={setTimeRange}
+        // timeRange={timeRange}
+        // setTimeRange={setTimeRange}
         functionName={panelOptions.functionName}
         moduleName={panelOptions.moduleName}
       />
@@ -40,8 +40,8 @@ export function PanelContent() {
     <div>
       <SingleChart
         options={panelOptions}
-        timeRange={timeRange}
-        setTimeRange={setTimeRange}
+        // timeRange={timeRange}
+        // setTimeRange={setTimeRange}
       />
     </div>
   );

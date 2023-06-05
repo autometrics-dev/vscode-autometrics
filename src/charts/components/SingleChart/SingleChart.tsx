@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   GraphType,
   MetricsChart,
   StackingType,
+  TimeRange,
   Timeseries,
 } from "fiberplane-charts";
 
@@ -12,25 +13,51 @@ import {
   getRequestRate,
   getSumQuery,
 } from "../../../queries";
-import { useRequestData } from "../../hooks";
+import { useHandler } from "../../hooks";
 import { TimeRangeProps } from "../types";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
 import styled from "styled-components";
+import { GraphContext } from "../../state";
+import { useSnapshot } from "valtio";
+import { useChartHook } from "../../hooks";
+import { DatePicker } from "../DatePicker";
 
 type Props = {
   options: SingleChartOptions;
-} & TimeRangeProps;
+};
 
 export function SingleChart(props: Props) {
-  const { options, timeRange, setTimeRange } = props;
+  const { options } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [query, setQuery] = useState<string | null>(null);
   const [stackingType, setStackingType] = useState<StackingType>("none");
-  const [timeseriesData, setTimeseriesData] = useState<Array<Timeseries>>([]);
+  const state = useContext(GraphContext);
 
-  const requestData = useRequestData();
+  const { showingQuery, timeRange } = useSnapshot(state);
+  const { error, loading, timeSeries } = useChartHook("single", query || "");
+
+  const setTimeRange = useHandler((timeRange: TimeRange) => {
+    state.timeRange = timeRange;
+  });
+
+  // useEffect(() => {
+  //   const graph = state.graphs["single"];
+  //   if (!graph) {
+  //     state.graphs["single"] = {
+  //       timeSeries: null,
+  //       loading: true,
+  //       error: null,
+  //     };
+  //   }
+
+  //   return () => {
+  //     delete state.graphs["single"];
+  //   };
+  // }, []);
+
+  // const requestData = useRequestData();
 
   useEffect(() => {
     const query = getQuery(options);
@@ -40,21 +67,19 @@ export function SingleChart(props: Props) {
     }
 
     setQuery(query);
-    requestData(timeRange, query).then((data) => {
-      setTimeseriesData(data);
-    });
-  }, [options, timeRange]);
+  }, [options]);
 
   const title = `${options.type} chart for ${getTitle(options)}`;
 
   return (
     <Container>
       <h1>{title}</h1>
+      <DatePicker timeRange={timeRange} onChange={setTimeRange} />
       <MetricsChart
         graphType={graphType}
         stackingType={stackingType}
         timeRange={timeRange}
-        timeseriesData={timeseriesData}
+        timeseriesData={(timeSeries || []) as Timeseries[]}
         onChangeGraphType={setGraphType}
         onChangeStackingType={setStackingType}
         onChangeTimeRange={setTimeRange}

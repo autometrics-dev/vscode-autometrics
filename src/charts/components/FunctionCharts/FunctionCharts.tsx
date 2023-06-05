@@ -1,5 +1,5 @@
 import { FunctionChart } from "./FunctionChart";
-import { TimeRangeProps } from "../types";
+// import { TimeRangeProps } from "../types";
 import styled from "styled-components";
 import {
   generateErrorRatioQuery,
@@ -16,14 +16,16 @@ import { useContext } from "react";
 import { useSnapshot } from "valtio";
 import { GlobalLoadingContext, GraphContext } from "../../state";
 import { Toggle } from "../Toggle";
+import { useHandler } from "../../hooks";
+import { TimeRange } from "fiberplane-charts";
 
-type Props = TimeRangeProps & {
+type Props = {
   functionName: string;
   moduleName?: string;
 };
 
 export function FunctionCharts(props: Props) {
-  const { functionName, moduleName, timeRange, setTimeRange } = props;
+  const { functionName, moduleName } = props;
 
   const requestRateQuery = generateRequestRateQuery(functionName, moduleName);
   const errorRatioQuery = generateErrorRatioQuery(functionName, moduleName);
@@ -32,9 +34,13 @@ export function FunctionCharts(props: Props) {
   const calledByRequestQuery = getCalledByRequestRate(functionName);
   const calledByErrorRatioQuery = getCalledByErrorRatio(functionName);
   const state = useContext(GraphContext);
-  const { showingQuery } = useSnapshot(state);
+  const { showingQuery, timeRange } = useSnapshot(state);
   const loadingState = useContext(GlobalLoadingContext);
   const { loading } = useSnapshot(loadingState);
+  const setTimeRange = useHandler((timeRange: TimeRange) => {
+    state.timeRange = timeRange;
+  });
+
   return (
     <div>
       <TopSection>
@@ -71,8 +77,6 @@ export function FunctionCharts(props: Props) {
             <FunctionChart
               title="Request Rate"
               query={requestRateQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
               key="request_rate"
               id="request_rate"
             />
@@ -81,8 +85,6 @@ export function FunctionCharts(props: Props) {
             <FunctionChart
               title="Error Ratio"
               query={errorRatioQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
               key="error_ratio"
               id="error_ratio"
             />
@@ -92,8 +94,6 @@ export function FunctionCharts(props: Props) {
               title="Latency (95th and 99th Percentile)"
               description="This shows the 99th and 95th percentile latency or response time for the given function.\n\nFor example, if the 99th percentile latency is 500 milliseconds, that means that 99% of calls to the function are handled within 500ms or less."
               query={latencyQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
               key="latency_query"
               id="latency_query"
             />
@@ -107,8 +107,6 @@ export function FunctionCharts(props: Props) {
             <FunctionChart
               title="Request Rate"
               query={calledByRequestQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
               key="request_rate"
               id="called_by_request_rate"
             />
@@ -117,8 +115,6 @@ export function FunctionCharts(props: Props) {
             <FunctionChart
               title="Error Ratio"
               query={calledByErrorRatioQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
               key="error_ratio"
               id="called_by_error_ratio"
             />
