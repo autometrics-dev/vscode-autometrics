@@ -87,7 +87,7 @@ const Title = styled.h2`
   font-size: ${pxToEm(16)}; // 16px on 13px base; 
   line-height: 2.1875; // 35px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 ${pxToEm(10)};
 `;
 
 const Description = styled.div`
@@ -96,7 +96,7 @@ const Description = styled.div`
   font-weight: 400;
   font-size: ${pxToEm(10)};// 10px over 13px base;
   line-height: 1.6; // 16px;
-  padding: 0.3em 0;
+  padding: 0 0 0 ${pxToEm(10)};
 `;
 
 const ErrorMessage = styled.div`

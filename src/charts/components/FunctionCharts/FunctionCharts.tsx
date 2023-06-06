@@ -48,7 +48,7 @@ export function FunctionCharts(props: Props) {
         </Title>
         <Controls>
           <ToggleContainer>
-            <span>Showing PromQL</span>
+            <span>Show query</span>
             <Toggle
               onChange={(on) => {
                 state.showingQuery = on;
@@ -70,7 +70,7 @@ export function FunctionCharts(props: Props) {
           </StyledButton>
         </Controls>
       </TopSection>
-      <MainContent>
+      <div>
         <Container>
           <ChartContainer>
             <FunctionChart
@@ -98,9 +98,9 @@ export function FunctionCharts(props: Props) {
             />
           </ChartContainer>
         </Container>
-        <hr />
-        <h5>"Called by" metrics</h5>
-        <hr />
+        <StyledLine />
+        <SectionHeading>"Called by" metrics</SectionHeading>
+        <StyledLine />
         <Container>
           <ChartContainer>
             <FunctionChart
@@ -119,7 +119,7 @@ export function FunctionCharts(props: Props) {
             />
           </ChartContainer>
         </Container>
-      </MainContent>
+      </div>
     </div>
   );
 }
@@ -128,7 +128,7 @@ const TopSection = styled.div`
   position: sticky;
   display: grid;
   grid-template-columns: auto max-content;
-  padding: ${pxToEm(10)};
+  padding: ${pxToEm(10)} ${pxToEm(30)};
   border-bottom: 1px solid var(--vscode-menu-border, transparent);
   align-items: center;
   z-index: 1;
@@ -166,17 +166,32 @@ const FunctionName = styled.code`
   font-size: inherit;
 `;
 
-const MainContent = styled.div`
-  padding: ${pxToEm(20)};
-`;
-
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: ${pxToEm(30)};
+  padding: ${pxToEm(20)} ${pxToEm(30)} ${pxToEm(20)} ${pxToEm(20)};
+  gap: ${pxToEm(25)};
   width: 100%;
 `;
 
 const ChartContainer = styled.div`
   height: 100%;
+`;
+
+const StyledLine = styled.hr`
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 1px;
+  background: var(--vscode-menu-border, transparent);
+`;
+
+const SectionHeading = styled.h5`
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: ${pxToEm(16)};
+  line-height: ${35 / 16};
+  margin: 0;
+  padding: ${pxToEm(10)};
 `;

@@ -28,12 +28,6 @@ export const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "var(--vscode-editor-font-size, 14px)",
     color: "var(--vscode-dropdown-foreground, --vscode-foreground, #76d9e6)",
     textShadow: "none",
-    background:
-      "var(--vscode-dropdown-background, --vscode-editor-background, #ffffff)",
-    padding: "12px",
-    borderRadius: "4px",
-    border:
-      "1px solid var(--vscode-dropdown-border, --vscode-widget-border, #ccc)",
     overflow: "auto",
     position: "relative",
   },
