@@ -1,5 +1,4 @@
 import { FunctionChart } from "./FunctionChart";
-// import { TimeRangeProps } from "../types";
 import styled from "styled-components";
 import {
   generateErrorRatioQuery,
@@ -49,7 +48,7 @@ export function FunctionCharts(props: Props) {
         </Title>
         <Controls>
           <ToggleContainer>
-            Showing PromQL
+            <span>Showing PromQL</span>
             <Toggle
               onChange={(on) => {
                 state.showingQuery = on;
@@ -58,7 +57,7 @@ export function FunctionCharts(props: Props) {
             />
           </ToggleContainer>
           <DatePicker timeRange={timeRange} onChange={setTimeRange} />
-          <Button
+          <StyledButton
             buttonStyle="secondary"
             disabled={loading}
             onClick={() => {
@@ -68,7 +67,7 @@ export function FunctionCharts(props: Props) {
             }}
           >
             <Refresh />
-          </Button>
+          </StyledButton>
         </Controls>
       </TopSection>
       <MainContent>
@@ -149,11 +148,18 @@ const Controls = styled.div`
   display: grid;
   height: fit-content;
   grid-template-columns: repeat(3, max-content);
+  gap: ${pxToEm(20)};
 `;
 
 const ToggleContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: ${pxToEm(20)};
+  font: ${({ theme }) => theme.fontStudioBodyCopySmallShortHand};
+`;
+
+const StyledButton = styled(Button)`
+  border-radius: ${pxToEm(8)};
 `;
 
 const FunctionName = styled.code`
@@ -167,7 +173,7 @@ const MainContent = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 30px;
+  gap: ${pxToEm(30)};
   width: 100%;
 `;
 

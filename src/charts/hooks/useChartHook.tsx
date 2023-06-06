@@ -1,8 +1,6 @@
 import { useSnapshot } from "valtio";
-import { useHandler } from "./useHandler";
 import { GraphContext } from "../state";
 import { useContext, useEffect } from "react";
-import { TimeRange } from "fiberplane-charts";
 import { loadGraph } from "../utils";
 
 export function useChartHook(id: string, query: string) {
@@ -52,6 +50,7 @@ export function useChartHook(id: string, query: string) {
 
     loadGraph(query, { ...timeRange })
       .then(async (data) => {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         graph.timeSeries = data;
         graph.error = null;
       })

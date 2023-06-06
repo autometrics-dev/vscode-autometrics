@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { TimeRangeProps } from "../types";
+import { useContext, useState } from "react";
 import {
   GraphType,
   MetricsChart,
@@ -9,7 +8,7 @@ import {
 } from "fiberplane-charts";
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
-import { colors, loadGraph, pxToEm } from "../../utils";
+import { colors, pxToEm } from "../../utils";
 import { Loading } from "./Loading";
 import { ErrorIcon } from "./ErrorIcon";
 import { useSnapshot } from "valtio";

@@ -56,23 +56,11 @@ export function registerChartPanel(
 
       const panel = createChartPanel(context, prometheus, options);
       panel.onDidDispose(() => {
-        console.log("sorry disposed");
         chartPanel = null;
       });
       chartPanel = panel;
     },
   );
-}
-
-function omit<T extends Record<string, unknown>, K extends keyof T>(
-  target: T,
-  ...keys: K[]
-): Omit<T, K> {
-  const result = { ...target };
-  for (const key of keys) {
-    delete result[key];
-  }
-  return result;
 }
 
 function createChartPanel(

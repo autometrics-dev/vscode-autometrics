@@ -1,11 +1,8 @@
-import * as React from "react";
 import { TimeRange, Timestamp } from "fiberplane-charts";
-import { useHandler } from "../../hooks";
 import { MonthTable } from "./MonthTable";
 import styled, { css } from "styled-components";
-import { Button } from "../Button";
-import { pxToEm, validateTimeRange } from "../../utils";
-import { FormEvent, useRef, useState } from "react";
+import { pxToEm,  } from "../../utils";
+import { useState } from "react";
 import { DatePickerForm } from "./DatePickerForm";
 import { TimeRangePresets } from "./TimeRangePresets";
 

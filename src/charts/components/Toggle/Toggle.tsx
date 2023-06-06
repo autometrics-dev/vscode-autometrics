@@ -11,39 +11,6 @@ type ToggleProps = {
   "aria-checked": "true" | "false";
 };
 
-// const checkedStyling = css`
-//   background-color: ${(props) => props.theme.colorBase800};
-//   border-color: ${(props) => props.theme.colorBase800};
-
-//   &:hover {
-//     background-color: ${(props) => props.theme.colorBase700};
-//     border-color: ${(props) => props.theme.colorBase700};
-//   }
-
-//   &:active {
-//     background-color: ${(props) => props.theme.colorBase600};
-//     border-color: ${(props) => props.theme.colorBase600};
-//   }
-// `;
-
-// const uncheckedStyling = css`
-//   background-color: ${(props) => props.theme.colorBase300};
-//   border-color: ${(props) => props.theme.colorBase300};
-
-//   &:hover {
-//     background-color: ${(props) => props.theme.colorBase400};
-//     border-color: ${(props) => props.theme.colorBase400};
-//   }
-
-//   &:active {
-//     background-color: ${(props) => props.theme.colorBase500};
-//     border-color: ${(props) => props.theme.colorBase500};
-//   }
-// `;
-
-/* ${({ "aria-checked": on }) =>
-    on === "true" ? checkedStyling : uncheckedStyling} */
-
 const ToggleContainer = styled.div<ToggleProps>`
   display: flex;
   border-radius: 10px;
@@ -52,9 +19,8 @@ const ToggleContainer = styled.div<ToggleProps>`
   padding: 1px;
   height: 20px;
   width: 32px;
-  /* background: gold !important; */
-  background-color: var(--vscode-checkbox-background);
-  /* border: 1px solid ${(props) => props.theme.colorBase800}; */
+  background-color: var(--vscode-checkbox-selectBackground, transparent);
+  border: 1px solid var(--vscode-checkbox-border, transparent);
   transition: background 0.1s ease-in-out;
   transition-property: background, border-color;
   position: relative;
@@ -64,7 +30,8 @@ const ToggleContainer = styled.div<ToggleProps>`
   }
 
   &:focus-visible {
-    border-color: ${(props) => props.theme.colorPrimary600};
+    border-color: var(--vscode-checkbox-selectBorder, ${(props) =>
+      props.theme.colorPrimary600});
   }
 `;
 
@@ -80,7 +47,6 @@ const Dot = styled.div<ToggleProps>(
     transition: left 0.15s ease-in-out;
     transition-property: left, width;
     left: ${on === "true" ? "12px" : "2px"};
-    top: 2px;
     filter: ${theme.effectShadowMainFilter};
 
     /* Stylelint doesn't like this type of selectors and wants a newline in the middle */

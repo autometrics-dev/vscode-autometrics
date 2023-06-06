@@ -1,10 +1,8 @@
-// import * as vscode from "vscode";
 import * as React from "react";
 import type { TimeRange, Timeseries, Timestamp } from "fiberplane-charts";
 import { getNonce } from "../utils";
 import { Result } from "../providerRuntime/types";
 import { vscode } from "./chart";
-// import { vscode } from "./chart";
 
 export const colors = [
   "var(--vscode-charts-red)",
@@ -129,8 +127,6 @@ window.addEventListener("message", (event) => {
 });
 
 export function loadGraph(query: string, timeRange: TimeRange) {
-  // window.addEventListener("message", handler);
-  // return new Promise
   const id = getNonce();
 
   const result = new Promise<Timeseries[]>((resolve, rejects) => {
