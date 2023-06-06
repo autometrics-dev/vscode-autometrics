@@ -1,18 +1,16 @@
-import { TimeRange } from "fiberplane-charts";
 import { useState } from "react";
 
-import { PanelOptions, SingleChartOptions } from "../../chartPanel";
-import { getCurrentTimeRange } from "../utils";
+import { PanelOptions, TimeRangeOptions } from "../../chartPanel";
 import type { MessageToWebview } from "../types";
 import { SingleChart } from "./SingleChart/SingleChart";
 import { useMessage } from "../hooks";
 import { FunctionCharts } from "./FunctionCharts";
+import { GraphContextProvider } from "../state";
 
 export function PanelContent() {
-  const [timeRange, setTimeRange] = useState<TimeRange>(() =>
-    getCurrentTimeRange(),
-  );
-  const [panelOptions, setPanelOptions] = useState<PanelOptions | null>(null);
+  const [panelOptions, setPanelOptions] = useState<
+    (PanelOptions & TimeRangeOptions) | null
+  >(null);
 
   useMessage<MessageToWebview>((event) => {
     if (event.data.type === "show_panel") {
@@ -25,24 +23,19 @@ export function PanelContent() {
     return <div>Nothing to show</div>;
   }
 
-  if (panelOptions.type === "function_graphs") {
-    return (
-      <FunctionCharts
-        // timeRange={timeRange}
-        // setTimeRange={setTimeRange}
-        functionName={panelOptions.functionName}
-        moduleName={panelOptions.moduleName}
-      />
-    );
-  }
-
+  const { timeRange } = panelOptions;
   return (
-    <div>
-      <SingleChart
-        options={panelOptions}
-        // timeRange={timeRange}
-        // setTimeRange={setTimeRange}
-      />
-    </div>
+    <GraphContextProvider initialTimeRange={timeRange}>
+      {panelOptions.type === "function_graphs" ? (
+        <FunctionCharts
+          functionName={panelOptions.functionName}
+          moduleName={panelOptions.moduleName}
+        />
+      ) : (
+        <div>
+          <SingleChart options={panelOptions} />
+        </div>
+      )}
+    </GraphContextProvider>
   );
 }

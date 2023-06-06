@@ -6,13 +6,6 @@ import { Result } from "../providerRuntime/types";
 import { vscode } from "./chart";
 // import { vscode } from "./chart";
 
-export function getCurrentTimeRange(): TimeRange {
-  const now = new Date();
-  const oneHourAgo = new Date();
-  oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-  return { from: oneHourAgo.toISOString(), to: now.toISOString() };
-}
-
 export const colors = [
   "var(--vscode-charts-red)",
   "var(--vscode-charts-blue)",

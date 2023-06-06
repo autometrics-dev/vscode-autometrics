@@ -1,8 +1,9 @@
 import { TimeRange, Timeseries } from "fiberplane-charts";
-import { ReactNode, createContext, useRef } from "react";
-import { proxy } from "valtio";
+import { ReactNode, createContext, useEffect, useRef } from "react";
+import { proxy, useSnapshot } from "valtio";
 import { derive } from "valtio/utils";
-import { getCurrentTimeRange } from "../utils";
+import { vscode } from "../chart";
+import { createDefaultTimeRange } from "../../utils";
 
 type Graph = {
   timeSeries: null | Timeseries[];
@@ -18,7 +19,7 @@ type GraphState = {
 
 export const GraphContext = createContext<GraphState>({
   graphs: {},
-  timeRange: getCurrentTimeRange(),
+  timeRange: createDefaultTimeRange(),
   showingQuery: false,
 });
 
@@ -26,11 +27,14 @@ export const GlobalLoadingContext = createContext<{ loading: boolean }>({
   loading: false,
 });
 
-export function GraphContextProvider(props: { children: ReactNode }) {
+export function GraphContextProvider(props: {
+  children: ReactNode;
+  initialTimeRange: TimeRange;
+}) {
   const state = useRef(
     proxy({
       graphs: {},
-      timeRange: getCurrentTimeRange(),
+      timeRange: props.initialTimeRange,
       showingQuery: false,
     } as GraphState),
   ).current;
@@ -42,6 +46,14 @@ export function GraphContextProvider(props: { children: ReactNode }) {
         Object.values(get(state.graphs)).some(({ loading }) => loading),
     }),
   ).current;
+
+  const { timeRange } = useSnapshot(state);
+  useEffect(() => {
+    vscode.postMessage({
+      type: "update_time_range",
+      timeRange: { ...timeRange },
+    });
+  });
 
   return (
     <GraphContext.Provider value={state}>

@@ -1,9 +1,9 @@
 import type { TimeRange, Timeseries } from "fiberplane-charts";
 
-import type { PanelOptions } from "../chartPanel";
+import type { PanelOptions, TimeRangeOptions } from "../chartPanel";
 
 export type MessageToWebview =
-  | { type: "show_panel"; options: PanelOptions }
+  | { type: "show_panel"; options: PanelOptions & TimeRangeOptions }
   | {
       type: "show_data";
       timeRange: TimeRange;
@@ -18,4 +18,5 @@ export type MessageToWebview =
 
 export type MessageFromWebview =
   | { type: "ready" }
-  | { type: "request_data"; query: string; timeRange: TimeRange; id: string };
+  | { type: "request_data"; query: string; timeRange: TimeRange; id: string }
+  | { type: "update_time_range"; timeRange: TimeRange };

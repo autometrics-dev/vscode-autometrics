@@ -5,7 +5,7 @@ import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
-import { getNonce, getTitle } from "./utils";
+import { createDefaultTimeRange, getNonce, getTitle } from "./utils";
 
 /**
  * Options for the kind of chart to display.
@@ -19,6 +19,10 @@ export type SingleChartOptions =
 export type PanelOptions =
   | SingleChartOptions
   | { type: "function_graphs"; functionName: string; moduleName?: string };
+
+export type TimeRangeOptions = {
+  timeRange: TimeRange;
+};
 
 type ChartPanel = {
   /**
@@ -43,7 +47,6 @@ export function registerChartPanel(
   vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     (options: PanelOptions) => {
-      // let timeRange: TimeRange = null;
       // Reuse existing panel if available.
       if (chartPanel) {
         chartPanel.update(options);
@@ -53,6 +56,7 @@ export function registerChartPanel(
 
       const panel = createChartPanel(context, prometheus, options);
       panel.onDidDispose(() => {
+        console.log("sorry disposed");
         chartPanel = null;
       });
       chartPanel = panel;
@@ -60,12 +64,26 @@ export function registerChartPanel(
   );
 }
 
+function omit<T extends Record<string, unknown>, K extends keyof T>(
+  target: T,
+  ...keys: K[]
+): Omit<T, K> {
+  const result = { ...target };
+  for (const key of keys) {
+    delete result[key];
+  }
+  return result;
+}
+
 function createChartPanel(
   context: vscode.ExtensionContext,
   prometheus: Prometheus,
   options: PanelOptions,
 ): ChartPanel {
-  let currentOptions = options;
+  let currentOptions: PanelOptions & TimeRangeOptions = {
+    ...options,
+    timeRange: createDefaultTimeRange(),
+  };
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     getTitle(options),
@@ -78,9 +96,10 @@ function createChartPanel(
   }
 
   function update(options: PanelOptions) {
-    currentOptions = options;
+    const timeRange = currentOptions?.timeRange || createDefaultTimeRange();
+    currentOptions = { ...options, timeRange };
     panel.title = getTitle(options);
-    postMessage({ type: "show_panel", options });
+    postMessage({ type: "show_panel", options: currentOptions });
   }
 
   panel.webview.onDidReceiveMessage(
@@ -111,6 +130,11 @@ function createChartPanel(
                 );
               }
             });
+          return;
+        }
+        case "update_time_range": {
+          const { timeRange } = message;
+          currentOptions = { ...currentOptions, timeRange };
           return;
         }
       }

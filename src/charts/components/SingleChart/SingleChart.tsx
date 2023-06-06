@@ -19,7 +19,6 @@ import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
 import styled from "styled-components";
 import { GraphContext } from "../../state";
-import { useSnapshot } from "valtio";
 import { useChartHook } from "../../hooks";
 import { DatePicker } from "../DatePicker";
 
@@ -34,32 +33,15 @@ export function SingleChart(props: Props) {
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const state = useContext(GraphContext);
 
-  const { showingQuery } = useSnapshot(state);
-  const { error, loading, timeSeries, timeRange } = useChartHook(
-    "single",
-    query || "",
-  );
+  const {
+    // error, loading,
+    timeSeries,
+    timeRange,
+  } = useChartHook("single", query || "");
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;
   });
-
-  // useEffect(() => {
-  //   const graph = state.graphs["single"];
-  //   if (!graph) {
-  //     state.graphs["single"] = {
-  //       timeSeries: null,
-  //       loading: true,
-  //       error: null,
-  //     };
-  //   }
-
-  //   return () => {
-  //     delete state.graphs["single"];
-  //   };
-  // }, []);
-
-  // const requestData = useRequestData();
 
   useEffect(() => {
     const query = getQuery(options);

@@ -2,15 +2,12 @@ import { createRoot } from "react-dom/client";
 
 import { PanelContent, ChartThemeProvider } from "./components";
 import type { MessageFromWebview } from "./types";
-import { GraphContextProvider } from "./state";
 
 // rome-ignore lint/style/noNonNullAssertion: Root is defined in `chartPanel.ts`.
 const root = createRoot(document.querySelector("#root")!);
 root.render(
   <ChartThemeProvider>
-    <GraphContextProvider>
-      <PanelContent />
-    </GraphContextProvider>
+    <PanelContent />
   </ChartThemeProvider>,
 );
 
