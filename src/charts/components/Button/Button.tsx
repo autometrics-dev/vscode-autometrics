@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 import styled from "styled-components";
 
 type ButtonStyle = "primary" | "secondary";
@@ -7,14 +7,17 @@ type Props = {
   buttonStyle?: ButtonStyle;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function Button(props: Props): JSX.Element {
+export const Button = forwardRef(function Button(
+  props: Props,
+  ref: React.ForwardedRef<HTMLButtonElement>,
+): JSX.Element {
   const { children, className = "", buttonStyle = "primary", ...rest } = props;
   return (
-    <StyledButton {...rest} className={`${className} ${buttonStyle}`}>
+    <StyledButton {...rest} ref={ref} className={`${className} ${buttonStyle}`}>
       {children}
     </StyledButton>
   );
-}
+});
 
 const StyledButton = styled.button`
   --button-foreground: var(--vscode-button-foreground);

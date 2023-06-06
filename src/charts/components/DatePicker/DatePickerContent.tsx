@@ -1,7 +1,7 @@
 import { TimeRange, Timestamp } from "fiberplane-charts";
 import { MonthTable } from "./MonthTable";
 import styled, { css } from "styled-components";
-import { pxToEm,  } from "../../utils";
+import { pxToEm } from "../../utils";
 import { useState } from "react";
 import { DatePickerForm } from "./DatePickerForm";
 import { TimeRangePresets } from "./TimeRangePresets";
