@@ -45,13 +45,13 @@ export function getSumQuery(
 ) {
   return `sum by (function, module) (
     rate(
-      ${metricName}{${Object.entries(labels)
-    .map(
-      ([key, value]) => `        ${key}="${value}"
+      ${metricName}{
+${Object.entries(labels)
+  .map(
+    ([key, value]) => `        ${key}="${value}"
 `,
-    )
-    .join(",")}
-  }[5m])
+  )
+  .join(",")}  }[5m])
 )`;
 }
 
