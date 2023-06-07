@@ -39,7 +39,7 @@ export const FunctionChart = function FunctionChart(props: Props) {
   return (
     <Container showingQuery={showingQuery}>
       {loading && <Loading />}
-      <div>
+      <Content>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
         {error && (
@@ -48,8 +48,8 @@ export const FunctionChart = function FunctionChart(props: Props) {
             <ErrorMessageText>{error}</ErrorMessageText>
           </ErrorMessage>
         )}
-      </div>
-      <div>
+      </Content>
+      <Content>
         <MetricsChart
           graphType={graphType}
           stackingType={stackingType}
@@ -65,7 +65,7 @@ export const FunctionChart = function FunctionChart(props: Props) {
           gridDashArray="2"
           colors={colors}
         />
-      </div>
+      </Content>
       {showingQuery && <CodeBlock query={query} />}
     </Container>
   );
@@ -75,9 +75,13 @@ const Container = styled.div<{ showingQuery: boolean }>`
   display: grid;
   grid-template-rows: ${({ showingQuery }) =>
     showingQuery ? "min-content auto 100px" : "min-content auto"};
-  gap: ${pxToEm(22)}; // 22px on 13px base;
+  gap: ${pxToEm(9)}; // 22px on 13px base;
   position: relative;
   height: 100%;
+`;
+
+const Content = styled.div`
+  min-width: 0;
 `;
 
 const Title = styled.h2`

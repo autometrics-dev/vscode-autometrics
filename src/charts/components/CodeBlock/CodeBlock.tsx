@@ -5,6 +5,7 @@ import { Button } from "../Button";
 import { Copy } from "./Copy";
 import { useRef } from "react";
 import { pxToEm } from "../../utils";
+import { vscode } from "../../chart";
 
 export function CodeBlock({ query }: { query: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -32,6 +33,7 @@ export function CodeBlock({ query }: { query: string }) {
               window.getSelection().addRange(range);
             }
           }
+          vscode.postMessage({ type: "show_notification", message: "Copied!" });
         }}
       >
         <Copy width="17" height="17" />
@@ -45,6 +47,7 @@ const Container = styled.div`
   grid-template-columns: auto 38px;
   background:var(--vscode-dropdown-background, --vscode-editor-background, #ffffff);
   margin: 0;
+  margin-top: ${pxToEm(13)};
   border-radius: ${pxToEm(4)};
   border: 1px solid var(--vscode-dropdown-border, --vscode-widget-border, #ccc);
 `;
@@ -54,4 +57,7 @@ const CodeContainer = styled.div`
 `;
 
 const StyledButton = styled(Button)`
+  border-radius: var(--vscode-corner-size, ${pxToEm(4)});
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 `;

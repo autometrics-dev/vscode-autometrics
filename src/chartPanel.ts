@@ -95,7 +95,6 @@ function createChartPanel(
 
   panel.webview.onDidReceiveMessage(
     (message: MessageFromWebview) => {
-      console.log("message", message);
       switch (message.type) {
         case "ready":
           update(currentOptions);
@@ -133,6 +132,10 @@ function createChartPanel(
           const { showingQuery } = message;
           currentOptions = { ...currentOptions, showingQuery };
           return;
+        }
+        case "show_notification": {
+          const { message: notificationMessage } = message;
+          vscode.window.showInformationMessage(notificationMessage);
         }
       }
     },

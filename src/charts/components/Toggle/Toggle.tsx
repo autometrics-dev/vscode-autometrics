@@ -21,7 +21,7 @@ const ToggleContainer = styled.div<ToggleProps>`
   width: 32px;
   background-color: var(${({ "aria-checked": on }) =>
     on === "true"
-      ? "--vscode-editor-selectionBackground"
+      ? "--vscode-checkbox-background"
       : "--vscode-checkbox-selectBackground"}, transparent);
   border: 1px solid var(--vscode-checkbox-border, transparent);
   transition: background 0.1s ease-in-out;

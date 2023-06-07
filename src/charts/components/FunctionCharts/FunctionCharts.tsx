@@ -160,6 +160,12 @@ const ToggleContainer = styled.div`
 
 const StyledButton = styled(Button)`
   border-radius: ${pxToEm(8)};
+
+  &[disabled] {
+    opacity: 0.5;
+    transition: opacity 0.15s ease-in-out;
+
+  }
 `;
 
 const FunctionName = styled.code`
@@ -172,6 +178,7 @@ const Container = styled.div`
   padding: ${pxToEm(20)} ${pxToEm(30)} ${pxToEm(20)} ${pxToEm(20)};
   gap: ${pxToEm(25)};
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const ChartContainer = styled.div`
@@ -193,5 +200,5 @@ const SectionHeading = styled.h5`
   font-size: ${pxToEm(16)};
   line-height: ${35 / 16};
   margin: 0;
-  padding: ${pxToEm(10)};
+  padding: ${pxToEm(10)} ${pxToEm(30, 16)};
 `;

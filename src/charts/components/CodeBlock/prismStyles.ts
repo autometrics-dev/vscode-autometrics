@@ -28,6 +28,8 @@ export const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "var(--vscode-editor-font-size, 14px)",
     color: "var(--vscode-dropdown-foreground, --vscode-foreground, #76d9e6)",
     textShadow: "none",
+    padding: "12px",
+    margin: "0",
     position: "relative",
   },
   'pre > code[class*="language-"]': {
