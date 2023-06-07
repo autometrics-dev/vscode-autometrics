@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { PanelOptions, TimeRangeOptions } from "../../chartPanel";
+import { PanelOptions, GlobalGraphSettings } from "../../chartPanel";
 import type { MessageToWebview } from "../types";
 import { SingleChart } from "./SingleChart/SingleChart";
 import { useMessage } from "../hooks";
@@ -9,7 +9,7 @@ import { GraphContextProvider } from "../state";
 
 export function PanelContent() {
   const [panelOptions, setPanelOptions] = useState<
-    (PanelOptions & TimeRangeOptions) | null
+    (PanelOptions & GlobalGraphSettings) | null
   >(null);
 
   useMessage<MessageToWebview>((event) => {
@@ -23,9 +23,12 @@ export function PanelContent() {
     return <div>Nothing to show</div>;
   }
 
-  const { timeRange } = panelOptions;
+  const { timeRange, showingQuery } = panelOptions;
   return (
-    <GraphContextProvider initialTimeRange={timeRange}>
+    <GraphContextProvider
+      initialTimeRange={timeRange}
+      initialShowingQuery={showingQuery}
+    >
       {panelOptions.type === "function_graphs" ? (
         <FunctionCharts
           functionName={panelOptions.functionName}

@@ -20,8 +20,9 @@ export type PanelOptions =
   | SingleChartOptions
   | { type: "function_graphs"; functionName: string; moduleName?: string };
 
-export type TimeRangeOptions = {
+export type GlobalGraphSettings = {
   timeRange: TimeRange;
+  showingQuery: boolean;
 };
 
 type ChartPanel = {
@@ -68,9 +69,10 @@ function createChartPanel(
   prometheus: Prometheus,
   options: PanelOptions,
 ): ChartPanel {
-  let currentOptions: PanelOptions & TimeRangeOptions = {
+  let currentOptions: PanelOptions & GlobalGraphSettings = {
     ...options,
     timeRange: createDefaultTimeRange(),
+    showingQuery: false,
   };
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
@@ -85,13 +87,15 @@ function createChartPanel(
 
   function update(options: PanelOptions) {
     const timeRange = currentOptions?.timeRange || createDefaultTimeRange();
-    currentOptions = { ...options, timeRange };
+    const showingQuery = currentOptions?.showingQuery || false;
+    currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
     postMessage({ type: "show_panel", options: currentOptions });
   }
 
   panel.webview.onDidReceiveMessage(
     (message: MessageFromWebview) => {
+      console.log("message", message);
       switch (message.type) {
         case "ready":
           update(currentOptions);
@@ -101,7 +105,7 @@ function createChartPanel(
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              postMessage({ type: "show_data", timeRange, data, id });
+              postMessage({ type: "show_data", data, id });
             })
             .catch((error: unknown) => {
               const errorMessage = formatProviderError(error);
@@ -123,6 +127,11 @@ function createChartPanel(
         case "update_time_range": {
           const { timeRange } = message;
           currentOptions = { ...currentOptions, timeRange };
+          return;
+        }
+        case "update_showing_query": {
+          const { showingQuery } = message;
+          currentOptions = { ...currentOptions, showingQuery };
           return;
         }
       }

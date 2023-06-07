@@ -30,12 +30,13 @@ export const GlobalLoadingContext = createContext<{ loading: boolean }>({
 export function GraphContextProvider(props: {
   children: ReactNode;
   initialTimeRange: TimeRange;
+  initialShowingQuery: boolean;
 }) {
   const state = useRef(
     proxy({
       graphs: {},
       timeRange: props.initialTimeRange,
-      showingQuery: false,
+      showingQuery: props.initialShowingQuery,
     } as GraphState),
   ).current;
 
@@ -47,13 +48,20 @@ export function GraphContextProvider(props: {
     }),
   ).current;
 
-  const { timeRange } = useSnapshot(state);
+  const { timeRange, showingQuery } = useSnapshot(state);
   useEffect(() => {
     vscode.postMessage({
       type: "update_time_range",
       timeRange: { ...timeRange },
     });
-  });
+  }, [timeRange]);
+
+  useEffect(() => {
+    vscode.postMessage({
+      type: "update_showing_query",
+      showingQuery,
+    });
+  }, [showingQuery]);
 
   return (
     <GraphContext.Provider value={state}>

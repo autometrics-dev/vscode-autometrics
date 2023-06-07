@@ -28,7 +28,6 @@ export const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "var(--vscode-editor-font-size, 14px)",
     color: "var(--vscode-dropdown-foreground, --vscode-foreground, #76d9e6)",
     textShadow: "none",
-    overflow: "auto",
     position: "relative",
   },
   'pre > code[class*="language-"]': {
@@ -38,8 +37,6 @@ export const styles: { [key: string]: React.CSSProperties } = {
     background: "var(--vscode-editor-background, #ffffff)",
     padding: "0.15em 0.2em 0.05em",
     borderRadius: ".3em",
-    border: "0.13em solid #7a6652",
-    boxShadow: "1px 1px 0.3em -0.1em #000 inset",
   },
   'pre[class*="language-"] code': {
     whiteSpace: "pre",
