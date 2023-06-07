@@ -51,6 +51,7 @@ export function useChartHook(id: string, query: string) {
 
     loadGraph(query, { ...timeRange })
       .then(async (data) => {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         graph.timeSeries = data;
         graph.error = null;
       })
