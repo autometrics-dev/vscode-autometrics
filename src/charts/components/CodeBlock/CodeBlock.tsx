@@ -5,7 +5,6 @@ import { Button } from "../Button";
 import { Copy } from "./Copy";
 import { useRef } from "react";
 import { pxToEm } from "../../utils";
-import { vscode } from "../../chart";
 
 export function CodeBlock({ query }: { query: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -20,20 +19,17 @@ export function CodeBlock({ query }: { query: string }) {
         onClick={() => {
           navigator.clipboard.writeText(query);
           if (ref.current) {
-            // ref.current.selec
-            if ("selection" in document) {
-              // IE
-              const range = document.body.createTextRange();
-              range.moveToElementText(ref.current);
-              range.select();
-            } else if (window.getSelection) {
-              const range = document.createRange();
-              range.selectNode(ref.current);
-              window.getSelection().removeAllRanges();
-              window.getSelection().addRange(range);
-            }
+            if (window.getSelection) {
+              let selection = window.getSelection();
+              let range = document.createRange();
+              range.selectNodeContents(ref.current);
+              if (selection) {
+                selection.removeAllRanges();
+                selection.addRange(range);
+              }
+              return;
+           }
           }
-          vscode.postMessage({ type: "show_notification", message: "Copied!" });
         }}
       >
         <Copy width="17" height="17" />

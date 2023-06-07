@@ -133,10 +133,6 @@ function createChartPanel(
           currentOptions = { ...currentOptions, showingQuery };
           return;
         }
-        case "show_notification": {
-          const { message: notificationMessage } = message;
-          vscode.window.showInformationMessage(notificationMessage);
-        }
       }
     },
     undefined,
