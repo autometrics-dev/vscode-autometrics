@@ -86,7 +86,6 @@ export function SingleChart(props: Props) {
 }
 
 function getQuery(options: PanelOptions) {
-  console.log('options', options);
   switch (options.type) {
     case "called_by":
       return getCalledByRequestRate(options.functionName);

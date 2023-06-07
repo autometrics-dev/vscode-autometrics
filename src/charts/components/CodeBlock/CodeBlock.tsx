@@ -20,8 +20,8 @@ export function CodeBlock({ query }: { query: string }) {
           navigator.clipboard.writeText(query);
           if (ref.current) {
             if (window.getSelection) {
-              let selection = window.getSelection();
-              let range = document.createRange();
+              const selection = window.getSelection();
+              const range = document.createRange();
               range.selectNodeContents(ref.current);
               if (selection) {
                 selection.removeAllRanges();
