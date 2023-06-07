@@ -9,12 +9,12 @@ import {
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
-import { Loading } from "./Loading";
-import { ErrorIcon } from "./ErrorIcon";
+import { Loading } from "../Loading";
 import { useSnapshot } from "valtio";
 import { GraphContext } from "../../state";
 import { useHandler } from "../../hooks";
 import { useChartHook } from "../../hooks";
+import { ErrorMessage } from "../ErrorMessage";
 
 type Props = {
   query: string;
@@ -42,12 +42,7 @@ export const FunctionChart = function FunctionChart(props: Props) {
       <Content>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
-        {error && (
-          <ErrorMessage>
-            <StyledErrorIcon />
-            <ErrorMessageText>{error}</ErrorMessageText>
-          </ErrorMessage>
-        )}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </Content>
       <Content>
         <MetricsChart
@@ -101,20 +96,4 @@ const Description = styled.div`
   font-size: ${pxToEm(10)};// 10px over 13px base;
   line-height: 1.6; // 16px;
   padding: 0 0 0 ${pxToEm(10)};
-`;
-
-const ErrorMessage = styled.div`
-  display: flex;
-  align-items: center;
-  color: var(--vscode-errorForeground, inherit);
-  gap: ${pxToEm(8)};
-  margin: ${pxToEm(8)} 0 0;
-`;
-
-const StyledErrorIcon = styled(ErrorIcon)`
-  flex: 0 0 ${pxToEm(23)};
-`;
-
-const ErrorMessageText = styled.div`
-  overflow-wrap: anywhere;
 `;

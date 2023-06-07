@@ -37,7 +37,8 @@ export function useChartHook(id: string, query: string) {
   }, [timeRange, id]);
 
   useEffect(() => {
-    if (!loading) {
+    // If we're not loading or there's no query, bail out
+    if (!loading || !query) {
       return;
     }
 

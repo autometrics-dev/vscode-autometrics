@@ -28,7 +28,7 @@ export function CodeBlock({ query }: { query: string }) {
                 selection.addRange(range);
               }
               return;
-           }
+            }
           }
         }}
       >

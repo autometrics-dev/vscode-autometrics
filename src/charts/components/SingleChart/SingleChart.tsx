@@ -21,6 +21,11 @@ import styled from "styled-components";
 import { GraphContext } from "../../state";
 import { useChartHook } from "../../hooks";
 import { DatePicker } from "../DatePicker";
+import { GraphContainer } from "../GraphContainer";
+import { FunctionChart } from "../FunctionCharts/FunctionChart";
+import { Loading } from "../Loading";
+import { ErrorMessage } from "../ErrorMessage";
+import { useSnapshot } from "valtio";
 
 type Props = {
   options: SingleChartOptions;
@@ -32,12 +37,11 @@ export function SingleChart(props: Props) {
   const [query, setQuery] = useState<string | null>(null);
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const state = useContext(GraphContext);
-
-  const {
-    // error, loading,
-    timeSeries,
-    timeRange,
-  } = useChartHook("single", query || "");
+  const { showingQuery } = useSnapshot(state);
+  const { error, loading, timeSeries, timeRange } = useChartHook(
+    "single",
+    query || "",
+  );
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;
@@ -56,30 +60,33 @@ export function SingleChart(props: Props) {
   const title = `${options.type} chart for ${getTitle(options)}`;
 
   return (
-    <Container>
-      <h1>{title}</h1>
-      <DatePicker timeRange={timeRange} onChange={setTimeRange} />
-      <MetricsChart
-        graphType={graphType}
-        stackingType={stackingType}
-        timeRange={timeRange}
-        timeseriesData={(timeSeries || []) as Timeseries[]}
-        onChangeGraphType={setGraphType}
-        onChangeStackingType={setStackingType}
-        onChangeTimeRange={setTimeRange}
-        chartControlsShown={false}
-        gridColumnsShown={false}
-        footerShown={false}
-        gridBordersShown={false}
-        gridDashArray="2"
-        colors={colors}
-      />
-      <CodeBlock query={query || ""} />
-    </Container>
+    <GraphContainer title={title}>
+      <Container>
+        {loading && <Loading />}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <MetricsChart
+          graphType={graphType}
+          stackingType={stackingType}
+          timeRange={timeRange}
+          timeseriesData={(timeSeries || []) as Timeseries[]}
+          onChangeGraphType={setGraphType}
+          onChangeStackingType={setStackingType}
+          onChangeTimeRange={setTimeRange}
+          chartControlsShown={false}
+          gridColumnsShown={false}
+          footerShown={false}
+          gridBordersShown={false}
+          gridDashArray="2"
+          colors={colors}
+        />
+        {showingQuery && <CodeBlock query={query || ""} />}
+      </Container>
+    </GraphContainer>
   );
 }
 
 function getQuery(options: PanelOptions) {
+  console.log('options', options);
   switch (options.type) {
     case "called_by":
       return getCalledByRequestRate(options.functionName);
@@ -94,4 +101,5 @@ function getQuery(options: PanelOptions) {
 
 const Container = styled.div`
   padding: ${pxToEm(20)};
+  position: relative;
 `;
