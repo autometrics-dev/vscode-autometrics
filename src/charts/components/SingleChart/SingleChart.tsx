@@ -5,6 +5,7 @@ import {
   StackingType,
   TimeRange,
   Timeseries,
+  TooltipAnchor,
 } from "fiberplane-charts";
 
 import { PanelOptions, SingleChartOptions } from "../../../chartPanel";
@@ -26,6 +27,7 @@ import { FunctionChart } from "../FunctionCharts/FunctionChart";
 import { Loading } from "../Loading";
 import { ErrorMessage } from "../ErrorMessage";
 import { useSnapshot } from "valtio";
+import { Tooltip } from "../Tooltip";
 
 type Props = {
   options: SingleChartOptions;
@@ -34,28 +36,29 @@ type Props = {
 export function SingleChart(props: Props) {
   const { options } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
-  const [query, setQuery] = useState<string | null>(null);
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const state = useContext(GraphContext);
   const { showingQuery } = useSnapshot(state);
-  const { error, loading, timeSeries, timeRange } = useChartHook(
-    "single",
-    query || "",
-  );
+  const query = getQuery(options);
+  const id = "Single";
+  const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
+
+  useEffect(() => {
+    const graph = state.graphs[id];
+
+    if (graph) {
+      graph.loading = true;
+    }
+  }, [query]);
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;
   });
 
-  useEffect(() => {
-    const query = getQuery(options);
-
-    if (!query) {
-      return;
-    }
-
-    setQuery(query);
-  }, [options]);
+  const [tooltip, setTooltip] = useState<{
+    anchor: TooltipAnchor;
+    content: React.ReactNode;
+  } | null>(null);
 
   const title = `${options.type} chart for ${getTitle(options)}`;
 
@@ -78,8 +81,13 @@ export function SingleChart(props: Props) {
           gridBordersShown={false}
           gridDashArray="2"
           colors={colors}
+          showTooltip={(anchor, content) => {
+            setTooltip({ anchor, content });
+            return () => setTooltip(null);
+          }}
         />
         {showingQuery && <CodeBlock query={query || ""} />}
+        {tooltip && <Tooltip {...tooltip} />}
       </Container>
     </GraphContainer>
   );

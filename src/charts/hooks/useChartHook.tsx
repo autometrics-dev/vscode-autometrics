@@ -8,9 +8,6 @@ export function useChartHook(id: string, query: string) {
   const { graphs, timeRange } = useSnapshot(state);
   const { loading = false, timeSeries = null, error = null } = graphs[id] || {};
 
-  // const setTimeRange = useHandler((timeRange: TimeRange) => {
-  //   state.timeRange = timeRange;
-  // });
   useEffect(() => {
     const graph = state.graphs[id];
     if (!graph) {

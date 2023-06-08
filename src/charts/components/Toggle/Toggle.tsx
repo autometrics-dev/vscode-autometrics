@@ -42,6 +42,7 @@ const Dot = styled.div<ToggleProps>(
   ({ "aria-checked": on, theme }) => css`
     background: var(--vscode-checkbox-foreground, ${theme.colorBackground});
     border-radius: ${theme.borderRadiusRound};
+    border: 1px solid var(--vscode-checkbox-border, transparent);
     display: inline-block;
     height: 16px;
     width: 16px;

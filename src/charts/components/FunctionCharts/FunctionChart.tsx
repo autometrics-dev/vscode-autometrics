@@ -5,6 +5,7 @@ import {
   StackingType,
   TimeRange,
   Timeseries,
+  TooltipAnchor,
 } from "fiberplane-charts";
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
@@ -15,6 +16,7 @@ import { GraphContext } from "../../state";
 import { useHandler } from "../../hooks";
 import { useChartHook } from "../../hooks";
 import { ErrorMessage } from "../ErrorMessage";
+import { Tooltip } from "../Tooltip";
 
 type Props = {
   query: string;
@@ -35,6 +37,11 @@ export function FunctionChart(props: Props) {
   const setTimeRange = useHandler((timeRange: TimeRange) => {
     state.timeRange = timeRange;
   });
+
+  const [tooltip, setTooltip] = useState<{
+    anchor: TooltipAnchor;
+    content: React.ReactNode;
+  } | null>(null);
 
   return (
     <Container showingQuery={showingQuery}>
@@ -59,9 +66,14 @@ export function FunctionChart(props: Props) {
           gridBordersShown={false}
           gridDashArray="2"
           colors={colors}
+          showTooltip={(anchor, content) => {
+            setTooltip({ anchor, content });
+            return () => setTooltip(null);
+          }}
         />
       </Content>
       {showingQuery && <CodeBlock query={query} />}
+      {tooltip && <Tooltip {...tooltip} />}
     </Container>
   );
 }
