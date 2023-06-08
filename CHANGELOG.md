@@ -6,6 +6,7 @@
 - add date picker to single chart views
 - add toggle for showing/hiding PromQL queries
 - add support for the "module" label for certain graphs
+- add tooltips to the graphs
 
 ## [0.4.0]
 - Add date picker to the function metrics panel
