@@ -1,48 +1,55 @@
-import { useEffect, useState } from "react";
-import { TimeRangeProps } from "../types";
-import { useRequestData } from "../../hooks";
+import { useContext, useState } from "react";
 import {
   GraphType,
   MetricsChart,
   StackingType,
+  TimeRange,
   Timeseries,
 } from "fiberplane-charts";
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
-import { colors } from "../../utils";
+import { colors, pxToEm } from "../../utils";
+import { Loading } from "../Loading";
+import { useSnapshot } from "valtio";
+import { GraphContext } from "../../state";
+import { useHandler } from "../../hooks";
+import { useChartHook } from "../../hooks";
+import { ErrorMessage } from "../ErrorMessage";
 
 type Props = {
   query: string;
   title?: React.ReactNode;
   description?: React.ReactNode;
-} & TimeRangeProps;
+  id: string;
+};
 
 export function FunctionChart(props: Props) {
-  const { query, timeRange, setTimeRange, title, description = "" } = props;
+  const { query, title, description = "", id } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [stackingType, setStackingType] = useState<StackingType>("none");
-  const [timeseriesData, setTimeseriesData] = useState<Array<Timeseries>>([]);
 
-  const requestData = useRequestData();
+  const state = useContext(GraphContext);
+  const { showingQuery } = useSnapshot(state);
+  const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
 
-  useEffect(() => {
-    requestData(timeRange, query).then((data) => {
-      setTimeseriesData(data);
-    });
-  }, [query, timeRange]);
+  const setTimeRange = useHandler((timeRange: TimeRange) => {
+    state.timeRange = timeRange;
+  });
 
   return (
-    <>
-      <div>
+    <Container showingQuery={showingQuery}>
+      {loading && <Loading />}
+      <Content>
         <Title>{title}</Title>
         {description && <Description>{description}</Description>}
-      </div>
-      <div>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+      </Content>
+      <Content>
         <MetricsChart
           graphType={graphType}
           stackingType={stackingType}
           timeRange={timeRange}
-          timeseriesData={timeseriesData}
+          timeseriesData={(timeSeries || []) as Timeseries[]}
           onChangeGraphType={setGraphType}
           onChangeStackingType={setStackingType}
           onChangeTimeRange={setTimeRange}
@@ -53,27 +60,40 @@ export function FunctionChart(props: Props) {
           gridDashArray="2"
           colors={colors}
         />
-      </div>
-      <CodeBlock query={query} />
-    </>
+      </Content>
+      {showingQuery && <CodeBlock query={query} />}
+    </Container>
   );
 }
+
+const Container = styled.div<{ showingQuery: boolean }>`
+  display: grid;
+  grid-template-rows: ${({ showingQuery }) =>
+    showingQuery ? "min-content auto 100px" : "min-content auto"};
+  gap: ${pxToEm(9)}; // 22px on 13px base;
+  position: relative;
+  height: 100%;
+`;
+
+const Content = styled.div`
+  min-width: 0;
+`;
 
 const Title = styled.h2`
   font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
-  font-size: 1.231em; // 16px on 13px base; 
+  font-size: ${pxToEm(16)}; // 16px on 13px base; 
   line-height: 2.1875; // 35px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 ${pxToEm(10)};
 `;
 
 const Description = styled.div`
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 0.7692em;// 10px over 13px base;
+  font-size: ${pxToEm(10)};// 10px over 13px base;
   line-height: 1.6; // 16px;
-  padding: 0.3em 0;
+  padding: 0 0 0 ${pxToEm(10)};
 `;

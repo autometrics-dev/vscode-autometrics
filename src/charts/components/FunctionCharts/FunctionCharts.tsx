@@ -1,5 +1,4 @@
 import { FunctionChart } from "./FunctionChart";
-import { TimeRangeProps } from "../types";
 import styled from "styled-components";
 import {
   generateErrorRatioQuery,
@@ -8,16 +7,16 @@ import {
   getCalledByErrorRatio,
   getCalledByRequestRate,
 } from "../../../queries";
-import { DatePicker } from "../DatePicker";
 import { pxToEm } from "../../utils";
+import { GraphContainer } from "../GraphContainer";
 
-type Props = TimeRangeProps & {
+type Props = {
   functionName: string;
   moduleName?: string;
 };
 
 export function FunctionCharts(props: Props) {
-  const { functionName, moduleName, timeRange, setTimeRange } = props;
+  const { functionName, moduleName } = props;
 
   const requestRateQuery = generateRequestRateQuery(functionName, moduleName);
   const errorRatioQuery = generateErrorRatioQuery(functionName, moduleName);
@@ -27,116 +26,96 @@ export function FunctionCharts(props: Props) {
   const calledByErrorRatioQuery = getCalledByErrorRatio(functionName);
 
   return (
-    <div>
-      <TopSection>
-        <Title>
+    <GraphContainer
+      title={
+        <>
           Live metrics for <FunctionName>{functionName}</FunctionName>
-        </Title>
-        <Controls>
-          <DatePicker timeRange={timeRange} onChange={setTimeRange} />
-        </Controls>
-      </TopSection>
-      <MainContent>
-        <Container>
-          <ChartContainer>
-            <FunctionChart
-              title="Request Rate"
-              query={requestRateQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
-              key="request_rate"
-            />
-          </ChartContainer>
-          <ChartContainer>
-            <FunctionChart
-              title="Error Ratio"
-              query={errorRatioQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
-              key="error_ratio"
-            />
-          </ChartContainer>
-          <ChartContainer>
-            <FunctionChart
-              title="Latency (95th and 99th Percentile)"
-              description="This shows the 99th and 95th percentile latency or response time for the given function.\n\nFor example, if the 99th percentile latency is 500 milliseconds, that means that 99% of calls to the function are handled within 500ms or less."
-              query={latencyQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
-              key="latency_query"
-            />
-          </ChartContainer>
-        </Container>
-        <hr />
-        <h5>"Called by" metrics</h5>
-        <hr />
-        <Container>
-          <ChartContainer>
-            <FunctionChart
-              title="Request Rate"
-              query={calledByRequestQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
-              key="request_rate"
-            />
-          </ChartContainer>
-          <ChartContainer>
-            <FunctionChart
-              title="Error Ratio"
-              query={calledByErrorRatioQuery}
-              timeRange={timeRange}
-              setTimeRange={setTimeRange}
-              key="error_ratio"
-            />
-          </ChartContainer>
-        </Container>
-      </MainContent>
-    </div>
+        </>
+      }
+    >
+      <Container>
+        <ChartContainer>
+          <FunctionChart
+            title="Request Rate"
+            query={requestRateQuery}
+            key="request_rate"
+            id="request_rate"
+          />
+        </ChartContainer>
+        <ChartContainer>
+          <FunctionChart
+            title="Error Ratio"
+            query={errorRatioQuery}
+            key="error_ratio"
+            id="error_ratio"
+          />
+        </ChartContainer>
+        <ChartContainer>
+          <FunctionChart
+            title="Latency (95th and 99th Percentile)"
+            description="This shows the 99th and 95th percentile latency or response time for the given function.\n\nFor example, if the 99th percentile latency is 500 milliseconds, that means that 99% of calls to the function are handled within 500ms or less."
+            query={latencyQuery}
+            key="latency_query"
+            id="latency_query"
+          />
+        </ChartContainer>
+      </Container>
+      <StyledLine />
+      <SectionHeading>"Called by" metrics</SectionHeading>
+      <StyledLine />
+      <Container>
+        <ChartContainer>
+          <FunctionChart
+            title="Request Rate"
+            query={calledByRequestQuery}
+            key="request_rate"
+            id="called_by_request_rate"
+          />
+        </ChartContainer>
+        <ChartContainer>
+          <FunctionChart
+            title="Error Ratio"
+            query={calledByErrorRatioQuery}
+            key="error_ratio"
+            id="called_by_error_ratio"
+          />
+        </ChartContainer>
+      </Container>
+    </GraphContainer>
   );
 }
-
-const TopSection = styled.div`
-  position: sticky;
-  display: grid;
-  grid-template-columns: auto max-content;
-  padding: ${pxToEm(10)};
-  border-bottom: 1px solid var(--vscode-menu-border, transparent);
-  align-items: center;
-`;
-
-const Title = styled.h1`
-  font-family: "Inter", sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.5385em; // 20px with 13px base
-  line-height: 1.75; // 35px
-  margin: 0;
-  padding: 0;
-`;
-
-const Controls = styled.div`
-  display: grid;
-  height: fit-content;
-`;
 
 const FunctionName = styled.code`
   font-size: inherit;
 `;
 
-const MainContent = styled.div`
-  padding: ${pxToEm(20)};
-`;
-
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 30px;
+  padding: ${pxToEm(20)} ${pxToEm(30)} ${pxToEm(20)} ${pxToEm(20)};
+  gap: ${pxToEm(25)};
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const ChartContainer = styled.div`
-  display: grid;
-  grid-template-rows: min-content auto 100px;
-  gap: 1.692em; // 22px on 13px base;
   height: 100%;
+`;
+
+const StyledLine = styled.hr`
+  padding: 0;
+  margin: 0;
+  border: none;
+  height: 1px;
+  background: var(--vscode-menu-border, transparent);
+`;
+
+const SectionHeading = styled.h5`
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: ${pxToEm(16)};
+  line-height: ${35 / 16};
+  margin: 0;
+  padding: ${pxToEm(10)} ${pxToEm(30, 16)};
 `;

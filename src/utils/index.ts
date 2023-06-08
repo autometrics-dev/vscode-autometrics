@@ -3,3 +3,4 @@ export * from "./uniq";
 export * from "./uniqBy";
 export * from "./getNonce";
 export * from "./getTitle";
+export * from "./createDefaultTimeRange";

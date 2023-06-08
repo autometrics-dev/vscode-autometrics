@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
+import type { TimeRange } from "fiberplane-charts";
 
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
-import { getNonce, getTitle } from "./utils";
+import { createDefaultTimeRange, getNonce, getTitle } from "./utils";
 
 /**
  * Options for the kind of chart to display.
@@ -18,6 +19,11 @@ export type SingleChartOptions =
 export type PanelOptions =
   | SingleChartOptions
   | { type: "function_graphs"; functionName: string; moduleName?: string };
+
+export type GlobalGraphSettings = {
+  timeRange: TimeRange;
+  showingQuery: boolean;
+};
 
 type ChartPanel = {
   /**
@@ -63,7 +69,11 @@ function createChartPanel(
   prometheus: Prometheus,
   options: PanelOptions,
 ): ChartPanel {
-  let currentOptions = options;
+  let currentOptions: PanelOptions & GlobalGraphSettings = {
+    ...options,
+    timeRange: createDefaultTimeRange(),
+    showingQuery: false,
+  };
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     getTitle(options),
@@ -76,9 +86,11 @@ function createChartPanel(
   }
 
   function update(options: PanelOptions) {
-    currentOptions = options;
+    const timeRange = currentOptions?.timeRange || createDefaultTimeRange();
+    const showingQuery = currentOptions?.showingQuery || false;
+    currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
-    postMessage({ type: "show_panel", options });
+    postMessage({ type: "show_panel", options: currentOptions });
   }
 
   panel.webview.onDidReceiveMessage(
@@ -92,7 +104,7 @@ function createChartPanel(
           prometheus
             .fetchTimeseries(query, timeRange)
             .then((data) => {
-              postMessage({ type: "show_data", timeRange, data, id });
+              postMessage({ type: "show_data", data, id });
             })
             .catch((error: unknown) => {
               const errorMessage = formatProviderError(error);
@@ -102,10 +114,23 @@ function createChartPanel(
                 id,
                 error: errorMessage,
               });
-              vscode.window.showErrorMessage(
-                `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
-              );
+
+              if (options.type !== "function_graphs") {
+                vscode.window.showErrorMessage(
+                  `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
+                );
+              }
             });
+          return;
+        }
+        case "update_time_range": {
+          const { timeRange } = message;
+          currentOptions = { ...currentOptions, timeRange };
+          return;
+        }
+        case "update_showing_query": {
+          const { showingQuery } = message;
+          currentOptions = { ...currentOptions, showingQuery };
           return;
         }
       }
