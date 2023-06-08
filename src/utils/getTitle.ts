@@ -5,6 +5,9 @@ export function getTitle(options: PanelOptions) {
     case "called_by":
       return `Called by ${options.functionName}`;
     case "function":
+      if (options.moduleName) {
+        return `${options.moduleName}::${options.functionName}`;
+      }
       return options.functionName;
     case "metric":
       return options.metricName;
