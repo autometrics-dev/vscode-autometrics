@@ -3,8 +3,10 @@ import type { Result } from "../../providerRuntime/types";
 import { getNonce } from "../../utils";
 import { vscode } from "../chart";
 
-const requests =
-  new Map<string, (result: Result<Timeseries[], String>) => void>);
+const requests = new Map<
+  string,
+  (result: Result<Timeseries[], String>) => void
+>();
 
 window.addEventListener("message", (event) => {
   if (event.data.type === "show_data") {
