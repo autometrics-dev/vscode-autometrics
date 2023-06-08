@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+- Add refresh button
+- clean up styling
+- add date picker to single chart views
+- add toggle for showing/hiding PromQL queries
+- add support for the "module" label for certain graphs
+
 ## [0.4.0]
 - Add date picker to the function metrics panel
 - [chore] update TypeScript plugin dependency
