@@ -1084,6 +1084,7 @@ __metadata:
   resolution: "autometrics@workspace:."
   dependencies:
     "@autometrics/typescript-plugin": ^0.5.0
+    "@floating-ui/core": ^1.2.6
     "@floating-ui/dom": ^1.2.9
     "@floating-ui/react": ^0.24.2
     "@msgpack/msgpack": ^3.0.0-beta2
