@@ -18,17 +18,15 @@ export function CodeBlock({ query }: { query: string }) {
       <StyledButton
         onClick={() => {
           navigator.clipboard.writeText(query);
-          if (ref.current) {
-            if (window.getSelection) {
-              const selection = window.getSelection();
-              const range = document.createRange();
-              range.selectNodeContents(ref.current);
-              if (selection) {
-                selection.removeAllRanges();
-                selection.addRange(range);
-              }
-              return;
+          if (ref.current && window.getSelection) {
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(ref.current);
+            if (selection) {
+              selection.removeAllRanges();
+              selection.addRange(range);
             }
+            return;
           }
         }}
       >

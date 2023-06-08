@@ -23,7 +23,7 @@ type Props = {
   id: string;
 };
 
-export const FunctionChart = function FunctionChart(props: Props) {
+export function FunctionChart(props: Props) {
   const { query, title, description = "", id } = props;
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [stackingType, setStackingType] = useState<StackingType>("none");
@@ -64,7 +64,7 @@ export const FunctionChart = function FunctionChart(props: Props) {
       {showingQuery && <CodeBlock query={query} />}
     </Container>
   );
-};
+}
 
 const Container = styled.div<{ showingQuery: boolean }>`
   display: grid;
