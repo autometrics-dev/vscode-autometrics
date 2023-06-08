@@ -90,7 +90,14 @@ function getQuery(options: PanelOptions) {
     case "called_by":
       return getCalledByRequestRate(options.functionName);
     case "function":
-      return getRequestRate(options.functionName);
+      return getRequestRate(
+        options.functionName,
+        options.moduleName
+          ? {
+              module: options.moduleName,
+            }
+          : undefined,
+      );
     case "metric":
       return getSumQuery(options.metricName);
     default:

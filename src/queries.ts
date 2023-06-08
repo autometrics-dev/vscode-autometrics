@@ -4,10 +4,13 @@ const HISTOGRAM_BUCKET_NAME = "function_calls_duration_bucket";
 const ADD_BUILD_INFO_LABELS =
   "* on (instance, job) group_left(version, commit) last_over_time(build_info[1s])";
 
-export function getRequestRate(functionName: string) {
+export function getRequestRate(
+  functionName: string,
+  labels: Record<string, string> = {},
+) {
   return `# Rate of calls to the \`${functionName}\` function per second, averaged over 5 minute windows
 
-${getSumQuery(COUNTER_NAME, { function: functionName })}`;
+${getSumQuery(COUNTER_NAME, { ...labels, function: functionName })}`;
 }
 
 export function getCalledByRequestRate(functionName: string) {
