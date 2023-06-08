@@ -8,9 +8,6 @@ export function useChartHook(id: string, query: string) {
   const { graphs, timeRange } = useSnapshot(state);
   const { loading = false, timeSeries = null, error = null } = graphs[id] || {};
 
-  // const setTimeRange = useHandler((timeRange: TimeRange) => {
-  //   state.timeRange = timeRange;
-  // });
   useEffect(() => {
     const graph = state.graphs[id];
     if (!graph) {
@@ -51,7 +48,6 @@ export function useChartHook(id: string, query: string) {
 
     loadGraph(query, { ...timeRange })
       .then(async (data) => {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         graph.timeSeries = data;
         graph.error = null;
       })
