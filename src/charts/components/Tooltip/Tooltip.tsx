@@ -1,5 +1,4 @@
 import { TooltipAnchor } from "fiberplane-charts";
-import {} from "@floating-ui/dom";
 import { useFloating } from "@floating-ui/react";
 import styled from "styled-components";
 import { pxToEm } from "../../utils";
