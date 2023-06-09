@@ -19,7 +19,7 @@ export function GraphContainer(props: {
   const loadingState = useContext(GlobalLoadingContext);
   const { loading } = useSnapshot(loadingState);
   const setTimeRange = useHandler((timeRange: TimeRange) => {
-    state.timeRange = timeRange;
+    state.timeRange = { type: "absolute", ...timeRange };
   });
 
   return (

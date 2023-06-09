@@ -5,16 +5,22 @@ import { pxToEm } from "../../utils";
 import { useState } from "react";
 import { DatePickerForm } from "./DatePickerForm";
 import { TimeRangePresets } from "./TimeRangePresets";
+import { FlexibleTimeRange } from "../../../types";
+import { relativeToAbsoluteTimeRange } from "../../../utils";
 
 type Props = {
-  timeRange: TimeRange;
-  onChange: (timeRange: TimeRange) => void;
+  timeRange: FlexibleTimeRange;
+  onChange: (timeRange: FlexibleTimeRange) => void;
 };
 
 export function DatePickerContent(props: Props) {
   const { onChange, timeRange } = props;
 
-  const { from, to } = timeRange;
+  const absoluteTimeRange =
+    timeRange.type === "absolute"
+      ? timeRange
+      : relativeToAbsoluteTimeRange(timeRange);
+  const { from, to } = absoluteTimeRange;
 
   const [draftFrom, setDraftFrom] = useState<Timestamp>(from);
   const [draftTo, setDraftTo] = useState<Timestamp>(to);
@@ -33,7 +39,7 @@ export function DatePickerContent(props: Props) {
         <DatePickerForm
           from={draftFrom}
           to={draftTo}
-          onChange={onChange}
+          onChange={(timeRange) => onChange({ type: "absolute", ...timeRange })}
           updateDraftFrom={setDraftFrom}
           updateDraftTo={setDraftTo}
         />

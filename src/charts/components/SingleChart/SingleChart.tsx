@@ -21,9 +21,7 @@ import { colors, pxToEm } from "../../utils";
 import styled from "styled-components";
 import { GraphContext } from "../../state";
 import { useChartHook } from "../../hooks";
-import { DatePicker } from "../DatePicker";
 import { GraphContainer } from "../GraphContainer";
-import { FunctionChart } from "../FunctionCharts/FunctionChart";
 import { Loading } from "../Loading";
 import { ErrorMessage } from "../ErrorMessage";
 import { useSnapshot } from "valtio";
@@ -43,6 +41,13 @@ export function SingleChart(props: Props) {
   const id = "Single";
   const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
 
+  const setTimeRange = useHandler((timeRange: TimeRange) => {
+    state.timeRange = {
+      type: "absolute",
+      ...timeRange,
+    };
+  });
+
   useEffect(() => {
     const graph = state.graphs[id];
 
@@ -50,10 +55,6 @@ export function SingleChart(props: Props) {
       graph.loading = true;
     }
   }, [query]);
-
-  const setTimeRange = useHandler((timeRange: TimeRange) => {
-    state.timeRange = timeRange;
-  });
 
   const [tooltip, setTooltip] = useState<{
     anchor: TooltipAnchor;

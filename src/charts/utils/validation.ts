@@ -1,5 +1,5 @@
 import type { TimeRange } from "fiberplane-charts";
-import { secondsToTimestamp, timestampToSeconds } from "./date";
+import { secondsToTimestamp, timestampToSeconds } from "../../utils";
 
 type Keys = keyof TimeRange | "global";
 

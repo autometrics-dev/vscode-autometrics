@@ -3,10 +3,11 @@ import styled, { css } from "styled-components";
 
 import { Day, StyledDay } from "./Day";
 import { Timestamp } from "fiberplane-charts";
-import { getDateParts, pxToEm, timestampToDate } from "../../utils";
+import { pxToEm } from "../../utils";
 import { Button } from "../Button";
 import { CaretLeft } from "./CaretLeft";
 import { CaretRight } from "./CaretRight";
+import { getDateParts, timestampToDate } from "../../../utils";
 
 const MONTHS = [
   "January",

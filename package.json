@@ -130,6 +130,7 @@
     "fiberplane-charts": "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts",
     "framer-motion": "^10.12.16",
     "node-fetch": "^2.0.0",
+    "parse-duration": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",

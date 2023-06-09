@@ -7,6 +7,7 @@ import { useHandler } from "../../hooks";
 import { Clock } from "./Clock";
 import { CaretDown } from "./CaretDown";
 import { pxToEm } from "../../utils";
+import { FlexibleTimeRange } from "../../../types";
 
 type Props = {
   timeRange: TimeRange;
@@ -18,9 +19,16 @@ export function DatePicker(props: Props) {
   const contentRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const handler = useHandler((timeRange: TimeRange) => {
+  const handler = useHandler((timeRange: FlexibleTimeRange) => {
     setOpened(false);
-    props.onChange(timeRange);
+    // if (timeRange.type === "relative") {
+    //   props.onChange(timeRange);
+    //   return;
+    // }
+
+    props.onChange({
+      ...timeRange,
+    });
   });
 
   useEffect(() => {
@@ -56,7 +64,10 @@ export function DatePicker(props: Props) {
       </StyledButton>
       {opened && (
         <Content ref={contentRef}>
-          <DatePickerContent timeRange={props.timeRange} onChange={handler} />
+          <DatePickerContent
+            timeRange={{ type: "absolute", ...props.timeRange }}
+            onChange={handler}
+          />
         </Content>
       )}
     </>

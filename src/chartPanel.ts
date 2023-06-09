@@ -5,7 +5,13 @@ import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
-import { createDefaultTimeRange, getNonce, getTitle } from "./utils";
+import {
+  createDefaultTimeRange,
+  getNonce,
+  getTitle,
+  relativeToAbsoluteTimeRange,
+} from "./utils";
+import { FlexibleTimeRange } from "./types";
 
 /**
  * Options for the kind of chart to display.
@@ -21,7 +27,7 @@ export type PanelOptions =
   | { type: "function_graphs"; functionName: string; moduleName?: string };
 
 export type GlobalGraphSettings = {
-  timeRange: TimeRange;
+  timeRange: FlexibleTimeRange;
   showingQuery: boolean;
 };
 
@@ -101,8 +107,17 @@ function createChartPanel(
           return;
         case "request_data": {
           const { query, timeRange, id } = message;
+          const absoluteTimeRange =
+            timeRange.type === "absolute"
+              ? timeRange
+              : relativeToAbsoluteTimeRange(timeRange);
+
+          console.log("this is an absolute time range", absoluteTimeRange);
           prometheus
-            .fetchTimeseries(query, timeRange)
+            .fetchTimeseries(query, {
+              to: absoluteTimeRange.to,
+              from: absoluteTimeRange.from,
+            })
             .then((data) => {
               postMessage({ type: "show_data", data, id });
             })

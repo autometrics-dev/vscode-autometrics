@@ -35,7 +35,10 @@ export function FunctionChart(props: Props) {
   const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
-    state.timeRange = timeRange;
+    state.timeRange = {
+      type: "absolute",
+      ...timeRange,
+    };
   });
 
   const [tooltip, setTooltip] = useState<{
