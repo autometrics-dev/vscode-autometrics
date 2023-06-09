@@ -45,30 +45,38 @@ export function createDefaultTimeRange(): FlexibleTimeRange {
 export function relativeToAbsoluteTimeRange(
   timeRange: RelativeTimeRange,
 ): AbsoluteTimeRange {
-  let fromText = timeRange.from.trim().toLowerCase();
-
-  const match = /^now\s?-(?<duration>(.*?))$/.exec(fromText);
-
-  if (!match?.groups?.duration) {
+  const duration = getFromNowDuration(timeRange.from.trim().toLowerCase());
+  if (duration === null) {
     throw new Error(`Invalid from range: ${timeRange.from}`);
   }
 
-  fromText = match.groups.duration;
-
-  if (timeRange.to.trim().toLowerCase() !== "now") {
+  if (!validateRelativeTo(timeRange.to)) {
     throw new Error(`Invalid to range: expected 'now', got: '${timeRange.to}'`);
   }
 
-  const from = parseDuration(fromText);
-  if (from === undefined) {
-    throw new Error(`Invalid duration: ${timeRange.from}`);
-  }
-
   const now = Date.now();
-
   return {
     type: "absolute",
-    from: msToTimestamp(now - from),
+    from: msToTimestamp(now - duration),
     to: msToTimestamp(now),
   };
+}
+
+/**
+ * Get the duration from a human readable duration. Expecting a string like "now-1h".
+ * and returning the value in milliseconds.
+ */
+function getFromNowDuration(from: string): number | null {
+  const match = /^now\s?-(?<duration>(.*?))$/.exec(from);
+
+  if (!match?.groups?.duration) {
+    return null;
+  }
+
+  const duration = match.groups.duration;
+  return parseDuration(duration) ?? null;
+}
+
+function validateRelativeTo(to: string): boolean {
+  return to.trim().toLowerCase() === "now";
 }

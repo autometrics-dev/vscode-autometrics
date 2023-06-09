@@ -29,7 +29,6 @@ export function DatePickerContent(props: Props) {
     <Container>
       <Section>
         <Header>Absolute time range</Header>
-
         <MonthTable
           setStartTime={setDraftFrom}
           setEndTime={setDraftTo}
