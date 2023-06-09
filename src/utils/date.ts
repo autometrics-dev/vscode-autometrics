@@ -35,10 +35,6 @@ export const msToTimestamp = (ms: number): Timestamp =>
   new Date(ms).toISOString();
 
 export function createDefaultTimeRange(): FlexibleTimeRange {
-  // const now = new Date();
-  // const oneHourAgo = new Date();
-  // oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-  // return { from: oneHourAgo.toISOString(), to: now.toISOString() };
   return {
     type: "relative",
     from: "now-1h",
@@ -49,7 +45,21 @@ export function createDefaultTimeRange(): FlexibleTimeRange {
 export function relativeToAbsoluteTimeRange(
   timeRange: RelativeTimeRange,
 ): AbsoluteTimeRange {
-  const from = parseDuration(timeRange.from);
+  let fromText = timeRange.from.trim().toLowerCase();
+
+  const match = /^now\s?-(?<duration>(.*?))$/.exec(fromText);
+
+  if (!match?.groups?.duration) {
+    throw new Error(`Invalid from range: ${timeRange.from}`);
+  }
+
+  fromText = match.groups.duration;
+
+  if (timeRange.to.trim().toLowerCase() !== "now") {
+    throw new Error(`Invalid to range: expected 'now', got: '${timeRange.to}'`);
+  }
+
+  const from = parseDuration(fromText);
   if (from === undefined) {
     throw new Error(`Invalid duration: ${timeRange.from}`);
   }

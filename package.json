@@ -97,7 +97,10 @@
     "lint-code": "rome check .",
     "package": "yarn compile-extension --minify && yarn compile-charts --minify",
     "pretest": "yarn compile-tests && yarn compile && yarn lint",
-    "test": "node ./out/test/run-test.js",
+    "test": "yarn test:unit && yarn test:e2e",
+    "test:e2e": "node ./out/test/run-test.js",
+    "test:functional": "CI=true vitest",
+    "test:functional-watch": "vitest",
     "tsc": "tsc --noEmit",
     "vscode:prepublish": "yarn package",
     "watch": "mkdir -p dist/styles && cp src/charts/styles/* dist/styles && concurrently \"yarn compile-charts --sourcemap --watch\" \"yarn compile-extension --sourcemap --watch\"",
@@ -119,7 +122,8 @@
     "esbuild": "^0.17.19",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "rome": "^12.1.0"
+    "rome": "^12.1.0",
+    "vitest": "^0.32.0"
   },
   "dependencies": {
     "@autometrics/typescript-plugin": "^0.5.0",

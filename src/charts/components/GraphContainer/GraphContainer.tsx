@@ -41,9 +41,8 @@ export function GraphContainer(props: {
             buttonStyle="secondary"
             disabled={loading}
             onClick={() => {
-              Object.values(state.graphs).forEach((graph) => {
-                graph.loading = true;
-              });
+              // This way the time range will also appear new, triggering a refresh
+              state.timeRange = { ...state.timeRange };
             }}
           >
             <Refresh />

@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import type { TimeRange } from "fiberplane-charts";
 
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
@@ -107,35 +106,43 @@ function createChartPanel(
           return;
         case "request_data": {
           const { query, timeRange, id } = message;
-          const absoluteTimeRange =
-            timeRange.type === "absolute"
-              ? timeRange
-              : relativeToAbsoluteTimeRange(timeRange);
 
-          console.log("this is an absolute time range", absoluteTimeRange);
-          prometheus
-            .fetchTimeseries(query, {
-              to: absoluteTimeRange.to,
-              from: absoluteTimeRange.from,
-            })
-            .then((data) => {
-              postMessage({ type: "show_data", data, id });
-            })
-            .catch((error: unknown) => {
-              const errorMessage = formatProviderError(error);
+          try {
+            const absoluteTimeRange =
+              timeRange.type === "absolute"
+                ? timeRange
+                : relativeToAbsoluteTimeRange(timeRange);
 
-              postMessage({
-                type: "show_error",
-                id,
-                error: errorMessage,
+            console.log("this is an absolute time range", absoluteTimeRange);
+            prometheus
+              .fetchTimeseries(query, {
+                to: absoluteTimeRange.to,
+                from: absoluteTimeRange.from,
+              })
+              .then((data) => {
+                // console.log("data", data);
+                postMessage({ type: "show_data", data, id });
+              })
+              .catch((error: unknown) => {
+                const errorMessage = formatProviderError(error);
+
+                postMessage({
+                  type: "show_error",
+                  id,
+                  error: errorMessage,
+                });
               });
+          } catch (error) {
+            console.log("error", error);
+            const errorMessage = formatProviderError(error);
 
-              if (options.type !== "function_graphs") {
-                vscode.window.showErrorMessage(
-                  `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
-                );
-              }
+            postMessage({
+              type: "show_error",
+              id,
+              error: errorMessage,
             });
+          }
+
           return;
         }
         case "update_time_range": {

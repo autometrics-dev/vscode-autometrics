@@ -21,10 +21,6 @@ export function DatePicker(props: Props) {
 
   const handler = useHandler((timeRange: FlexibleTimeRange) => {
     setOpened(false);
-    // if (timeRange.type === "relative") {
-    //   props.onChange(timeRange);
-    //   return;
-    // }
 
     props.onChange({
       ...timeRange,

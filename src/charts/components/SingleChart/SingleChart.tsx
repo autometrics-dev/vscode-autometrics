@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   GraphType,
   MetricsChart,
@@ -14,13 +14,12 @@ import {
   getRequestRate,
   getSumQuery,
 } from "../../../queries";
-import { useHandler } from "../../hooks";
+import { useHandler, useChartHook } from "../../hooks";
 import { getTitle } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
 import styled from "styled-components";
 import { GraphContext } from "../../state";
-import { useChartHook } from "../../hooks";
 import { GraphContainer } from "../GraphContainer";
 import { Loading } from "../Loading";
 import { ErrorMessage } from "../ErrorMessage";

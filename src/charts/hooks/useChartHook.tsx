@@ -1,12 +1,21 @@
 import { useSnapshot } from "valtio";
 import { GraphContext } from "../state";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { loadGraph } from "../utils";
+import { relativeToAbsoluteTimeRange } from "../../utils";
 
 export function useChartHook(id: string, query: string) {
   const state = useContext(GraphContext);
   const { graphs, timeRange } = useSnapshot(state);
   const { loading = false, timeSeries = null, error = null } = graphs[id] || {};
+
+  const absoluteTimeRange = useMemo(() => {
+    const value =
+      timeRange.type === "relative"
+        ? relativeToAbsoluteTimeRange(timeRange)
+        : timeRange;
+    return { from: value.from, to: value.to };
+  }, [timeRange]);
 
   useEffect(() => {
     const graph = state.graphs[id];
@@ -46,8 +55,8 @@ export function useChartHook(id: string, query: string) {
       return;
     }
 
-    loadGraph(query, { ...timeRange })
-      .then(async (data) => {
+    loadGraph(query, { type: "absolute", ...absoluteTimeRange })
+      .then((data) => {
         graph.timeSeries = data;
         graph.error = null;
       })
@@ -65,5 +74,5 @@ export function useChartHook(id: string, query: string) {
       });
   }, [loading, query, timeRange]);
 
-  return { loading, timeSeries, error, timeRange };
+  return { loading, timeSeries, error, timeRange: absoluteTimeRange };
 }
