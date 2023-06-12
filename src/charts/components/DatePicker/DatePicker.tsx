@@ -1,7 +1,7 @@
 import { TimeRange } from "fiberplane-charts";
 import { Button } from "../Button";
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DatePickerContent } from "./DatePickerContent";
 import { useHandler } from "../../hooks";
 import { Clock } from "./Clock";
@@ -9,7 +9,7 @@ import { CaretDown } from "./CaretDown";
 import { pxToEm } from "../../utils";
 import { FlexibleTimeRange } from "../../../types";
 import { formatDuration } from "../../../utils";
-import { useFloating, useMergeRefs } from "@floating-ui/react";
+import { useFloating, flip, offset, shift } from "@floating-ui/react";
 
 type Props = {
   timeRange: FlexibleTimeRange;
@@ -18,10 +18,10 @@ type Props = {
 
 export function DatePicker(props: Props) {
   const [opened, setOpened] = useState(false);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const { refs, floatingStyles } = useFloating();
+  const { refs, floatingStyles } = useFloating({
+    middleware: [offset(5), flip(), shift()],
+  });
   const handler = useHandler((timeRange: FlexibleTimeRange) => {
     setOpened(false);
 
@@ -75,7 +75,6 @@ export function DatePicker(props: Props) {
 const Content = styled.div`
   position: absolute;
   z-index: 1;
-  /* transform: translateY(${pxToEm(5)}); */
 `;
 
 const StyledButton = styled(Button)`
