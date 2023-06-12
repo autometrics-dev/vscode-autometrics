@@ -45,20 +45,25 @@ export function createDefaultTimeRange(): FlexibleTimeRange {
 export function relativeToAbsoluteTimeRange(
   timeRange: RelativeTimeRange,
 ): AbsoluteTimeRange {
-  const duration = getFromNowDuration(timeRange.from.trim().toLowerCase());
-  if (duration === null) {
+  const fromDuration = getNowDuration(timeRange.from.trim().toLowerCase());
+  if (fromDuration === null) {
     throw new Error(`Invalid from range: ${timeRange.from}`);
   }
 
-  if (!validateRelativeTo(timeRange.to)) {
+  const toDuration = getNowDuration(timeRange.to.trim().toLowerCase());
+  if (toDuration === null) {
     throw new Error(`Invalid to range: expected 'now', got: '${timeRange.to}'`);
+  }
+
+  if (fromDuration > toDuration) {
+    throw new Error("End date is before start date");
   }
 
   const now = Date.now();
   return {
     type: "absolute",
-    from: msToTimestamp(now - duration),
-    to: msToTimestamp(now),
+    from: msToTimestamp(now + fromDuration),
+    to: msToTimestamp(now + toDuration),
   };
 }
 
@@ -66,17 +71,136 @@ export function relativeToAbsoluteTimeRange(
  * Get the duration from a human readable duration. Expecting a string like "now-1h".
  * and returning the value in milliseconds.
  */
-function getFromNowDuration(from: string): number | null {
-  const match = /^now\s?-(?<duration>(.*?))$/.exec(from);
+export function getNowDuration(from: string): number | null {
+  if (from === "now") {
+    return 0;
+  }
+
+  const match = /^now\s?(?<sign>(-|\+))(?<duration>(.*?))$/.exec(from);
 
   if (!match?.groups?.duration) {
     return null;
   }
 
-  const duration = match.groups.duration;
-  return parseDuration(duration) ?? null;
+  const { duration, sign } = match.groups;
+  const parsed = parseDuration(duration);
+  if (parsed == null) {
+    return null;
+  }
+
+  return sign === "+" ? parsed : -parsed;
 }
 
-function validateRelativeTo(to: string): boolean {
+export function validateRelativeTo(to: string): boolean {
   return to.trim().toLowerCase() === "now";
+}
+
+export function formatDuration(timeRange: FlexibleTimeRange) {
+  if (timeRange.type === "relative" && timeRange.to === "now") {
+    const duration = getNowDuration(timeRange.from);
+    if (duration !== null) {
+      return `Last ${humanizeDuration(-duration)}`;
+    }
+  }
+
+  return `${timeRange.from} - ${timeRange.to}`;
+}
+
+// function humanizeDuration(duration: number) {
+//   const seconds = Math.floor(duration / 1000);
+//   const minutes = Math.floor(seconds / 60);
+//   const hours = Math.floor(minutes / 60);
+//   const days = Math.floor(hours / 24);
+//   const weeks = Math.floor(days / 7);
+
+//   let result = "";
+
+//   if (weeks > 0) {
+//     result += `${result.length ? " " : ""}${weeks}wk`;
+//   }
+
+//   if (days > 0) {
+//     result += `${result.length ? " " : ""}${days}d`;
+//   }
+
+//   if (hours > 0) {
+//     result += `${result.length ? " " : ""}${hours}h`;
+//   }
+
+//   if (hours > 0) {
+//     result += `${result.length ? " " : ""}${hours}h`;
+//   }
+
+//   if (minutes > 0) {
+//     result += `${result.length ? " " : ""}${minutes}m`;
+//   }
+
+//   if (seconds > 0) {
+//     result += `${result.length ? " " : ""}${seconds}s`;
+//   }
+//   return result;
+// }
+
+const millisecondsPerSecond = 1000;
+const millisecondsPerMinute = 60 * millisecondsPerSecond;
+const millisecondsPerHour = 60 * millisecondsPerMinute;
+const millisecondsPerDay = 24 * millisecondsPerHour;
+const millisecondsPerWeek = 7 * millisecondsPerDay;
+
+function humanizeDuration(value: number) {
+  let duration = value;
+
+  const weeks = Math.floor(duration / millisecondsPerWeek);
+  duration %= millisecondsPerWeek;
+  const days = Math.floor(duration / millisecondsPerDay);
+  duration %= millisecondsPerDay;
+
+  const hours = Math.floor(duration / millisecondsPerHour);
+  duration %= millisecondsPerHour;
+
+  const minutes = Math.floor(duration / millisecondsPerMinute);
+  duration %= millisecondsPerMinute;
+
+  const seconds = Math.floor(duration / millisecondsPerSecond);
+  let result = "";
+
+  if (weeks > 0) {
+    result += `${weeks > 1 ? `${weeks} ` : ""}week${weeks > 1 ? "s" : ""}`;
+  }
+  if (days > 0) {
+    result += `${result.length ? ", " : ""}${pluralize(days, "day", {
+      skipOne: result.length > 0,
+    })}`;
+  }
+
+  if (hours > 0) {
+    result += `${result.length ? ", " : ""}${pluralize(hours, "hour", {
+      skipOne: result.length > 0,
+    })}`;
+  }
+
+  if (minutes > 0) {
+    result += `${result.length ? ", " : ""}${pluralize(minutes, "minute", {
+      skipOne: result.length > 0,
+    })}`;
+  }
+  if (seconds > 0) {
+    result += `${result.length ? ", " : ""}${pluralize(seconds, "second", {
+      skipOne: result.length > 0,
+    })}`;
+  }
+
+  return result;
+}
+
+function pluralize(
+  value: number,
+  unit: string,
+  { skipOne = false }: { skipOne: boolean },
+) {
+  if (value === 1 && skipOne) {
+    return unit;
+  }
+
+  return `${value} ${unit}${value > 1 ? "s" : ""}`;
 }

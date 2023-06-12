@@ -39,13 +39,10 @@ describe("relativeToAbsoluteTimeRange", () => {
       type: "relative",
       from: "now-1h",
       to: "invalid",
-      // rome-ignore lint/suspicious/noExplicitAny: <explanation>
-    } as any;
+    };
 
     expect(() => {
       relativeToAbsoluteTimeRange(timeRange);
     }).toThrowError("Invalid to range: expected 'now', got: 'invalid'");
   });
-
-  // Add more tests as needed to cover other scenarios
 });

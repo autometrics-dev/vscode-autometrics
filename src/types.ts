@@ -7,7 +7,7 @@ export type AbsoluteTimeRange = {
 export type RelativeTimeRange = {
   type: "relative";
   from: string;
-  to: "now";
+  to: string;
 };
 
 export type FlexibleTimeRange = AbsoluteTimeRange | RelativeTimeRange;

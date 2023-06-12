@@ -2,7 +2,7 @@ import { TimeRange, Timestamp } from "fiberplane-charts";
 import { MonthTable } from "./MonthTable";
 import styled, { css } from "styled-components";
 import { pxToEm } from "../../utils";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DatePickerForm } from "./DatePickerForm";
 import { TimeRangePresets } from "./TimeRangePresets";
 import { FlexibleTimeRange } from "../../../types";
@@ -15,32 +15,31 @@ type Props = {
 
 export function DatePickerContent(props: Props) {
   const { onChange, timeRange } = props;
+  const [draft, setDraft] = useState<FlexibleTimeRange>(timeRange);
+  const absoluteTimeRange = useMemo(() => {
+    if (draft.type === "absolute") {
+      return draft;
+    }
 
-  const absoluteTimeRange =
-    timeRange.type === "absolute"
-      ? timeRange
-      : relativeToAbsoluteTimeRange(timeRange);
-  const { from, to } = absoluteTimeRange;
-
-  const [draftFrom, setDraftFrom] = useState<Timestamp>(from);
-  const [draftTo, setDraftTo] = useState<Timestamp>(to);
+    return relativeToAbsoluteTimeRange(draft);
+  }, [draft]);
 
   return (
     <Container>
       <Section>
         <Header>Absolute time range</Header>
         <MonthTable
-          setStartTime={setDraftFrom}
-          setEndTime={setDraftTo}
-          startTime={draftFrom}
-          endTime={draftTo}
+          // setStartTime={setDraftFrom}
+          // setEndTime={setDraftTo}
+          startTime={absoluteTimeRange.from}
+          endTime={absoluteTimeRange.to}
+          updateTimeRange={setDraft}
         />
         <DatePickerForm
-          from={draftFrom}
-          to={draftTo}
+          from={draft.from}
+          to={draft.to}
           onChange={(timeRange) => onChange({ type: "absolute", ...timeRange })}
-          updateDraftFrom={setDraftFrom}
-          updateDraftTo={setDraftTo}
+          updateDraft={setDraft}
         />
       </Section>
       <Section>

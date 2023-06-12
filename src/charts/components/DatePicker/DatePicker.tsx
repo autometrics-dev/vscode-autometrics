@@ -8,9 +8,10 @@ import { Clock } from "./Clock";
 import { CaretDown } from "./CaretDown";
 import { pxToEm } from "../../utils";
 import { FlexibleTimeRange } from "../../../types";
+import { formatDuration } from "../../../utils";
 
 type Props = {
-  timeRange: TimeRange;
+  timeRange: FlexibleTimeRange;
   onChange: (timeRange: TimeRange) => void;
 };
 
@@ -55,15 +56,12 @@ export function DatePicker(props: Props) {
         ref={buttonRef}
       >
         <Clock />
-        {props.timeRange.from} - {props.timeRange.to}
+        {formatDuration(props.timeRange)}
         <CaretDown />
       </StyledButton>
       {opened && (
         <Content ref={contentRef}>
-          <DatePickerContent
-            timeRange={{ type: "absolute", ...props.timeRange }}
-            onChange={handler}
-          />
+          <DatePickerContent timeRange={props.timeRange} onChange={handler} />
         </Content>
       )}
     </>
