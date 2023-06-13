@@ -110,5 +110,5 @@ const Description = styled.div`
   font-weight: 400;
   font-size: ${pxToEm(10)};// 10px over 13px base;
   line-height: 1.6; // 16px;
-  padding: 0 0 0 ${pxToEm(10)};
+  padding: 0 0 0 ${pxToEm(14)};
 `;
