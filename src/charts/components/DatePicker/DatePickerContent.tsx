@@ -9,44 +9,42 @@ import { FlexibleTimeRange } from "../../../types";
 import { relativeToAbsoluteTimeRange } from "../../../utils";
 
 type Props = {
-  timeRange: FlexibleTimeRange;
-  onChange: (timeRange: FlexibleTimeRange) => void;
+	timeRange: FlexibleTimeRange;
+	onChange: (timeRange: FlexibleTimeRange) => void;
 };
 
 export function DatePickerContent(props: Props) {
-  const { onChange, timeRange } = props;
-  const [draft, setDraft] = useState<FlexibleTimeRange>(timeRange);
-  const absoluteTimeRange = useMemo(() => {
-    if (draft.type === "absolute") {
-      return draft;
-    }
+	const { onChange, timeRange } = props;
+	const [draft, setDraft] = useState<FlexibleTimeRange>(timeRange);
+	const absoluteTimeRange = useMemo(() => {
+		if (draft.type === "absolute") {
+			return draft;
+		}
 
-    return relativeToAbsoluteTimeRange(draft);
-  }, [draft]);
+		return relativeToAbsoluteTimeRange(draft);
+	}, [draft]);
 
-  return (
-    <Container>
-      <Section>
-        <Header>Absolute time range</Header>
-        <MonthTable
-          // setStartTime={setDraftFrom}
-          // setEndTime={setDraftTo}
-          startTime={absoluteTimeRange.from}
-          endTime={absoluteTimeRange.to}
-          updateTimeRange={setDraft}
-        />
-        <DatePickerForm
-          from={draft.from}
-          to={draft.to}
-          onChange={(timeRange) => onChange({ type: "absolute", ...timeRange })}
-          updateDraft={setDraft}
-        />
-      </Section>
-      <Section>
-        <TimeRangePresets onChange={onChange} />
-      </Section>
-    </Container>
-  );
+	return (
+		<Container>
+			<Section>
+				<Header>Absolute time range</Header>
+				<MonthTable
+					startTime={absoluteTimeRange.from}
+					endTime={absoluteTimeRange.to}
+					updateTimeRange={setDraft}
+				/>
+				<DatePickerForm
+					from={draft.from}
+					to={draft.to}
+					onChange={(timeRange) => onChange({ type: "absolute", ...timeRange })}
+					updateDraft={setDraft}
+				/>
+			</Section>
+			<Section>
+				<TimeRangePresets onChange={onChange} />
+			</Section>
+		</Container>
+	);
 }
 
 const Container = styled.div`
@@ -67,7 +65,7 @@ const Section = styled.div`
 `;
 
 export const Header = styled.div(
-  ({ theme }) => css`
+	({ theme }) => css`
     font: ${theme.fontStudioHeadingsH5ShortHand};
     letter-spacing: ${theme.fontStudioHeadingsH5LetterSpacing};
     padding: 0 6px;
