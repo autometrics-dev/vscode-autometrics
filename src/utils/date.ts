@@ -67,9 +67,10 @@ export function relativeToAbsoluteTimeRange(
   };
 }
 
+type Sign = "+" | "-";
 function parseDurationText(
   from: string,
-): { duration: string; sign: "+" | "-" } | null {
+): { duration: string; sign: Sign } | null {
   const match = /^now\s?(?<sign>(-|\+))(?<duration>(.*?))$/.exec(from);
 
   if (!match?.groups?.duration) {
@@ -77,7 +78,10 @@ function parseDurationText(
   }
 
   const { duration, sign } = match.groups;
-  return { duration, sign };
+  return {
+    duration,
+    sign: sign as Sign,
+  };
 }
 
 /**
@@ -89,7 +93,12 @@ export function getNowDuration(from: string): number | null {
     return 0;
   }
 
-  const { duration, sign } = parseDurationText(from);
+  const result = parseDurationText(from);
+  if (result === null) {
+    return null;
+  }
+
+  const { duration, sign } = result;
   const parsed = parseDuration(duration);
   if (parsed == null) {
     return null;
@@ -104,9 +113,9 @@ export function validateRelativeTo(to: string): boolean {
 
 export function formatDuration(timeRange: FlexibleTimeRange) {
   if (timeRange.type === "relative" && timeRange.to === "now") {
-    const { duration } = parseDurationText(timeRange.from.trim().toLowerCase());
-    if (duration) {
-      return `Last ${duration}`;
+    const result = parseDurationText(timeRange.from.trim().toLowerCase());
+    if (result !== null) {
+      return `Last ${result.duration}`;
     }
   }
 
