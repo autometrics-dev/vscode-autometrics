@@ -39,7 +39,7 @@ type ChartPanel = {
   /**
    * Instructs the panel to display a new metric.
    */
-  update(options: PanelOptions): void;
+  update(options: PanelOptions): Promise<void>;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
 };
@@ -52,10 +52,10 @@ export function registerChartPanel(
 
   vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
-    (options: PanelOptions) => {
+    async (options: PanelOptions) => {
       // Reuse existing panel if available.
       if (chartPanel) {
-        chartPanel.update(options);
+        await chartPanel.update(options);
         chartPanel.reveal();
         return;
       }
@@ -86,20 +86,20 @@ function createChartPanel(
     { enableScripts: true },
   );
 
-  function postMessage(message: MessageToWebview) {
-    panel.webview.postMessage(message);
+  async function postMessage(message: MessageToWebview) {
+    await panel.webview.postMessage(message);
   }
 
-  function update(options: PanelOptions) {
+  async function update(options: PanelOptions) {
     const timeRange = currentOptions?.timeRange || createDefaultTimeRange();
-    const showingQuery = currentOptions?.showingQuery || false;
+    const showingQuery = currentOptions?.showingQuery ?? false;
     currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
-    postMessage({ type: "show_panel", options: currentOptions });
+    await postMessage({ type: "show_panel", options: currentOptions });
   }
 
   panel.webview.onDidReceiveMessage(
-    (message: MessageFromWebview) => {
+    async (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
           update(currentOptions);
@@ -113,30 +113,27 @@ function createChartPanel(
                 ? timeRange
                 : relativeToAbsoluteTimeRange(timeRange);
 
-            console.log("this is an absolute time range", absoluteTimeRange);
             prometheus
               .fetchTimeseries(query, {
                 to: absoluteTimeRange.to,
                 from: absoluteTimeRange.from,
               })
               .then((data) => {
-                // console.log("data", data);
                 postMessage({ type: "show_data", data, id });
               })
-              .catch((error: unknown) => {
+              .catch(async (error: unknown) => {
                 const errorMessage = formatProviderError(error);
 
-                postMessage({
+                await postMessage({
                   type: "show_error",
                   id,
                   error: errorMessage,
                 });
               });
           } catch (error) {
-            console.log("error", error);
             const errorMessage = formatProviderError(error);
 
-            postMessage({
+            await postMessage({
               type: "show_error",
               id,
               error: errorMessage,
