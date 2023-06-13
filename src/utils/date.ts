@@ -37,7 +37,7 @@ export const msToTimestamp = (ms: number): Timestamp =>
 export function createDefaultTimeRange(): FlexibleTimeRange {
 	return {
 		type: "relative",
-		from: "now-1h",
+		from: "now-1 hour",
 		to: "now",
 	};
 }
