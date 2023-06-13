@@ -67,6 +67,19 @@ export function relativeToAbsoluteTimeRange(
 	};
 }
 
+function parseDurationText(
+	from: string,
+): { duration: string; sign: "+" | "-" } | null {
+	const match = /^now\s?(?<sign>(-|\+))(?<duration>(.*?))$/.exec(from);
+
+	if (!match?.groups?.duration) {
+		return null;
+	}
+
+	const { duration, sign } = match.groups;
+	return { duration, sign };
+}
+
 /**
  * Get the duration from a human readable duration. Expecting a string like "now-1h".
  * and returning the value in milliseconds.
@@ -76,13 +89,7 @@ export function getNowDuration(from: string): number | null {
 		return 0;
 	}
 
-	const match = /^now\s?(?<sign>(-|\+))(?<duration>(.*?))$/.exec(from);
-
-	if (!match?.groups?.duration) {
-		return null;
-	}
-
-	const { duration, sign } = match.groups;
+	const { duration, sign } = parseDurationText(from);
 	const parsed = parseDuration(duration);
 	if (parsed == null) {
 		return null;
@@ -97,65 +104,13 @@ export function validateRelativeTo(to: string): boolean {
 
 export function formatDuration(timeRange: FlexibleTimeRange) {
 	if (timeRange.type === "relative" && timeRange.to === "now") {
-		const duration = getNowDuration(timeRange.from);
-		if (duration !== null) {
-			return `Last ${humanizeDuration(-duration)}`;
+		const { duration } = parseDurationText(timeRange.from.trim().toLowerCase());
+		if (duration) {
+			return `Last ${duration}`;
 		}
 	}
 
 	return `${timeRange.from} - ${timeRange.to}`;
-}
-
-const millisecondsPerSecond = 1000;
-const millisecondsPerMinute = 60 * millisecondsPerSecond;
-const millisecondsPerHour = 60 * millisecondsPerMinute;
-const millisecondsPerDay = 24 * millisecondsPerHour;
-const millisecondsPerWeek = 7 * millisecondsPerDay;
-
-function humanizeDuration(value: number) {
-	let duration = value;
-
-	const weeks = Math.floor(duration / millisecondsPerWeek);
-	duration %= millisecondsPerWeek;
-	const days = Math.floor(duration / millisecondsPerDay);
-	duration %= millisecondsPerDay;
-
-	const hours = Math.floor(duration / millisecondsPerHour);
-	duration %= millisecondsPerHour;
-
-	const minutes = Math.floor(duration / millisecondsPerMinute);
-	duration %= millisecondsPerMinute;
-
-	const seconds = Math.floor(duration / millisecondsPerSecond);
-	let result = "";
-
-	if (weeks > 0) {
-		result += `${weeks > 1 ? `${weeks} ` : ""}week${weeks > 1 ? "s" : ""}`;
-	}
-	if (days > 0) {
-		result += `${result.length ? ", " : ""}${pluralize(days, "day", {
-			skipOne: result.length > 0,
-		})}`;
-	}
-
-	if (hours > 0) {
-		result += `${result.length ? ", " : ""}${pluralize(hours, "hour", {
-			skipOne: result.length > 0,
-		})}`;
-	}
-
-	if (minutes > 0) {
-		result += `${result.length ? ", " : ""}${pluralize(minutes, "minute", {
-			skipOne: result.length > 0,
-		})}`;
-	}
-	if (seconds > 0) {
-		result += `${result.length ? ", " : ""}${pluralize(seconds, "second", {
-			skipOne: result.length > 0,
-		})}`;
-	}
-
-	return result;
 }
 
 function pluralize(
