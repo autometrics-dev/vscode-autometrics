@@ -3,10 +3,12 @@ import styled, { css } from "styled-components";
 
 import { Day, StyledDay } from "./Day";
 import { Timestamp } from "fiberplane-charts";
-import { getDateParts, pxToEm, timestampToDate } from "../../utils";
+import { pxToEm } from "../../utils";
 import { Button } from "../Button";
 import { CaretLeft } from "./CaretLeft";
 import { CaretRight } from "./CaretRight";
+import { getDateParts, timestampToDate } from "../../../utils";
+import { AbsoluteTimeRange } from "../../../types";
 
 const MONTHS = [
   "January",
@@ -27,9 +29,8 @@ const START_DAY_OFFSET = 1;
 
 type Props = {
   startTime: Timestamp;
-  endTime?: Timestamp;
-  setStartTime: (startTime: Timestamp) => void;
-  setEndTime?: (endTime: Timestamp) => void;
+  endTime: Timestamp;
+  updateTimeRange: (timeRange: AbsoluteTimeRange) => void;
   className?: string;
 };
 
@@ -77,7 +78,11 @@ export const MonthTable = memo(function MonthTable(props: Props) {
   const onClick = (day: Date) => {
     // No end time, so instead of creating a range we set the start time
     if (!props.endTime) {
-      props.setStartTime(day.toISOString());
+      props.updateTimeRange({
+        type: "absolute",
+        from: day.toISOString(),
+        to: props.endTime,
+      });
       return;
     }
 
@@ -96,18 +101,24 @@ export const MonthTable = memo(function MonthTable(props: Props) {
     startDate.setSeconds(0);
     startDate.setMilliseconds(0);
 
-    props.setStartTime(startDate.toISOString());
+    props.updateTimeRange({
+      type: "absolute",
+      from: startDate.toISOString(),
+      to: props.endTime,
+    });
 
-    if (props.setEndTime) {
-      const endDate = timestampToDate(
-        backwards ? endParts.timestamp : dayParts.timestamp,
-      );
-      endDate.setHours(23);
-      endDate.setMinutes(59);
-      endDate.setSeconds(59);
-      endDate.setMilliseconds(999);
-      props.setEndTime(endDate.toISOString());
-    }
+    const endDate = timestampToDate(
+      backwards ? endParts.timestamp : dayParts.timestamp,
+    );
+    endDate.setHours(23);
+    endDate.setMinutes(59);
+    endDate.setSeconds(59);
+    endDate.setMilliseconds(999);
+    props.updateTimeRange({
+      type: "absolute",
+      from: props.startTime,
+      to: endDate.toISOString(),
+    });
 
     setSelectedDate(null);
     setMonthOffset(0);

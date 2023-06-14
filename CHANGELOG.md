@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- Add support for relative time ranges
 - Add refresh button
 - clean up styling
 - add date picker to single chart views
