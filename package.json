@@ -97,7 +97,7 @@
     "lint-code": "rome check .",
     "package": "yarn compile-extension --minify && yarn compile-charts --minify",
     "pretest": "yarn compile-tests && yarn compile && yarn lint",
-    "test": "yarn test:unit && yarn test:e2e",
+    "test": "yarn test:functional && yarn test:e2e",
     "test:e2e": "node ./out/test/run-test.js",
     "test:functional": "CI=true vitest",
     "test:functional-watch": "vitest",
