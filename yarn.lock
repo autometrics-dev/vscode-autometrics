@@ -1101,7 +1101,7 @@ __metadata:
     byte-base64: ^1.1.0
     concurrently: ^8.0.1
     esbuild: ^0.17.19
-    fiberplane-charts: "fiberplane/fiberplane#head=legend_toggle&workspace=fiberplane-charts"
+    fiberplane-charts: "fiberplane/fiberplane#workspace=fiberplane-charts"
     framer-motion: ^10.12.16
     glob: ^8.1.0
     mocha: ^10.2.0
@@ -1984,9 +1984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fiberplane-charts@fiberplane/fiberplane#head=legend_toggle&workspace=fiberplane-charts":
+"fiberplane-charts@fiberplane/fiberplane#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=c3d2086babb614b1153adc2b1010754e8c4b5023"
+  resolution: "fiberplane-charts@https://github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=284507713449e19ff55e56017fb6ec5644107d18"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
