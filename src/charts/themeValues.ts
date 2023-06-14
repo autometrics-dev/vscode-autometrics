@@ -3,7 +3,7 @@ import { pxToEm } from "./utils";
 export const colorBackground = "--vscode-editor-background";
 export const colorForeground = "--vscode-foreground";
 export const colorBase100 = "#f9f9f9";
-export const colorBase200 = "#f3f3f3";
+export const colorBase200 = "transparent";
 export const colorBase300 = "#e7e7e7";
 export const colorBase400 = "#c4c4c4";
 export const colorBase500 = "#a4a4a4";

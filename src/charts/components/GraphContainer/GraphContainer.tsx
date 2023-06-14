@@ -19,11 +19,11 @@ export function GraphContainer(props: {
   const loadingState = useContext(GlobalLoadingContext);
   const { loading } = useSnapshot(loadingState);
   const setTimeRange = useHandler((timeRange: TimeRange) => {
-    state.timeRange = timeRange;
+    state.timeRange = { type: "absolute", ...timeRange };
   });
 
   return (
-    <div>
+    <Container>
       <TopSection>
         <Title>{props.title}</Title>
         <Controls>
@@ -41,22 +41,27 @@ export function GraphContainer(props: {
             buttonStyle="secondary"
             disabled={loading}
             onClick={() => {
-              Object.values(state.graphs).forEach((graph) => {
-                graph.loading = true;
-              });
+              // This way the time range will also appear new, triggering a refresh
+              state.timeRange = { ...state.timeRange };
             }}
           >
             <Refresh />
           </StyledButton>
         </Controls>
       </TopSection>
-      <div>{props.children}</div>
-    </div>
+      <Content>{props.children}</Content>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: 100vh;
+`;
+
 const TopSection = styled.div`
-  position: sticky;
+  background: var(--vscode-menu-background, transparent);
   display: grid;
   grid-template-columns: auto max-content;
   padding: ${pxToEm(10)} ${pxToEm(30)};
@@ -69,7 +74,7 @@ const Title = styled.h1`
   font-family: "Inter", sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.5385em; // 20px with 13px base
+  font-size: ${pxToEm(20)}; // 20px with 13px base
   line-height: 1.75; // 35px
   margin: 0;
   padding: 0;
@@ -97,4 +102,8 @@ const StyledButton = styled(Button)`
     transition: opacity 0.15s ease-in-out;
 
   }
+`;
+
+const Content = styled.div`
+  overflow: auto;
 `;

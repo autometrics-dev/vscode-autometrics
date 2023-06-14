@@ -3,6 +3,7 @@ import { ReactNode, createContext, useEffect, useRef } from "react";
 import { proxy, useSnapshot } from "valtio";
 import { derive } from "valtio/utils";
 import { vscode } from "../chart";
+import { FlexibleTimeRange } from "../../types";
 import { createDefaultTimeRange } from "../../utils";
 
 type Graph = {
@@ -13,7 +14,7 @@ type Graph = {
 
 type GraphState = {
   graphs: Record<string, Graph>;
-  timeRange: TimeRange;
+  timeRange: FlexibleTimeRange;
   showingQuery: boolean;
 };
 

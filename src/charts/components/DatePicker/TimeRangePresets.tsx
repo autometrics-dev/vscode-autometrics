@@ -1,89 +1,89 @@
 import styled, { css } from "styled-components";
-import { msToTimestamp, pxToEm } from "../../utils";
-import { TimeRange } from "fiberplane-charts";
+import { pxToEm } from "../../utils";
+import { FlexibleTimeRange } from "../../../types";
 
 type Option = {
   label: string;
-  value: number;
+  value: string;
 };
 
 const options: Array<Option> = [
   {
     label: "Last 5 minutes",
-    value: 5 * 60 * 1000,
+    value: "5 minutes",
   },
   {
     label: "Last 15 minutes",
-    value: 15 * 60 * 1000,
+    value: "15 minutes",
   },
   {
     label: "Last 30 minutes",
-    value: 30 * 60 * 1000,
+    value: "30 minutes",
   },
   {
     label: "Last 1 hour",
-    value: 60 * 60 * 1000,
+    value: "1 hour",
   },
   {
     label: "Last 3 hours",
-    value: 3 * 60 * 60 * 1000,
+    value: "3 hours",
   },
   {
     label: "Last 6 hours",
-    value: 6 * 60 * 60 * 1000,
+    value: "6 hours",
   },
   {
     label: "Last 12 hours",
-    value: 12 * 60 * 60 * 1000,
+    value: "12 hours",
   },
   {
     label: "Last 24 hours",
-    value: 24 * 60 * 60 * 1000,
+    value: "24 hours",
   },
   {
     label: "Last 2 days",
-    value: 2 * 24 * 60 * 60 * 1000,
+    value: "2 days",
   },
   {
     label: "Last 7 days",
-    value: 7 * 24 * 60 * 60 * 1000,
+    value: "7 days",
   },
   {
     label: "Last 30 days",
-    value: 30 * 24 * 60 * 60 * 1000,
+    value: "30 days",
   },
   {
     label: "Last 90 days",
-    value: 90 * 24 * 60 * 60 * 1000,
+    value: "90 days",
   },
   {
     label: "Last 6 months",
-    value: 6 * 30 * 24 * 60 * 60 * 1000,
+    value: "6 months",
   },
   {
     label: "Last 1 year",
-    value: 365 * 24 * 60 * 60 * 1000,
+    value: "1 year",
   },
   {
     label: "Last 2 years",
-    value: 2 * 365 * 24 * 60 * 60 * 1000,
+    value: "2 years",
   },
   {
     label: "Last 5 years",
-    value: 5 * 365 * 24 * 60 * 60 * 1000,
+    value: "5 years",
   },
   {
     label: "Last 10 years",
-    value: 10 * 365 * 24 * 60 * 60 * 1000,
+    value: "10 years",
   },
   {
     label: "Last 20 years",
-    value: 20 * 365 * 24 * 60 * 60 * 1000,
+    value: "20 years",
   },
 ];
 
 type Props = {
-  onChange: (timeRange: TimeRange) => void;
+  onChange: (timeRange: FlexibleTimeRange) => void;
 };
 
 export function TimeRangePresets(props: Props) {
@@ -97,10 +97,10 @@ export function TimeRangePresets(props: Props) {
           <TimeOption
             key={option.label}
             onClick={() => {
-              const now = Date.now();
               onChange({
-                from: msToTimestamp(now - option.value),
-                to: msToTimestamp(now),
+                type: "relative",
+                from: `now-${option.value}`,
+                to: "now",
               });
             }}
           >

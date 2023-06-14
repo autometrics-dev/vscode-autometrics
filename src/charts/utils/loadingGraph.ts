@@ -1,7 +1,8 @@
-import type { TimeRange, Timeseries } from "fiberplane-charts";
+import type { Timeseries } from "fiberplane-charts";
 import type { Result } from "../../providerRuntime/types";
 import { getNonce } from "../../utils";
 import { vscode } from "../chart";
+import { FlexibleTimeRange } from "../../types";
 
 const requests = new Map<
   string,
@@ -24,7 +25,7 @@ window.addEventListener("message", (event) => {
   }
 });
 
-export function loadGraph(query: string, timeRange: TimeRange) {
+export function loadGraph(query: string, timeRange: FlexibleTimeRange) {
   const id = getNonce();
 
   const result = new Promise<Timeseries[]>((resolve, rejects) => {

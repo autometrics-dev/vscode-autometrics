@@ -1,11 +1,16 @@
 import * as vscode from "vscode";
-import type { TimeRange } from "fiberplane-charts";
 
 import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
-import { createDefaultTimeRange, getNonce, getTitle } from "./utils";
+import {
+  createDefaultTimeRange,
+  getNonce,
+  getTitle,
+  relativeToAbsoluteTimeRange,
+} from "./utils";
+import { FlexibleTimeRange } from "./types";
 
 /**
  * Options for the kind of chart to display.
@@ -21,7 +26,7 @@ export type PanelOptions =
   | { type: "function_graphs"; functionName: string; moduleName?: string };
 
 export type GlobalGraphSettings = {
-  timeRange: TimeRange;
+  timeRange: FlexibleTimeRange;
   showingQuery: boolean;
 };
 
@@ -34,7 +39,7 @@ type ChartPanel = {
   /**
    * Instructs the panel to display a new metric.
    */
-  update(options: PanelOptions): void;
+  update(options: PanelOptions): Promise<void>;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
 };
@@ -47,10 +52,10 @@ export function registerChartPanel(
 
   vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
-    (options: PanelOptions) => {
+    async (options: PanelOptions) => {
       // Reuse existing panel if available.
       if (chartPanel) {
-        chartPanel.update(options);
+        await chartPanel.update(options);
         chartPanel.reveal();
         return;
       }
@@ -81,46 +86,60 @@ function createChartPanel(
     { enableScripts: true },
   );
 
-  function postMessage(message: MessageToWebview) {
-    panel.webview.postMessage(message);
+  async function postMessage(message: MessageToWebview) {
+    await panel.webview.postMessage(message);
   }
 
-  function update(options: PanelOptions) {
+  async function update(options: PanelOptions) {
     const timeRange = currentOptions?.timeRange || createDefaultTimeRange();
-    const showingQuery = currentOptions?.showingQuery || false;
+    const showingQuery = currentOptions?.showingQuery ?? false;
     currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
-    postMessage({ type: "show_panel", options: currentOptions });
+    await postMessage({ type: "show_panel", options: currentOptions });
   }
 
   panel.webview.onDidReceiveMessage(
-    (message: MessageFromWebview) => {
+    async (message: MessageFromWebview) => {
       switch (message.type) {
         case "ready":
           update(currentOptions);
           return;
         case "request_data": {
           const { query, timeRange, id } = message;
-          prometheus
-            .fetchTimeseries(query, timeRange)
-            .then((data) => {
-              postMessage({ type: "show_data", data, id });
-            })
-            .catch((error: unknown) => {
-              const errorMessage = formatProviderError(error);
 
-              postMessage({
-                type: "show_error",
-                id,
-                error: errorMessage,
+          try {
+            const absoluteTimeRange =
+              timeRange.type === "absolute"
+                ? timeRange
+                : relativeToAbsoluteTimeRange(timeRange);
+
+            prometheus
+              .fetchTimeseries(query, {
+                to: absoluteTimeRange.to,
+                from: absoluteTimeRange.from,
+              })
+              .then((data) => {
+                postMessage({ type: "show_data", data, id });
+              })
+              .catch(async (error: unknown) => {
+                const errorMessage = formatProviderError(error);
+
+                await postMessage({
+                  type: "show_error",
+                  id,
+                  error: errorMessage,
+                });
               });
+          } catch (error) {
+            const errorMessage = formatProviderError(error);
 
-              if (options.type !== "function_graphs") {
-                vscode.window.showErrorMessage(
-                  `Could not query Prometheus. Query: ${query} Error: ${errorMessage}`,
-                );
-              }
+            await postMessage({
+              type: "show_error",
+              id,
+              error: errorMessage,
             });
+          }
+
           return;
         }
         case "update_time_range": {

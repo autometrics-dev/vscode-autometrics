@@ -4,17 +4,17 @@ import styled, { css } from "styled-components";
 
 import { pxToEm, validateTimeRange } from "../../utils";
 import { Button } from "../Button";
+import { FlexibleTimeRange } from "../../../types";
 
 type Props = {
   from: Timestamp;
   to: Timestamp;
-  updateDraftFrom: (time: Timestamp) => void;
-  updateDraftTo: (time: Timestamp) => void;
+  updateDraft: (time: FlexibleTimeRange) => void;
   onChange: (timeRange: TimeRange) => void;
 };
 
 export function DatePickerForm(props: Props) {
-  const { from, to, onChange, updateDraftFrom, updateDraftTo } = props;
+  const { from, to, onChange, updateDraft } = props;
   const fromRef = React.useRef<HTMLInputElement | null>(null);
   const toRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -110,7 +110,7 @@ export function DatePickerForm(props: Props) {
                 const hasErrors =
                   Object.values(errors).filter((value) => !!value).length === 0;
                 if (hasErrors) {
-                  updateDraftFrom(values.from);
+                  updateDraft(values);
                 }
               }}
               defaultValue={from}
@@ -134,7 +134,7 @@ export function DatePickerForm(props: Props) {
                 const hasErrors =
                   Object.values(errors).filter((value) => !!value).length === 0;
                 if (hasErrors) {
-                  updateDraftTo(values.to);
+                  updateDraft(values);
                 }
               }}
               ref={toRef}
