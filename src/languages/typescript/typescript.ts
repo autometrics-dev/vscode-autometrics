@@ -5,11 +5,14 @@ import {
   getAutometricsConfig,
   getPrometheusUrl,
 } from "../../config";
+import { QuickInfo, SymbolDisplayPart } from "typescript";
+import { createFunctionHover } from "../../functionHover";
 
 const typescriptExtensionId = "vscode.typescript-language-features";
 const tsPluginId = "@autometrics/typescript-plugin";
 
 export async function activateTypeScriptSupport() {
+  vscode.languages.registerHoverProvider("typescript", TypescriptHover);
   const tsExtension = vscode.extensions.getExtension(typescriptExtensionId);
   if (!tsExtension) {
     return;
@@ -27,7 +30,10 @@ export async function activateTypeScriptSupport() {
     const config = getAutometricsConfig();
     const prometheusUrl = getPrometheusUrl(config);
     console.log(`Configuring TS plugin with ${prometheusUrl}`);
-    api.configurePlugin(tsPluginId, { prometheusUrl });
+    api.configurePlugin(tsPluginId, {
+      prometheusUrl,
+      quickInfoMode: "html-comment",
+    });
   }
 
   configureTSPlugin(tsExtensionApi);
@@ -37,4 +43,61 @@ export async function activateTypeScriptSupport() {
       configureTSPlugin(tsExtensionApi);
     }
   });
+}
+
+type RequestResponse<T> =
+  | {
+      body: T;
+      request_seq: number;
+      command: string;
+      success: boolean;
+      type: "response";
+    }
+  | {
+      type: "noContent";
+    };
+
+export const TypescriptHover = {
+  async provideHover(document: vscode.TextDocument, position: vscode.Position) {
+    try {
+      const result = await vscode.commands.executeCommand<
+        RequestResponse<QuickInfo>
+      >("typescript.tsserverRequest", "quickinfo", {
+        file: document.uri.fsPath,
+        line: position.line + 1,
+        offset: position.character,
+      });
+
+      if (
+        result.type === "response" &&
+        result.body &&
+        result.body.documentation
+      ) {
+        const functionName = extractAutometricsInfo(result.body.documentation);
+        if (functionName) {
+          return createFunctionHover(functionName);
+        }
+      }
+      return undefined;
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        "Autometrics: Error getting TypeScript hover info",
+      );
+    }
+    return undefined;
+  },
+};
+
+const regex = /<!-- autometrics_fn:(?<functionName>.*?)-->/;
+function extractAutometricsInfo(docs: SymbolDisplayPart[]) {
+  for (const doc of docs) {
+    if (doc.kind === "string") {
+      const match = doc.text.match(regex);
+      const functionName = match?.groups?.functionName;
+      if (functionName !== undefined) {
+        return functionName.trim();
+      }
+    }
+  }
+  return null;
 }
