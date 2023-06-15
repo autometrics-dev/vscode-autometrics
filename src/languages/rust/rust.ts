@@ -9,7 +9,7 @@ export function activateRustSupport() {
   if (rustAnalyzerConfig.server?.extraEnv?.AUTOMETRICS_DOCS_GEN !== "0") {
     // Note: Name of the environment variable may still change.
     // See: https://github.com/autometrics-dev/autometrics-rs/issues/80
-    rustAnalyzerConfig.update("server.extraEnv.AUTOMETRICS_DOCS_GEN", "0");
+    rustAnalyzerConfig.update("server.extraEnv.AUTOMETRICS_DISABLE_DOCS", "1");
   }
 
   vscode.languages.registerHoverProvider("rust", RustHover);
