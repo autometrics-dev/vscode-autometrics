@@ -73,6 +73,39 @@ export function FunctionChart(props: Props) {
             setTooltip({ anchor, content });
             return () => setTooltip(null);
           }}
+          onToggleTimeseriesVisibility={
+            timeSeries && timeSeries.length > 1
+              ? ({ timeseries: relevantTimeseries, toggleOthers }) => {
+                  const graph = state.graphs[id];
+                  if (!graph || !graph.timeSeries) {
+                    return;
+                  }
+                  const selectedIndex = timeSeries.indexOf(relevantTimeseries);
+
+                  // Can't find the index? Bail out
+                  if (selectedIndex === -1) {
+                    return;
+                  }
+
+                  if (toggleOthers) {
+                    const othersVisible = graph.timeSeries.some(
+                      (ts, index) => ts.visible && index !== selectedIndex,
+                    );
+
+                    graph.timeSeries.forEach((ts, index) => {
+                      if (index !== selectedIndex) {
+                        ts.visible = !othersVisible;
+                      } else {
+                        ts.visible = true;
+                      }
+                    });
+                  } else {
+                    graph.timeSeries[selectedIndex].visible =
+                      !relevantTimeseries.visible;
+                  }
+                }
+              : undefined
+          }
         />
       </Content>
       {showingQuery && <CodeBlock query={query} />}
