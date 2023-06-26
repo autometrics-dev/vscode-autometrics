@@ -30,10 +30,11 @@ export async function activateTypeScriptSupport() {
     const config = getAutometricsConfig();
     const prometheusUrl = getPrometheusUrl(config);
     console.log(`Configuring TS plugin with ${prometheusUrl}`);
-    api.configurePlugin(tsPluginId, {
+    const options = {
       prometheusUrl,
-      quickInfoMode: "html-comment",
-    });
+      docsOutputFormat: "vscode",
+    };
+    api.configurePlugin(tsPluginId, options);
   }
 
   configureTSPlugin(tsExtensionApi);

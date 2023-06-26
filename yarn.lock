@@ -2172,7 +2172,7 @@ __metadata:
 
 "fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=284507713449e19ff55e56017fb6ec5644107d18"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=368e0fad163f3d5b79974bb6f649e97fd5a3457c"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
@@ -2191,7 +2191,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: dbc9fba9a06306c9daefb10727cbf4619dd75d507874ff8ee40e19cad25091767e5d0fd8925db312b14778cbd93a53cbae41b4305c71096b817a3e016f173f24
+  checksum: bd23306b97cbd638c221a657e6253c157d0b1eb187c9aea1f9b909a9f62718d70efca68f6eed823355775b1a8055f7d99111c2552aeb026067b2e18617222055
   languageName: node
   linkType: hard
 
