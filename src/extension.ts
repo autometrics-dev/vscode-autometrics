@@ -15,7 +15,7 @@ declare const WebAssembly: any;
 
 export async function activate(context: vscode.ExtensionContext) {
   activatePythonSupport();
-  activateRustSupport();
+  await activateRustSupport(context);
   await activateTypeScriptSupport();
 
   const config = getAutometricsConfig();
