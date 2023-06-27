@@ -7,8 +7,8 @@ import { PanelOptions } from "./chartPanel";
  * Creates a VS Code hover for the given function.
  */
 export function createFunctionHover(functionName: string): vscode.Hover {
-  const content = `## Autometrics
-[View the live metrics](${getOpenPanelCommand({
+  const content = `### Autometrics 
+  [**View metrics**](${getOpenPanelCommand({
     type: "function_graphs",
     functionName,
   })})

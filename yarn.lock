@@ -5,10 +5,10 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@autometrics/typescript-plugin@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@autometrics/typescript-plugin@npm:0.5.0"
-  checksum: 286f79f6a4b9a86e1c372d1a0e4c0ae14cffe92b51cfc8399af2837296c327036bfbd17e521e9e6c566a63806c1039e06d195483a0c006e5fe74cb950bb2e15a
+"@autometrics/typescript-plugin@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@autometrics/typescript-plugin@npm:0.5.3"
+  checksum: e0911453a383f60b3dfa98c5845ba5ba292aca7a2eb98cc3731b93b99b1982bb7dc56802498c9d7c35b4bce00ccbbd8ce772a5f54525e257e0caac0cd7c886c4
   languageName: node
   linkType: hard
 
@@ -1183,7 +1183,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "autometrics@workspace:."
   dependencies:
-    "@autometrics/typescript-plugin": ^0.5.0
+    "@autometrics/typescript-plugin": ^0.5.3
     "@floating-ui/core": ^1.2.6
     "@floating-ui/react": ^0.24.2
     "@msgpack/msgpack": ^3.0.0-beta2
@@ -2172,7 +2172,7 @@ __metadata:
 
 "fiberplane-charts@git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts":
   version: 0.1.0
-  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=284507713449e19ff55e56017fb6ec5644107d18"
+  resolution: "fiberplane-charts@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts&commit=368e0fad163f3d5b79974bb6f649e97fd5a3457c"
   dependencies:
     "@types/d3-scale": ^4.0.3
     "@visx/axis": ^3.1.0
@@ -2191,7 +2191,7 @@ __metadata:
     react: ^18.0.0
     react-dom: ^18.0.0
     styled-components: ^5.3.0
-  checksum: dbc9fba9a06306c9daefb10727cbf4619dd75d507874ff8ee40e19cad25091767e5d0fd8925db312b14778cbd93a53cbae41b4305c71096b817a3e016f173f24
+  checksum: bd23306b97cbd638c221a657e6253c157d0b1eb187c9aea1f9b909a9f62718d70efca68f6eed823355775b1a8055f7d99111c2552aeb026067b2e18617222055
   languageName: node
   linkType: hard
 

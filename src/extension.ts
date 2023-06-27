@@ -15,14 +15,14 @@ declare const WebAssembly: any;
 
 export async function activate(context: vscode.ExtensionContext) {
   activatePythonSupport();
-  activateRustSupport(context);
-  activateTypeScriptSupport();
+  await activateRustSupport(context);
+  await activateTypeScriptSupport();
 
   const config = getAutometricsConfig();
   const prometheusUrl = getPrometheusUrl(config);
   const prometheus = await loadPrometheusProvider(prometheusUrl);
 
-  activateSidebar(prometheus);
+  await activateSidebar(prometheus);
   registerChartPanel(context, prometheus);
 }
 
