@@ -126,7 +126,7 @@
     "vitest": "^0.32.0"
   },
   "dependencies": {
-    "@autometrics/typescript-plugin": "^0.5.2",
+    "@autometrics/typescript-plugin": "^0.5.3",
     "@floating-ui/core": "^1.2.6",
     "@floating-ui/react": "^0.24.2",
     "@msgpack/msgpack": "^3.0.0-beta2",
