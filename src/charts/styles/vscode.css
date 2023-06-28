@@ -13,7 +13,6 @@ body {
   font-weight: var(--vscode-font-weight);
   font-family: var(--vscode-font-family);
   background-color: var(--vscode-editor-background);
-  overflow: hidden;
 }
 
 @font-face {
