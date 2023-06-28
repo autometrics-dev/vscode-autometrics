@@ -113,7 +113,7 @@ const Content = styled.div`
 `;
 
 const ControlsContainer = styled.div`
-  position: sticky;
-  bottom: 10px;
-  right: 10px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 `;

@@ -11,19 +11,20 @@ export function KeyboardControls() {
     <>
       {hover && ref.current && (
         <StyledTooltip anchor={ref.current} offset={10} alignment="end">
-          <Heading>Keyboard shortcuts</Heading>
+          <Heading>Keyboard controls</Heading>
+          <div>On a graph you can change the time range using keyboard and mouse</div>
           <ControlOption>
             <div>Drag time range:</div>
             <KeyboardCombination>
               <Key>Shift</Key>
-              <Key>drag</Key>
+              <Key>Drag</Key>
             </KeyboardCombination>
           </ControlOption>
           <ControlOption>
             <div>Zoom time range:</div>
             <KeyboardCombination>
               <Key>Cmd</Key>
-              <Key>scroll</Key>
+              <Key>Select</Key>
             </KeyboardCombination>
           </ControlOption>
         </StyledTooltip>
@@ -67,6 +68,7 @@ const Heading = styled.h2`
   margin: 0;
   padding: 0;
 `;
+
 
 const ControlOption = styled.div`
   display: grid;
