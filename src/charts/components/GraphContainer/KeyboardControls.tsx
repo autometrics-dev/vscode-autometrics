@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { Tooltip } from "../Tooltip";
 import { Keyboard } from "./Keyboard";
-import styled from "styled-components";
+import styled, { DefaultTheme, StyledComponent } from "styled-components";
 import { pxToEm } from "../../utils";
 
 export function KeyboardControls() {
   const [hover, setHover] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   return (
     <>
       {hover && ref.current && (
