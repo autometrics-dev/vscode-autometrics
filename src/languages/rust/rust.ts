@@ -1,11 +1,34 @@
 import * as vscode from "vscode";
 
 import { createFunctionHover } from "../../functionHover";
+import { getAutometricsConfig } from "../../config";
 
 // TODO: See https://github.com/autometrics-dev/vscode-autometrics/issues/27
 //       for tracking the Rust implementation.
 export async function activateRustSupport(context: vscode.ExtensionContext) {
-  vscode.languages.registerHoverProvider("rust", RustHover);
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration(async () => {
+      await init(context);
+    }),
+  );
+
+  await init(context);
+}
+
+let hoverProviderDisposable: vscode.Disposable | undefined;
+let rustAnalyzerMonitorDisposable: vscode.Disposable | undefined;
+
+/**
+ * This function will enable/activate all rust related features
+ */
+async function activateExperimentalSupport(context: vscode.ExtensionContext) {
+  if (!hoverProviderDisposable) {
+    hoverProviderDisposable = vscode.languages.registerHoverProvider(
+      "rust",
+      RustHover,
+    );
+    context.subscriptions.push(hoverProviderDisposable);
+  }
 
   if (isRustAnalyzerInstalled()) {
     // Next: disable the rust-analyzer docs by setting an environment variable.
@@ -14,13 +37,50 @@ export async function activateRustSupport(context: vscode.ExtensionContext) {
     vscode.window.showErrorMessage(
       "Rust-analyzer extension is not installed or not active. Please install the extension and try again.",
     );
-    context.subscriptions.push(
-      vscode.extensions.onDidChange(() => {
+
+    if (!rustAnalyzerMonitorDisposable) {
+      rustAnalyzerMonitorDisposable = vscode.extensions.onDidChange(() => {
         if (isRustAnalyzerInstalled()) {
           updateAutometricsDocsSetting(context);
         }
-      }),
-    );
+      });
+  
+      context.subscriptions.push(
+        rustAnalyzerMonitorDisposable
+      );
+    }
+  }
+}
+
+/**
+ * This function removes all rust related features
+ */
+function cleanupExperimentalSupport(context: vscode.ExtensionContext) {
+  if (hoverProviderDisposable) {
+    hoverProviderDisposable.dispose();
+    const index = context.subscriptions.indexOf(hoverProviderDisposable);
+    if (index !== -1) {
+      context.subscriptions.splice(index, 1);
+    }
+    hoverProviderDisposable = undefined;
+  }
+
+  if (rustAnalyzerMonitorDisposable) {
+    rustAnalyzerMonitorDisposable.dispose();
+    const index = context.subscriptions.indexOf(rustAnalyzerMonitorDisposable);
+    if (index !== -1) {
+      context.subscriptions.splice(index, 1);
+    }
+    rustAnalyzerMonitorDisposable = undefined;
+  }
+}
+
+async function init(context: vscode.ExtensionContext) {
+  const config = getAutometricsConfig();
+  if (config.experimentalRustSupport) {
+    await activateExperimentalSupport(context);
+  } else {
+    cleanupExperimentalSupport(context);
   }
 }
 
