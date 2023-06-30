@@ -44,10 +44,8 @@ async function activateExperimentalSupport(context: vscode.ExtensionContext) {
           updateAutometricsDocsSetting(context);
         }
       });
-  
-      context.subscriptions.push(
-        rustAnalyzerMonitorDisposable
-      );
+
+      context.subscriptions.push(rustAnalyzerMonitorDisposable);
     }
   }
 }

@@ -1,10 +1,17 @@
 import type { TimeRange, Timeseries } from "fiberplane-charts";
 
-import type { PanelOptions, GlobalGraphSettings } from "../chartPanel";
+import type {
+  PanelOptions,
+  GlobalGraphSettings,
+  PrometheusOptions,
+} from "../chartPanel";
 import { FlexibleTimeRange } from "../types";
 
 export type MessageToWebview =
-  | { type: "show_panel"; options: PanelOptions & GlobalGraphSettings }
+  | {
+      type: "show_panel";
+      options: PanelOptions & GlobalGraphSettings & PrometheusOptions;
+    }
   | {
       type: "show_data";
       data: Array<Timeseries>;
@@ -14,6 +21,10 @@ export type MessageToWebview =
       type: "show_error";
       id: string;
       error: string;
+    }
+  | {
+      type: "update_prometheus_url";
+      prometheusUrl: string;
     };
 
 export type MessageFromWebview =

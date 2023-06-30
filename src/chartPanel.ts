@@ -25,6 +25,10 @@ export type PanelOptions =
   | SingleChartOptions
   | { type: "function_graphs"; functionName: string; moduleName?: string };
 
+export type PrometheusOptions = {
+  prometheusUrl: string;
+};
+
 export type GlobalGraphSettings = {
   timeRange: FlexibleTimeRange;
   showingQuery: boolean;
@@ -42,6 +46,7 @@ type ChartPanel = {
   update(options: PanelOptions): Promise<void>;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
+  updatePrometheusUrl(prometheusUrl: string): Promise<void>;
 };
 
 export function registerChartPanel(
@@ -50,7 +55,13 @@ export function registerChartPanel(
 ) {
   let chartPanel: ChartPanel | null = null;
 
-  vscode.commands.registerCommand(
+  prometheus.onDidChangConfig(() => {
+    if (chartPanel) {
+      chartPanel.updatePrometheusUrl(prometheus.getUrl());
+    }
+  });
+
+  return vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     async (options: PanelOptions) => {
       // Reuse existing panel if available.
@@ -79,6 +90,7 @@ function createChartPanel(
     timeRange: createDefaultTimeRange(),
     showingQuery: false,
   };
+
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     getTitle(options),
@@ -95,7 +107,10 @@ function createChartPanel(
     const showingQuery = currentOptions?.showingQuery ?? false;
     currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
-    await postMessage({ type: "show_panel", options: currentOptions });
+    await postMessage({
+      type: "show_panel",
+      options: { ...currentOptions, prometheusUrl: prometheus.getUrl() },
+    });
   }
 
   panel.webview.onDidReceiveMessage(
@@ -160,10 +175,18 @@ function createChartPanel(
 
   panel.webview.html = getHtmlForWebview(context, panel.webview);
 
+  async function updatePrometheusUrl(prometheusUrl: string) {
+    await postMessage({
+      type: "update_prometheus_url",
+      prometheusUrl,
+    });
+  }
+
   return {
     reveal: panel.reveal.bind(panel),
     update,
     onDidDispose: panel.onDidDispose.bind(panel),
+    updatePrometheusUrl,
   };
 }
 

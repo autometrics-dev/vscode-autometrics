@@ -111,8 +111,16 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
    * Updates the Prometheus URL and fires the `onDidChangeConfig` event.
    */
   function setUrl(url: string) {
+    if (url === currentUrl) {
+      return;
+    }
+
     currentUrl = url;
     _onDidChangeConfig.fire();
+  }
+
+  function getUrl() {
+    return currentUrl;
   }
 
   /**
@@ -196,5 +204,6 @@ export async function loadPrometheusProvider(prometheusUrl: string) {
     fetchTimeseries,
     onDidChangConfig,
     setUrl,
+    getUrl,
   };
 }
