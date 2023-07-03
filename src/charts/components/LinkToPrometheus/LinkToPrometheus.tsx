@@ -19,7 +19,7 @@ export function LinkToPrometheus(props: { href: string }) {
         <ExternalLink width={16} height={16} />
       </a>
       {ref.current && hover && (
-        <Tooltip anchor={ref.current} content="Open in Prometheus" />
+        <Tooltip anchor={ref.current}>Open in Prometheus</Tooltip>
       )}
     </>
   );
