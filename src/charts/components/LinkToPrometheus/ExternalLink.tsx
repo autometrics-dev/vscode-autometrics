@@ -1,4 +1,3 @@
-import * as React from "react";
 import { SVGProps } from "react";
 
 export const ExternalLink = (props: SVGProps<SVGSVGElement>) => (
@@ -10,6 +9,7 @@ export const ExternalLink = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 26 26"
     {...props}
   >
+    <title>External link</title>
     <path
       fill="currentColor"
       d="m9.66 14.934 1.398 1.4L21 6v6h2V3.016h-8V5h4.5l-9.84 9.934Z"

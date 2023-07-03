@@ -11,6 +11,8 @@ export function LinkToPrometheus(props: { href: string }) {
       <a
         ref={ref}
         href={href}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
         onMouseOver={() => setHover(true)}
         onMouseOut={() => setHover(false)}
       >
