@@ -8,9 +8,12 @@ import {
   createDefaultTimeRange,
   getNonce,
   getTitle,
+  makePrometheusUrl,
   relativeToAbsoluteTimeRange,
 } from "./utils";
 import { FlexibleTimeRange } from "./types";
+import { getAutometricsConfig } from "./config";
+import { getRequestRate } from "./queries";
 
 /**
  * Options for the kind of chart to display.
@@ -64,6 +67,23 @@ export function registerChartPanel(
   return vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     async (options: PanelOptions) => {
+      const { graphPreferences = "embedded", prometheusUrl = "" } =
+        getAutometricsConfig();
+      if (graphPreferences === "prometheus" && options.type === "function") {
+        const query = getRequestRate(
+          options.functionName,
+          options.moduleName
+            ? {
+                module: options.moduleName,
+              }
+            : undefined,
+        );
+
+        const rawUrl = makePrometheusUrl(query, prometheusUrl);
+        vscode.commands.executeCommand("vscode.open", rawUrl);
+        return;
+      }
+
       // Reuse existing panel if available.
       if (chartPanel) {
         await chartPanel.update(options);
