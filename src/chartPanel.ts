@@ -13,7 +13,7 @@ import {
 } from "./utils";
 import { FlexibleTimeRange } from "./types";
 import { getAutometricsConfig } from "./config";
-import { getRequestRate } from "./queries";
+import { getRequestRate, getSumQuery } from "./queries";
 
 /**
  * Options for the kind of chart to display.
@@ -69,19 +69,28 @@ export function registerChartPanel(
     async (options: PanelOptions) => {
       const { graphPreferences = "embedded", prometheusUrl = "" } =
         getAutometricsConfig();
-      if (graphPreferences === "prometheus" && options.type === "function") {
-        const query = getRequestRate(
-          options.functionName,
-          options.moduleName
-            ? {
-                module: options.moduleName,
-              }
-            : undefined,
-        );
-
-        const rawUrl = makePrometheusUrl(query, prometheusUrl);
-        vscode.commands.executeCommand("vscode.open", rawUrl);
-        return;
+      if (graphPreferences === "prometheus")
+      switch(options.type) {
+        case "function": {
+          const query = getRequestRate(
+            options.functionName,
+            options.moduleName
+              ? {
+                  module: options.moduleName,
+                }
+              : undefined,
+          );
+  
+          const rawUrl = makePrometheusUrl(query, prometheusUrl);
+          vscode.commands.executeCommand("vscode.open", rawUrl);
+          return;
+        }
+        case "metric": {
+          const query = getSumQuery(options.metricName);
+          const rawUrl = makePrometheusUrl(query, prometheusUrl);
+          vscode.commands.executeCommand("vscode.open", rawUrl);
+          return;
+        }
       }
 
       // Reuse existing panel if available.
