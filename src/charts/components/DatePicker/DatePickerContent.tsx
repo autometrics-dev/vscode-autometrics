@@ -1,4 +1,3 @@
-import { TimeRange, Timestamp } from "fiberplane-charts";
 import { MonthTable } from "./MonthTable";
 import styled, { css } from "styled-components";
 import { pxToEm } from "../../utils";

@@ -109,7 +109,7 @@ export function FunctionChart(props: Props) {
         />
       </Content>
       {showingQuery && <CodeBlock query={query} />}
-      {tooltip && <Tooltip {...tooltip} />}
+      {tooltip && <Tooltip anchor={tooltip.anchor}>{tooltip.content}</Tooltip>}
     </Container>
   );
 }

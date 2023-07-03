@@ -9,6 +9,7 @@
 - add support for the "module" label for certain graphs
 - add tooltips to the graphs
 - update bundled typescript plugin which contains fixes for usage in combination with typescript 5
+- add info in the UI that shows how to zoom in/drag time range directly on the graph
 
 ## [0.4.0]
 - Add date picker to the function metrics panel
