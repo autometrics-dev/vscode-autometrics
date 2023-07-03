@@ -6,7 +6,6 @@ export function LinkToPrometheus(props: { href: string }) {
   const { href } = props;
   const [hover, setHover] = useState(false);
   const ref = useRef<HTMLAnchorElement | null>(null);
-  console.log("hover", hover, "ref", ref.current);
   return (
     <>
       <a

@@ -70,28 +70,28 @@ export function registerChartPanel(
       const { graphPreferences = "embedded", prometheusUrl = "" } =
         getAutometricsConfig();
       if (graphPreferences === "prometheus")
-      switch(options.type) {
-        case "function": {
-          const query = getRequestRate(
-            options.functionName,
-            options.moduleName
-              ? {
-                  module: options.moduleName,
-                }
-              : undefined,
-          );
-  
-          const rawUrl = makePrometheusUrl(query, prometheusUrl);
-          vscode.commands.executeCommand("vscode.open", rawUrl);
-          return;
+        switch (options.type) {
+          case "function": {
+            const query = getRequestRate(
+              options.functionName,
+              options.moduleName
+                ? {
+                    module: options.moduleName,
+                  }
+                : undefined,
+            );
+
+            const rawUrl = makePrometheusUrl(query, prometheusUrl);
+            vscode.commands.executeCommand("vscode.open", rawUrl);
+            return;
+          }
+          case "metric": {
+            const query = getSumQuery(options.metricName);
+            const rawUrl = makePrometheusUrl(query, prometheusUrl);
+            vscode.commands.executeCommand("vscode.open", rawUrl);
+            return;
+          }
         }
-        case "metric": {
-          const query = getSumQuery(options.metricName);
-          const rawUrl = makePrometheusUrl(query, prometheusUrl);
-          vscode.commands.executeCommand("vscode.open", rawUrl);
-          return;
-        }
-      }
 
       // Reuse existing panel if available.
       if (chartPanel) {
