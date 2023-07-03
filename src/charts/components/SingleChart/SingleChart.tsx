@@ -95,7 +95,9 @@ export function SingleChart(props: Props) {
           }}
         />
         {showingQuery && <CodeBlock query={query || ""} />}
-        {tooltip && <Tooltip {...tooltip} />}
+        {tooltip && (
+          <Tooltip anchor={tooltip.anchor}>{tooltip.content}</Tooltip>
+        )}
       </Container>
     </GraphContainer>
   );

@@ -9,6 +9,7 @@ import { TimeRange } from "fiberplane-charts";
 import { useHandler } from "../../hooks";
 import { DatePicker } from "../DatePicker";
 import { Refresh } from "./Refresh";
+import { KeyboardControls } from "./KeyboardControls";
 
 export function GraphContainer(props: {
   children: React.ReactNode;
@@ -50,6 +51,9 @@ export function GraphContainer(props: {
         </Controls>
       </TopSection>
       <Content>{props.children}</Content>
+      <ControlsContainer>
+        <KeyboardControls />
+      </ControlsContainer>
     </Container>
   );
 }
@@ -106,4 +110,10 @@ const StyledButton = styled(Button)`
 
 const Content = styled.div`
   overflow: auto;
+`;
+
+const ControlsContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 `;
