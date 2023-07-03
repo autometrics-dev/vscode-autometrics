@@ -84,7 +84,6 @@ export function Tooltip(props: {
 
   const shouldReduceMotion = useReducedMotion();
 
-  // console.log('currentPlacement', currentPlacement);
   return (
     <Container ref={refs.setFloating} style={floatingStyles}>
       <Content
