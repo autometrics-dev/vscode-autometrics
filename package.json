@@ -38,23 +38,22 @@
         "properties": {
           "autometrics.prometheusUrl": {
             "type": "string",
-            "title": "Prometheus URL",
             "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
             "default": "http://localhost:9090"
           },
           "autometrics.experimentalRustSupport": {
             "type": "boolean",
-            "title": "Enable experimental Rust support",
             "description": "Enable experimental support for Rust",
             "default": false
-          }, 
-          "autometrics.graphPreferences": {
+          },
+          "autometrics.graph.graphPreferences": {
             "type": "string",
-            "title": "Graph preferences",
-            "description": "The extension can (for supported languages) link to either prometheus or use the build in graphs (recommended).",
+            "description": "The extension can (for supported languages) link to either the embedded graphs (default) or to the prometheus web interface",
             "default": "embedded",
             "enum": [
-              "embedded", "prometheus"
+              "embedded",
+              "prometheus",
+              "explorer"
             ],
             "enumItemLabels": [
               "Use the embedded graphs",
