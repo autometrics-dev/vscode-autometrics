@@ -120,5 +120,5 @@ const Content = styled(motion.div)`
   color: var(--vscode-editorHoverWidget-foreground);
   background: var(--vscode-editorHoverWidget-background);
   border: 1px solid var(--vscode-editorHoverWidget-border);
-  font-size: ${pxToEm(10)};
+  font-size: 0.625rem;
 `;

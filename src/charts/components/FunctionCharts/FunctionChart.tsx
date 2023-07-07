@@ -13,10 +13,12 @@ import { colors, pxToEm } from "../../utils";
 import { Loading } from "../Loading";
 import { useSnapshot } from "valtio";
 import { GraphContext } from "../../state";
-import { useHandler } from "../../hooks";
-import { useChartHook } from "../../hooks";
+import { useHandler, useChartHook } from "../../hooks";
 import { ErrorMessage } from "../ErrorMessage";
 import { Tooltip } from "../Tooltip";
+import { makePrometheusUrl } from "../../../utils";
+import { ExternalLink } from "../LinkToPrometheus/ExternalLink";
+import { LinkToPrometheus } from "../LinkToPrometheus";
 
 type Props = {
   query: string;
@@ -31,7 +33,7 @@ export function FunctionChart(props: Props) {
   const [stackingType, setStackingType] = useState<StackingType>("none");
 
   const state = useContext(GraphContext);
-  const { showingQuery } = useSnapshot(state);
+  const { showingQuery, prometheusUrl } = useSnapshot(state);
   const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
 
   const setTimeRange = useHandler((timeRange: TimeRange) => {
@@ -50,7 +52,10 @@ export function FunctionChart(props: Props) {
     <Container showingQuery={showingQuery}>
       {loading && <Loading />}
       <Content>
-        <Title>{title}</Title>
+        <Title>
+          {title}{" "}
+          <LinkToPrometheus href={makePrometheusUrl(query, prometheusUrl)} />
+        </Title>
         {description && <Description>{description}</Description>}
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </Content>

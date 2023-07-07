@@ -8,9 +8,12 @@ import {
   createDefaultTimeRange,
   getNonce,
   getTitle,
+  makePrometheusUrl,
   relativeToAbsoluteTimeRange,
 } from "./utils";
 import { FlexibleTimeRange } from "./types";
+import { getAutometricsConfig } from "./config";
+import { getRequestRate, getSumQuery } from "./queries";
 
 /**
  * Options for the kind of chart to display.
@@ -24,6 +27,10 @@ export type SingleChartOptions =
 export type PanelOptions =
   | SingleChartOptions
   | { type: "function_graphs"; functionName: string; moduleName?: string };
+
+export type PrometheusOptions = {
+  prometheusUrl: string;
+};
 
 export type GlobalGraphSettings = {
   timeRange: FlexibleTimeRange;
@@ -42,6 +49,7 @@ type ChartPanel = {
   update(options: PanelOptions): Promise<void>;
 
   onDidDispose: vscode.WebviewPanel["onDidDispose"];
+  updatePrometheusUrl(prometheusUrl: string): Promise<void>;
 };
 
 export function registerChartPanel(
@@ -50,9 +58,41 @@ export function registerChartPanel(
 ) {
   let chartPanel: ChartPanel | null = null;
 
-  vscode.commands.registerCommand(
+  prometheus.onDidChangConfig(() => {
+    if (chartPanel) {
+      chartPanel.updatePrometheusUrl(prometheus.getUrl());
+    }
+  });
+
+  return vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     async (options: PanelOptions) => {
+      const { graphPreferences = "embedded", prometheusUrl = "" } =
+        getAutometricsConfig();
+      if (graphPreferences === "prometheus")
+        switch (options.type) {
+          case "function": {
+            const query = getRequestRate(
+              options.functionName,
+              options.moduleName
+                ? {
+                    module: options.moduleName,
+                  }
+                : undefined,
+            );
+
+            const rawUrl = makePrometheusUrl(query, prometheusUrl);
+            vscode.commands.executeCommand("vscode.open", rawUrl);
+            return;
+          }
+          case "metric": {
+            const query = getSumQuery(options.metricName);
+            const rawUrl = makePrometheusUrl(query, prometheusUrl);
+            vscode.commands.executeCommand("vscode.open", rawUrl);
+            return;
+          }
+        }
+
       // Reuse existing panel if available.
       if (chartPanel) {
         await chartPanel.update(options);
@@ -79,6 +119,7 @@ function createChartPanel(
     timeRange: createDefaultTimeRange(),
     showingQuery: false,
   };
+
   const panel = vscode.window.createWebviewPanel(
     "autometricsChart",
     getTitle(options),
@@ -95,7 +136,10 @@ function createChartPanel(
     const showingQuery = currentOptions?.showingQuery ?? false;
     currentOptions = { ...options, timeRange, showingQuery };
     panel.title = getTitle(options);
-    await postMessage({ type: "show_panel", options: currentOptions });
+    await postMessage({
+      type: "show_panel",
+      options: { ...currentOptions, prometheusUrl: prometheus.getUrl() },
+    });
   }
 
   panel.webview.onDidReceiveMessage(
@@ -160,10 +204,18 @@ function createChartPanel(
 
   panel.webview.html = getHtmlForWebview(context, panel.webview);
 
+  async function updatePrometheusUrl(prometheusUrl: string) {
+    await postMessage({
+      type: "update_prometheus_url",
+      prometheusUrl,
+    });
+  }
+
   return {
     reveal: panel.reveal.bind(panel),
     update,
     onDidDispose: panel.onDidDispose.bind(panel),
+    updatePrometheusUrl,
   };
 }
 

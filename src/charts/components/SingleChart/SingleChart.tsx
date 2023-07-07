@@ -15,7 +15,7 @@ import {
   getSumQuery,
 } from "../../../queries";
 import { useHandler, useChartHook } from "../../hooks";
-import { getTitle } from "../../../utils";
+import { getTitle, makePrometheusUrl } from "../../../utils";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";
 import styled from "styled-components";
@@ -25,6 +25,7 @@ import { Loading } from "../Loading";
 import { ErrorMessage } from "../ErrorMessage";
 import { useSnapshot } from "valtio";
 import { Tooltip } from "../Tooltip";
+import { LinkToPrometheus } from "../LinkToPrometheus";
 
 type Props = {
   options: SingleChartOptions;
@@ -35,7 +36,7 @@ export function SingleChart(props: Props) {
   const [graphType, setGraphType] = useState<GraphType>("line");
   const [stackingType, setStackingType] = useState<StackingType>("none");
   const state = useContext(GraphContext);
-  const { showingQuery } = useSnapshot(state);
+  const { showingQuery, prometheusUrl } = useSnapshot(state);
   const query = getQuery(options);
   const id = "Single";
   const { error, loading, timeSeries, timeRange } = useChartHook(id, query);
@@ -63,7 +64,14 @@ export function SingleChart(props: Props) {
   const title = `${options.type} chart for ${getTitle(options)}`;
 
   return (
-    <GraphContainer title={title}>
+    <GraphContainer
+      title={
+        <>
+          {title}{" "}
+          <LinkToPrometheus href={makePrometheusUrl(query, prometheusUrl)} />
+        </>
+      }
+    >
       <Container>
         {loading && <Loading />}
         {error && <ErrorMessage>{error}</ErrorMessage>}

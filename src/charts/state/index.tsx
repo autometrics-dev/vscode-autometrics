@@ -5,6 +5,8 @@ import { derive } from "valtio/utils";
 import { vscode } from "../chart";
 import { FlexibleTimeRange } from "../../types";
 import { createDefaultTimeRange } from "../../utils";
+import { MessageToWebview } from "../types";
+import { useMessage } from "../hooks";
 
 type Graph = {
   timeSeries: null | Timeseries[];
@@ -16,12 +18,14 @@ type GraphState = {
   graphs: Record<string, Graph>;
   timeRange: FlexibleTimeRange;
   showingQuery: boolean;
+  prometheusUrl: string;
 };
 
 export const GraphContext = createContext<GraphState>({
   graphs: {},
   timeRange: createDefaultTimeRange(),
   showingQuery: false,
+  prometheusUrl: "http://localhost:9090",
 });
 
 export const GlobalLoadingContext = createContext<{ loading: boolean }>({
@@ -32,14 +36,23 @@ export function GraphContextProvider(props: {
   children: ReactNode;
   initialTimeRange: TimeRange;
   initialShowingQuery: boolean;
+  initialPrometheusUrl: string;
 }) {
   const state = useRef(
     proxy({
       graphs: {},
       timeRange: props.initialTimeRange,
       showingQuery: props.initialShowingQuery,
+      prometheusUrl: props.initialPrometheusUrl,
     } as GraphState),
   ).current;
+
+  useMessage<MessageToWebview>((event) => {
+    if (event.data.type === "update_prometheus_url") {
+      const { prometheusUrl } = event.data;
+      state.prometheusUrl = prometheusUrl;
+    }
+  });
 
   // Global loading state derived from state.graphs{id].loading
   const globalLoadingState = useRef(

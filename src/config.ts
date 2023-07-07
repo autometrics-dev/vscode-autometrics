@@ -3,8 +3,9 @@ import * as vscode from "vscode";
 // Make sure to keep this in sync with the
 // "contributes.configuration.properties" section in the `package.json`.
 export type AutometricsConfig = {
-  experimentalChartsEnabled?: boolean;
   prometheusUrl?: string;
+  experimentalRustSupport?: boolean;
+  graphPreferences?: "embedded" | "prometheus";
 };
 
 const configSection = "autometrics";
