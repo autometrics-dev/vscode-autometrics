@@ -2,7 +2,12 @@ import * as vscode from "vscode";
 
 import { OPEN_PANEL_COMMAND } from "./constants";
 import { PanelOptions } from "./chartPanel";
-import { getAutometricsConfig } from "./config";
+import {
+  getAutometricsConfig,
+  getExplorerUrl,
+  getGraphPreferences,
+  getPrometheusUrl,
+} from "./config";
 import {
   generateErrorRatioQuery,
   generateLatencyQuery,
@@ -16,13 +21,13 @@ import { makePrometheusUrl } from "./utils";
  * Creates a VS Code hover for the given function.
  */
 export function createFunctionHover(functionName: string): vscode.Hover {
-  const graphPreference = getAutometricsConfig().graphPreferences ?? "embedded";
+  const graphPreference = getGraphPreferences(getAutometricsConfig());
 
-  if (graphPreference === "prometheus") {
-    return createPrometheusHover(functionName);
+  if (graphPreference === "embedded") {
+    return createEmbeddedHover(functionName);
   }
 
-  return createEmbeddedHover(functionName);
+  return createPrometheusHover(functionName);
 }
 
 function createEmbeddedHover(functionName: string): vscode.Hover {
@@ -39,13 +44,17 @@ function createEmbeddedHover(functionName: string): vscode.Hover {
   return new vscode.Hover(markdown);
 }
 
-const DEFAULT_URL = "http://localhost:9090";
+// const DEFAULT_URL = "http://localhost:9090";
 
 function createPrometheusHover(
   functionName: string,
   moduleName?: string,
 ): vscode.Hover {
-  const { prometheusUrl = DEFAULT_URL } = getAutometricsConfig();
+  const config = getAutometricsConfig();
+  const prometheusUrl =
+    getGraphPreferences(config) === "explorer"
+      ? getExplorerUrl(config)
+      : getPrometheusUrl(config);
   const requestRateQuery = generateRequestRateQuery(functionName, moduleName);
   const errorRatioQuery = generateErrorRatioQuery(functionName, moduleName);
   const latencyQuery = generateLatencyQuery(functionName, moduleName);

@@ -12,7 +12,12 @@ import {
   relativeToAbsoluteTimeRange,
 } from "./utils";
 import { FlexibleTimeRange } from "./types";
-import { getAutometricsConfig } from "./config";
+import {
+  getAutometricsConfig,
+  getExplorerUrl,
+  getGraphPreferences,
+  getPrometheusUrl,
+} from "./config";
 import { getRequestRate, getSumQuery } from "./queries";
 
 /**
@@ -67,44 +72,50 @@ export function registerChartPanel(
   return vscode.commands.registerCommand(
     OPEN_PANEL_COMMAND,
     async (options: PanelOptions) => {
-      const { graphPreferences = "embedded", prometheusUrl = "" } =
-        getAutometricsConfig();
-      if (graphPreferences === "prometheus")
-        switch (options.type) {
-          case "function": {
-            const query = getRequestRate(
-              options.functionName,
-              options.moduleName
-                ? {
-                    module: options.moduleName,
-                  }
-                : undefined,
-            );
-
-            const rawUrl = makePrometheusUrl(query, prometheusUrl);
-            vscode.commands.executeCommand("vscode.open", rawUrl);
-            return;
-          }
-          case "metric": {
-            const query = getSumQuery(options.metricName);
-            const rawUrl = makePrometheusUrl(query, prometheusUrl);
-            vscode.commands.executeCommand("vscode.open", rawUrl);
-            return;
-          }
+      const config = getAutometricsConfig();
+      const graphPreferences = getGraphPreferences(config);
+      if (graphPreferences === "embedded") {
+        // Reuse existing panel if available.
+        if (chartPanel) {
+          await chartPanel.update(options);
+          chartPanel.reveal();
+          return;
         }
 
-      // Reuse existing panel if available.
-      if (chartPanel) {
-        await chartPanel.update(options);
-        chartPanel.reveal();
-        return;
+        const panel = createChartPanel(context, prometheus, options);
+        panel.onDidDispose(() => {
+          chartPanel = null;
+        });
+        chartPanel = panel;
       }
 
-      const panel = createChartPanel(context, prometheus, options);
-      panel.onDidDispose(() => {
-        chartPanel = null;
-      });
-      chartPanel = panel;
+      const prometheusUrl =
+        graphPreferences === "explorer"
+          ? getExplorerUrl(config)
+          : getPrometheusUrl(config);
+      switch (options.type) {
+        case "function_graphs":
+        case "function": {
+          const query = getRequestRate(
+            options.functionName,
+            options.moduleName
+              ? {
+                  module: options.moduleName,
+                }
+              : undefined,
+          );
+
+          const rawUrl = makePrometheusUrl(query, prometheusUrl);
+          vscode.commands.executeCommand("vscode.open", rawUrl);
+          return;
+        }
+        case "metric": {
+          const query = getSumQuery(options.metricName);
+          const rawUrl = makePrometheusUrl(query, prometheusUrl);
+          vscode.commands.executeCommand("vscode.open", rawUrl);
+          return;
+        }
+      }
     },
   );
 }

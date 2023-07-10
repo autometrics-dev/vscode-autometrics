@@ -38,6 +38,7 @@
         "properties": {
           "autometrics.prometheusUrl": {
             "type": "string",
+            "format": "uri",
             "description": "Enter the base URL for your prometheus instance, this URL is used to generate links for queries",
             "default": "http://localhost:9090"
           },
@@ -46,18 +47,31 @@
             "description": "Enable experimental support for Rust",
             "default": false
           },
-          "autometrics.graph.graphPreferences": {
+          "autometrics.graphPreferences": {
             "type": "string",
-            "description": "The extension can (for supported languages) link to either the embedded graphs (default) or to the prometheus web interface",
+            "markdownDescription": "The extension can (for supported languages) link to: the embedded graphs (default), Prometheus web interface or the Autometrics explorer web interface (see for more information the [Autometrics local development](https://docs.autometrics.dev/local-development) documentation)",
             "default": "embedded",
             "enum": [
               "embedded",
-              "prometheus"
+              "prometheus",
+              "explorer"
             ],
             "enumItemLabels": [
               "Use the embedded graphs",
-              "Link out to prometheus"
+              "Link out to prometheus",
+              "Use autometrics explorer"
+            ],
+            "markdownEnumDescriptions": [
+              "The extension will show the graphs in the editor",
+              "The extension will link to the prometheus web interface",
+              "The extension will link to the autometrics explorer web interface"
             ]
+          },
+          "autometrics.webServerURL": {
+            "type": "string",
+            "markdownDescription": "If you use the [autometrics CLI](https://github.com/autometrics-dev/am) you can use the bundled web interface to explore autometrics data. In order to use this you should set `#autometrics.graphPreferences#` to the `Use autometrics explorer` option.\n\n**Note** This URL only needs to be changed if you're running the server on a different port.",
+            "format": "uri",
+            "default": "http://localhost:6789"
           }
         }
       }
