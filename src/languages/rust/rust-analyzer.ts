@@ -24,7 +24,9 @@ export async function updateRustAnalyzerSettings(
     return;
   }
 
-  // shouldUpdate
+  // verify if the settings need to be updated
+  // we don't want to update the settings if they are already set
+  // restarting the rust-analyzer server is expensive
   if (shouldUpdate()) {
     await withAnalyzerConfigRestart(updateSettings);
   }
