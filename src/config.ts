@@ -30,10 +30,10 @@ export function getGraphPreferences(
 }
 
 export function getPrometheusUrl(config: AutometricsConfig): string {
-  return config.prometheusUrl || "http://localhost:9090/";
+  return config.prometheusUrl || "http://localhost:9090";
 }
 
 export function getExplorerUrl(config: AutometricsConfig): string {
-  const baseUrl = config.webServerURL || "http://localhost:6789/";
+  const baseUrl = config.webServerURL || "http://localhost:6789";
   return `${baseUrl.replace(/\/$/, "")}`;
 }

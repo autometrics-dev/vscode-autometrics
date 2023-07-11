@@ -44,8 +44,6 @@ function createEmbeddedHover(functionName: string): vscode.Hover {
   return new vscode.Hover(markdown);
 }
 
-// const DEFAULT_URL = "http://localhost:9090";
-
 function createPrometheusHover(
   functionName: string,
   moduleName?: string,
