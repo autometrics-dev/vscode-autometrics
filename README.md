@@ -1,7 +1,6 @@
 # Autometrics
 
-This extension writes PromQL queries for instrumented functions or methods using
-Autometrics libraries.
+This extension enhances integration between your codebase and Autometrics enhanced functions. If you're new to autometrics, please see [our documentation](https://docs.autometrics.dev/)
 
 Currently supported languages:
 
@@ -23,6 +22,16 @@ This extension contributes the following settings:
 
 - `autometrics.prometheusUrl`: configure your Prometheus URL. This URL is used
   to create links to your Prometheus including useful autometrics based queries
+
+- `autometrics.experimentalRustSupport`: this option allows you to use the embedded graphs with rust. However currently all functions are assumed to have been decorated with the autometrics macro. You probably don't want to enable this feature.
+
+- `autometrics.graphPreferences`: this option allows you to configure what to use to render graphs. The possibilities are:
+
+* embedded graph (which are demonstrated in the animation above)
+* prometheus (which links out to the prometheus UI)
+* autometrics explorer (which links to the web interface that is bundled with the autometrics CLI: see also [local development](https://docs.autometrics.dev/local-development))
+
+- `autometrics.webServerURL` this option is only relevant if you've configured `autometrics.graphPreferences` to `use autometrics explorer`. The autometrics CLI serves the web interface on port 6789, however if you use a different port or don't run it on localhost you can update this setting to point to whatever you want.
 
 ---
 
