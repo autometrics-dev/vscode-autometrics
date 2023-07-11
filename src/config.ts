@@ -35,5 +35,5 @@ export function getPrometheusUrl(config: AutometricsConfig): string {
 
 export function getExplorerUrl(config: AutometricsConfig): string {
   const baseUrl = config.webServerURL || "http://localhost:6789/";
-  return `${baseUrl.replace(/\/$/, "")}/explorer`;
+  return `${baseUrl.replace(/\/$/, "")}`;
 }

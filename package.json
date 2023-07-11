@@ -49,7 +49,7 @@
           },
           "autometrics.graphPreferences": {
             "type": "string",
-            "markdownDescription": "The extension can (for supported languages) link to: the embedded graphs (default), Prometheus web interface or the Autometrics explorer web interface (see for more information the [Autometrics local development](https://docs.autometrics.dev/local-development) documentation)",
+            "markdownDescription": "The extension can (for supported languages) link to: the embedded graphs (default), Prometheus web interface or the Autometrics explorer web interface (see for more information the [Autometrics local development](https://docs.autometrics.dev/local-development) documentation).\n\n **Note:** the Autometrics explorer web interface doesn't support all possible graphs yet so the embedded graphs are used as a fallback in some cases.",
             "default": "embedded",
             "enum": [
               "embedded",

@@ -74,7 +74,10 @@ export function registerChartPanel(
     async (options: PanelOptions) => {
       const config = getAutometricsConfig();
       const graphPreferences = getGraphPreferences(config);
-      if (graphPreferences === "embedded") {
+      if (
+        graphPreferences === "embedded" ||
+        (graphPreferences === "explorer" && options.type === "metric")
+      ) {
         // Reuse existing panel if available.
         if (chartPanel) {
           await chartPanel.update(options);
@@ -87,6 +90,7 @@ export function registerChartPanel(
           chartPanel = null;
         });
         chartPanel = panel;
+        return;
       }
 
       const prometheusUrl =

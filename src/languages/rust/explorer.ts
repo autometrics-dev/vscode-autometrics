@@ -35,7 +35,7 @@ export function activateExplorer(context: vscode.ExtensionContext) {
 }
 
 export async function deactivateExplorer(context: vscode.ExtensionContext) {
-  if (usesExplorerUrl() === false) {
+  if (usesExplorerUrl() === true) {
     await withAnalyzerConfigRestart(async () => {
       const config = getRustAnalyzerConfig();
       const { PROMETHEUS_URL: _, ...extraEnv } = config.server?.extraEnv || {};
