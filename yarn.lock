@@ -1202,6 +1202,7 @@ __metadata:
     concurrently: ^8.0.1
     esbuild: ^0.17.19
     fiberplane-charts: "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts"
+    fiberplane-prometheus-query: "https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-prometheus-query"
     framer-motion: ^10.12.16
     glob: ^8.1.0
     mocha: ^10.2.0
@@ -2192,6 +2193,13 @@ __metadata:
     react-dom: ^18.0.0
     styled-components: ^5.3.0
   checksum: bd23306b97cbd638c221a657e6253c157d0b1eb187c9aea1f9b909a9f62718d70efca68f6eed823355775b1a8055f7d99111c2552aeb026067b2e18617222055
+  languageName: node
+  linkType: hard
+
+"fiberplane-prometheus-query@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-prometheus-query":
+  version: 0.0.0
+  resolution: "fiberplane-prometheus-query@https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-prometheus-query&commit=2618cbc32f1bf0ae40d5ec24a5f99aea9372f60e"
+  checksum: d288dcd70dfc32698db8699d803b0dcfc9d6978e6d063d56e7be9d3f603664337ec6fd01ed7631dc45bd797e2bb31a2966b3e1301e4cff9703926c08bf6c246f
   languageName: node
   linkType: hard
 
