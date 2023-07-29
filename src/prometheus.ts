@@ -94,7 +94,7 @@ export function getPrometheusClient(prometheusUrl: string) {
     params.append("step", stepParam);
 
     const url = `${baseUrl}/api/v1/query_range?${params.toString()}`;
-    const response = await fetch(url, { mode: "cors" });
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error("Error fetching prometheus data");
@@ -131,7 +131,7 @@ async function queryAutometricsSeries({ baseUrl }: { baseUrl: string }) {
   );
 
   const url = `${baseUrl}/api/v1/series?${params.toString()}`;
-  const response = await fetch(url, { mode: "cors" });
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error("Error fetching prometheus data");
@@ -165,7 +165,7 @@ async function queryAutometricsSeries({ baseUrl }: { baseUrl: string }) {
  */
 async function queryMetricNames({ baseUrl }: { baseUrl: string }) {
   const url = `${baseUrl}/api/v1/label/__name__/values`;
-  const response = await fetch(url, { mode: "cors" });
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error("Error fetching prometheus data");
