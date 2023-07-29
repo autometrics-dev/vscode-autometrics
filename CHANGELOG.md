@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- Remove wasm dependency
 - Add support for relative time ranges
 - Add refresh button
 - clean up styling
