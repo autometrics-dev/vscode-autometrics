@@ -72,9 +72,11 @@ export function getPrometheusClient(prometheusUrl: string) {
   /**
    * Fetches the timeseries data for a given query and time range.
    *
-   * NOTE - This is a copy of the `querySeries` function from fiberplane-prometheus-query.
-   *        I needed to copy it here to fix the URL param
-   *        Once `querySeries` is fixed, we can remove this function.
+   * NOTE - This is basically a copy of the `querySeries` function from fiberplane-prometheus-query.
+   *        At first, I needed to copy it here to fix an issue with the url.
+   *        But then I realized that we would need to polyfill fetch to use it,
+   *        so I think we'll just keep this version here for now, and
+   *        rely on the utilities to transform the request/response into the format we need.
    */
   async function queryRange(
     query: string,
