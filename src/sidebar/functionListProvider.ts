@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 
 import type { FunctionMetric, Prometheus } from "../prometheus";
-import { formatProviderError } from "../providerRuntime/errors";
 import { OPEN_PANEL_COMMAND } from "../constants";
 
 export class FunctionListProvider
@@ -44,9 +43,9 @@ export class FunctionListProvider
       )
       .catch((error) => {
         vscode.window.showErrorMessage(
-          `Could not fetch Autometrics functions from Prometheus: ${formatProviderError(
-            error,
-          )}`,
+          `Could not fetch Autometrics functions from Prometheus: ${
+            error?.message ?? "Unknown error"
+          }`,
         );
         throw error;
       });

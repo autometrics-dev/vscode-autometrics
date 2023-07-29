@@ -7,7 +7,7 @@ import {
 } from "./languages";
 import { activateSidebar } from "./sidebar";
 import { getAutometricsConfig, getPrometheusUrl } from "./config";
-import { loadPrometheusProvider } from "./prometheus";
+import { getPrometheusClient } from "./prometheus";
 import { registerChartPanel } from "./chartPanel";
 
 // rome-ignore lint/suspicious/noExplicitAny: WASM is supported, the types just aren't complete...
@@ -20,7 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const config = getAutometricsConfig();
   const prometheusUrl = getPrometheusUrl(config);
-  const prometheus = await loadPrometheusProvider(prometheusUrl);
+  const prometheus = getPrometheusClient(prometheusUrl);
 
   await activateSidebar(prometheus);
   registerChartPanel(context, prometheus);
