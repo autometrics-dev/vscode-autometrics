@@ -1,8 +1,9 @@
 import type { Timeseries } from "fiberplane-charts";
-import type { Result } from "../../providerRuntime/types";
 import { getNonce } from "../../utils";
 import { vscode } from "../chart";
 import { FlexibleTimeRange } from "../../types";
+
+type Result<T, E> = { Err: E } | { Ok: T };
 
 const requests = new Map<
   string,
