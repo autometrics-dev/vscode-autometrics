@@ -19,7 +19,6 @@
       ".vscode-test",
       "dist/**",
       "out/**",
-      "src/providerRuntime/index.ts",
       "*.json"
     ]
   }

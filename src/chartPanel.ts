@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 
-import { formatProviderError } from "./providerRuntime/errors";
 import type { MessageFromWebview, MessageToWebview } from "./charts";
 import { OPEN_PANEL_COMMAND } from "./constants";
 import type { Prometheus } from "./prometheus";
@@ -181,7 +180,7 @@ function createChartPanel(
                 postMessage({ type: "show_data", data, id });
               })
               .catch(async (error: unknown) => {
-                const errorMessage = formatProviderError(error);
+                const errorMessage = extractErrorMessage(error);
 
                 await postMessage({
                   type: "show_error",
@@ -190,7 +189,7 @@ function createChartPanel(
                 });
               });
           } catch (error) {
-            const errorMessage = formatProviderError(error);
+            const errorMessage = extractErrorMessage(error);
 
             await postMessage({
               type: "show_error",
@@ -267,4 +266,17 @@ function getHtmlForWebview(
         <script nonce="${nonce}" src="${scriptUri}" type="module"></script>
     </body>
     </html>`;
+}
+
+function extractErrorMessage(error: unknown) {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof error.message === "string"
+  ) {
+    return error.message;
+  }
+
+  return "Unknown error";
 }
