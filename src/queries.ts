@@ -1,7 +1,7 @@
 const COUNTER_NAME = "function_calls(_count)?(_total)?";
 
 const ADD_BUILD_INFO_LABELS =
-  "* on (instance, job) group_left(version, commit) last_over_time(build_info[1s])";
+  "* on (instance, job) group_left(version, commit) (last_over_time(build_info[1s]) or on (instance, job) up)";
 
 export function getRequestRate(
   functionName: string,
@@ -133,7 +133,7 @@ export function generateLatencyQuery(
       )
       # Attach the "version" and "commit" labels from the "build_info" metric 
       * on (instance, job) group_left(version, commit) (
-        last_over_time(build_info[1s])
+        last_over_time(build_info[1s]) or on (instance, job) up
       )
     )
   ),
@@ -155,8 +155,8 @@ export function generateLatencyQuery(
       )
       # Attach the "version" and "commit" labels from the "build_info" metric 
       * on (instance, job) group_left(version, commit) (
-        last_over_time(build_info[1s])
-      )
+        last_over_time(build_info[1s]) or on (instance, job) up
+      ) 
     )
   ),
   # Add the label {percentile_latency="95"} to the time series
