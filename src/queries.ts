@@ -33,7 +33,7 @@ ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
 }
 
 export function getLatency(functionName: string) {
-  const latency = `sum by (le, function, module, commit, version) (rate({__name__="function_calls_duration(_seconds)?_bucket",function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
+  const latency = `sum by (le, function, module, commit, version) (rate({__name__=~"function_calls_duration(_seconds)?_bucket",function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
 
   return `# 95th and 99th percentile latencies for the \`${functionName}\` function
 
