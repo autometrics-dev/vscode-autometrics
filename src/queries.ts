@@ -1,8 +1,5 @@
 const COUNTER_NAME = "function_calls(_count)?(_total)?";
 
-const ADD_BUILD_INFO_LABELS =
-  "* on (instance, job) group_left(version, commit) (last_over_time(build_info[1s]) or on (instance, job) up)";
-
 export function getRequestRate(
   functionName: string,
   labels: Record<string, string> = {},
@@ -30,15 +27,6 @@ export function getCalledByErrorRatio(functionName: string) {
 
 ${getSumQuery(COUNTER_NAME, { caller: functionName, result: "error" })} /
 ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
-}
-
-export function getLatency(functionName: string) {
-  const latency = `sum by (le, function, module, commit, version) (rate({__name__=~"function_calls_duration(_seconds)?_bucket",function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
-
-  return `# 95th and 99th percentile latencies for the \`${functionName}\` function
-
-label_replace(histogram_quantile(0.99, ${latency}), "percentile_latency", "99", "", "") or
-label_replace(histogram_quantile(0.95, ${latency}), "percentile_latency", "95", "", "")`;
 }
 
 export function getSumQuery(
