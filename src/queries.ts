@@ -15,13 +15,6 @@ export function getCalledByRequestRate(functionName: string) {
 ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
 }
 
-export function getErrorRatio(functionName: string) {
-  return `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
-
-${getSumQuery(COUNTER_NAME, { function: functionName, result: "error" })} /
-${getSumQuery(COUNTER_NAME, { function: functionName })}`;
-}
-
 export function getCalledByErrorRatio(functionName: string) {
   return `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
 
