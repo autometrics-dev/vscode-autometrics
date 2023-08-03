@@ -1,5 +1,4 @@
-const COUNTER_NAME = "function_calls_count";
-const HISTOGRAM_BUCKET_NAME = "function_calls_duration_bucket";
+const COUNTER_NAME = "function_calls(_count)?(_total)?";
 
 const ADD_BUILD_INFO_LABELS =
   "* on (instance, job) group_left(version, commit) last_over_time(build_info[1s])";
@@ -34,7 +33,7 @@ ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
 }
 
 export function getLatency(functionName: string) {
-  const latency = `sum by (le, function, module, commit, version) (rate(${HISTOGRAM_BUCKET_NAME}{function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
+  const latency = `sum by (le, function, module, commit, version) (rate({__name__="function_calls_duration(_seconds)?_bucket",function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
 
   return `# 95th and 99th percentile latencies for the \`${functionName}\` function
 
@@ -48,7 +47,8 @@ export function getSumQuery(
 ) {
   return `sum by (function, module) (
     rate(
-      ${metricName}{
+      {
+        __name__=~"${metricName}",
 ${Object.entries(labels)
   .map(
     ([key, value]) => `        ${key}="${value}"
@@ -65,7 +65,7 @@ export function generateRequestRateQuery(
   return `sum by (function, module, version, commit) (
   rate(
     { 
-      __name__=~"function_calls_count(?:_total)?",
+      __name__=~"function_calls(_count)?(_total)?",
       function=~"${functionName}",
       module=~"${moduleName || ".*"}"
     }[5m] 
@@ -86,7 +86,7 @@ export function generateErrorRatioQuery(
   sum by(function, module, version, commit) (
     rate(      
       {        
-        __name__=~"function_calls_count(?:_total)?",        
+        __name__=~"function_calls(_count)?(_total)?",
         result="error",         
         function=~"${functionName}",      
         module=~"${moduleName || ".*"}"
@@ -102,7 +102,7 @@ export function generateErrorRatioQuery(
   sum by(function, module, version, commit) (    
     rate(      
       {        
-        __name__=~"function_calls_count(?:_total)?",        
+        __name__=~"function_calls(_count)?(_total)?",
         function=~"${functionName}",
         module=~"${moduleName || ".*"}"
       }[5m]    
@@ -125,7 +125,8 @@ export function generateLatencyQuery(
     0.99, 
     sum by (le, function, module, commit, version) (
       rate(
-        function_calls_duration_bucket{
+        {
+          __name__=~"function_calls_duration(_seconds)?_bucket",
           function=~"${functionName}",
           module=~"${moduleName || ".*"}"
         }[5m]
@@ -146,7 +147,8 @@ export function generateLatencyQuery(
     0.95, 
     sum by (le, function, module, commit, version) (
       rate(
-        function_calls_duration_bucket{
+        {
+          __name__=~"function_calls_duration(_seconds)?_bucket",
           function=~"${functionName}",
           module=~"${moduleName || ".*"}"
         }[5m]
