@@ -137,7 +137,7 @@ export function generateLatencyQuery(
       # Attach the "version" and "commit" labels from the "build_info" metric 
       * on (instance, job) group_left(version, commit) (
         last_over_time(build_info[1s]) or on (instance, job) up
-      ) 
+      )
     )
   ),
   # Add the label {percentile_latency="95"} to the time series
