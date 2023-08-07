@@ -1,8 +1,4 @@
-const COUNTER_NAME = "function_calls_count";
-const HISTOGRAM_BUCKET_NAME = "function_calls_duration_bucket";
-
-const ADD_BUILD_INFO_LABELS =
-  "* on (instance, job) group_left(version, commit) last_over_time(build_info[1s])";
+const COUNTER_NAME = "function_calls(_count)?(_total)?";
 
 export function getRequestRate(
   functionName: string,
@@ -19,27 +15,11 @@ export function getCalledByRequestRate(functionName: string) {
 ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
 }
 
-export function getErrorRatio(functionName: string) {
-  return `# Percentage of calls to the \`${functionName}\` function that return errors, averaged over 5 minute windows
-
-${getSumQuery(COUNTER_NAME, { function: functionName, result: "error" })} /
-${getSumQuery(COUNTER_NAME, { function: functionName })}`;
-}
-
 export function getCalledByErrorRatio(functionName: string) {
   return `# Percentage of calls to functions called by \`${functionName}\` that return errors, averaged over 5 minute windows
 
 ${getSumQuery(COUNTER_NAME, { caller: functionName, result: "error" })} /
 ${getSumQuery(COUNTER_NAME, { caller: functionName })}`;
-}
-
-export function getLatency(functionName: string) {
-  const latency = `sum by (le, function, module, commit, version) (rate(${HISTOGRAM_BUCKET_NAME}{function="${functionName}"}[5m]) ${ADD_BUILD_INFO_LABELS})`;
-
-  return `# 95th and 99th percentile latencies for the \`${functionName}\` function
-
-label_replace(histogram_quantile(0.99, ${latency}), "percentile_latency", "99", "", "") or
-label_replace(histogram_quantile(0.95, ${latency}), "percentile_latency", "95", "", "")`;
 }
 
 export function getSumQuery(
@@ -48,7 +28,8 @@ export function getSumQuery(
 ) {
   return `sum by (function, module) (
     rate(
-      ${metricName}{
+      {
+        __name__=~"${metricName}",
 ${Object.entries(labels)
   .map(
     ([key, value]) => `        ${key}="${value}"
@@ -65,7 +46,7 @@ export function generateRequestRateQuery(
   return `sum by (function, module, version, commit) (
   rate(
     { 
-      __name__=~"function_calls_count(?:_total)?",
+      __name__=~"function_calls(_count)?(_total)?",
       function=~"${functionName}",
       module=~"${moduleName || ".*"}"
     }[5m] 
@@ -86,7 +67,7 @@ export function generateErrorRatioQuery(
   sum by(function, module, version, commit) (
     rate(      
       {        
-        __name__=~"function_calls_count(?:_total)?",        
+        __name__=~"function_calls(_count)?(_total)?",
         result="error",         
         function=~"${functionName}",      
         module=~"${moduleName || ".*"}"
@@ -102,7 +83,7 @@ export function generateErrorRatioQuery(
   sum by(function, module, version, commit) (    
     rate(      
       {        
-        __name__=~"function_calls_count(?:_total)?",        
+        __name__=~"function_calls(_count)?(_total)?",
         function=~"${functionName}",
         module=~"${moduleName || ".*"}"
       }[5m]    
@@ -125,14 +106,15 @@ export function generateLatencyQuery(
     0.99, 
     sum by (le, function, module, commit, version) (
       rate(
-        function_calls_duration_bucket{
+        {
+          __name__=~"function_calls_duration(_seconds)?_bucket",
           function=~"${functionName}",
           module=~"${moduleName || ".*"}"
         }[5m]
       )
       # Attach the "version" and "commit" labels from the "build_info" metric 
       * on (instance, job) group_left(version, commit) (
-        last_over_time(build_info[1s])
+        last_over_time(build_info[1s]) or on (instance, job) up
       )
     )
   ),
@@ -146,14 +128,15 @@ export function generateLatencyQuery(
     0.95, 
     sum by (le, function, module, commit, version) (
       rate(
-        function_calls_duration_bucket{
+        {
+          __name__=~"function_calls_duration(_seconds)?_bucket",
           function=~"${functionName}",
           module=~"${moduleName || ".*"}"
         }[5m]
       )
       # Attach the "version" and "commit" labels from the "build_info" metric 
       * on (instance, job) group_left(version, commit) (
-        last_over_time(build_info[1s])
+        last_over_time(build_info[1s]) or on (instance, job) up
       )
     )
   ),
