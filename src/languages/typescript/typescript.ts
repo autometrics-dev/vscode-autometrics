@@ -9,21 +9,41 @@ import { QuickInfo, SymbolDisplayPart } from "typescript";
 import { createFunctionHover } from "../../functionHover";
 
 const typescriptExtensionId = "vscode.typescript-language-features";
+const denoExtensionId = "denoland.vscode-deno";
 const tsPluginId = "@autometrics/typescript-plugin";
 
 export async function activateTypeScriptSupport() {
   vscode.languages.registerHoverProvider("typescript", TypescriptHover);
   const tsExtension = vscode.extensions.getExtension(typescriptExtensionId);
   if (!tsExtension) {
+    console.log("NO EXTENSION");
     return;
+  }
+
+  const denoExtension = vscode.extensions.getExtension(denoExtensionId);
+  if (!denoExtension) {
+    console.log("NO DENO EXTENSION... but i shall continue");
+    // return;
+  } else {
+    console.log("DENO EXTENSION", denoExtension);
   }
 
   await tsExtension.activate();
 
+  await denoExtension?.activate();
+
   const tsExtensionApi = tsExtension.exports?.getAPI?.(0);
+
+  const denoExtensionApi = denoExtension?.exports?.getAPI?.(0);
+
+  console.log("DENO EXTENSION... exports?  ", denoExtension?.exports?.());
+
   if (!tsExtensionApi) {
+    console.log("NO EXTENSION API");
     return;
   }
+
+  console.log("COFIGURING");
 
   // rome-ignore lint/suspicious/noExplicitAny: pluginAPI is not typed
   function configureTSPlugin(api: any) {
@@ -68,12 +88,14 @@ export const TypescriptHover = {
         line: position.line + 1,
         offset: position.character,
       });
+        console.log("hohohi", result)
 
       if (
         result.type === "response" &&
         result.body &&
         result.body.documentation
       ) {
+        console.log("hi")
         const functionName = extractAutometricsInfo(result.body.documentation);
         if (functionName) {
           return createFunctionHover(functionName);
@@ -81,6 +103,10 @@ export const TypescriptHover = {
       }
       return undefined;
     } catch (err) {
+      console.error(err);
+      // NOTE - This could happen because of an error in other TS plugins
+      //        I.e., we could end up propagating errors from other plugins
+      //        (This happened to me with the tailwind intellisense plugin)
       vscode.window.showErrorMessage(
         "Autometrics: Error getting TypeScript hover info",
       );
