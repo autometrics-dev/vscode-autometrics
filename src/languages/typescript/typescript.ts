@@ -81,6 +81,9 @@ export const TypescriptHover = {
       }
       return undefined;
     } catch (err) {
+      // NOTE - This could happen because of an error in other TS plugins
+      //        I.e., we could end up propagating errors from other plugins
+      //        (This happened to me with the tailwind intellisense plugin)
       vscode.window.showErrorMessage(
         "Autometrics: Error getting TypeScript hover info",
       );
