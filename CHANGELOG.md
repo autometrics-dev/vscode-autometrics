@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.5.0]
 - Remove dependency on provider runtime and query prometheus directly
 - Add support for relative time ranges
 - Add refresh button
