@@ -158,10 +158,10 @@
   },
   "dependencies": {
     "@autometrics/typescript-plugin": "^0.5.4",
+    "@fiberplane/fiberplane-charts": "^0.2.0",
+    "@fiberplane/prometheus-query": "^0.1.1",
     "@floating-ui/core": "^1.2.6",
     "@floating-ui/react": "^0.24.2",
-    "fiberplane-charts": "git+https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-charts",
-    "fiberplane-prometheus-query": "https://git@github.com/fiberplane/fiberplane.git#workspace=fiberplane-prometheus-query",
     "framer-motion": "^10.12.16",
     "node-fetch": "^2.0.0",
     "parse-duration": "^1.1.0",

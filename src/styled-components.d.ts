@@ -1,4 +1,4 @@
-import { ChartTheme } from "fiberplane-charts";
+import { ChartTheme } from "@fiberplane/fiberplane-charts";
 
 export interface AdditionalThemeValues extends ChartTheme {
   fontStudioHeadingsH5FontSize: string;

@@ -1,4 +1,4 @@
-import type { ChartTheme } from "fiberplane-charts";
+import type { ChartTheme } from "@fiberplane/fiberplane-charts";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 
 import * as defaultTheme from "../../themeValues";

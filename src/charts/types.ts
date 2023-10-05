@@ -1,4 +1,4 @@
-import type { TimeRange, Timeseries } from "fiberplane-charts";
+import type { TimeRange, Timeseries } from "@fiberplane/fiberplane-charts";
 
 import type {
   PanelOptions,

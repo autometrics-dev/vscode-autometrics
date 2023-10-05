@@ -1,4 +1,4 @@
-import type { Timeseries } from "fiberplane-charts";
+import type { Timeseries } from "@fiberplane/fiberplane-charts";
 import { getNonce } from "../../utils";
 import { vscode } from "../chart";
 import { FlexibleTimeRange } from "../../types";

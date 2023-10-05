@@ -6,7 +6,7 @@ import {
   TimeRange,
   Timeseries,
   TooltipAnchor,
-} from "fiberplane-charts";
+} from "@fiberplane/fiberplane-charts";
 import styled from "styled-components";
 import { CodeBlock } from "../CodeBlock";
 import { colors, pxToEm } from "../../utils";

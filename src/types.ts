@@ -1,4 +1,4 @@
-import { TimeRange } from "fiberplane-charts";
+import { TimeRange } from "@fiberplane/fiberplane-charts";
 
 export type AbsoluteTimeRange = {
   type: "absolute";

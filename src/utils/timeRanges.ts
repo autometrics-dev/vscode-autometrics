@@ -1,4 +1,4 @@
-import type { TimeRange } from "fiberplane-charts";
+import type { TimeRange } from "@fiberplane/fiberplane-charts";
 
 import { timestampToMs } from "./timestamps";
 

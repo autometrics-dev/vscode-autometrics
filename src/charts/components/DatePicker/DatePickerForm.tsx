@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TimeRange, Timestamp } from "fiberplane-charts";
+import { TimeRange, Timestamp } from "@fiberplane/fiberplane-charts";
 import styled, { css } from "styled-components";
 
 import { pxToEm, validateTimeRange } from "../../utils";
