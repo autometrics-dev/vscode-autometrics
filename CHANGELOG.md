@@ -1,5 +1,10 @@
 # Changelog
 
+# [0.5.1]
+
+- add TypeScript plugin fixes for v5
+- fix `@fiberplane/*` scoped packages
+
 ## [0.5.0]
 - Remove dependency on provider runtime and query prometheus directly
 - Add support for relative time ranges
