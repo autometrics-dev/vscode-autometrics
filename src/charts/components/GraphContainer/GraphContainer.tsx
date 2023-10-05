@@ -5,7 +5,7 @@ import { Toggle } from "../Toggle";
 import { useContext } from "react";
 import { GlobalLoadingContext, GraphContext } from "../../state";
 import { useSnapshot } from "valtio";
-import { TimeRange } from "fiberplane-charts";
+import { TimeRange } from "@fiberplane/fiberplane-charts";
 import { useHandler } from "../../hooks";
 import { DatePicker } from "../DatePicker";
 import { Refresh } from "./Refresh";

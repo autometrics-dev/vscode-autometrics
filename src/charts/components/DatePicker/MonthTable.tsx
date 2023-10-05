@@ -2,7 +2,7 @@ import { memo, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 
 import { Day, StyledDay } from "./Day";
-import { Timestamp } from "fiberplane-charts";
+import { Timestamp } from "@fiberplane/fiberplane-charts";
 import { pxToEm } from "../../utils";
 import { Button } from "../Button";
 import { CaretLeft } from "./CaretLeft";

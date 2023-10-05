@@ -6,7 +6,7 @@ import {
   TimeRange,
   Timeseries,
   TooltipAnchor,
-} from "fiberplane-charts";
+} from "@fiberplane/fiberplane-charts";
 
 import { PanelOptions, SingleChartOptions } from "../../../chartPanel";
 import {

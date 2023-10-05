@@ -1,5 +1,5 @@
 import parseDuration from "parse-duration";
-import type { Timestamp } from "fiberplane-charts";
+import type { Timestamp } from "@fiberplane/fiberplane-charts";
 import {
   AbsoluteTimeRange,
   FlexibleTimeRange,

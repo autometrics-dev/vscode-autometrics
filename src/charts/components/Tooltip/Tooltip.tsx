@@ -1,4 +1,4 @@
-import { TooltipAnchor } from "fiberplane-charts";
+import { TooltipAnchor } from "@fiberplane/fiberplane-charts";
 import {
   useFloating,
   offset as offsetMiddleware,

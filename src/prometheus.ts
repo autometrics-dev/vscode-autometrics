@@ -3,8 +3,8 @@ import {
   getStepFromTimeRange,
   roundToGrid,
   metricEntryToTimeseries,
-} from "fiberplane-prometheus-query";
-import type { TimeRange, Timeseries } from "fiberplane-prometheus-query";
+} from "@fiberplane/prometheus-query";
+import type { TimeRange, Timeseries } from "@fiberplane/prometheus-query";
 import fetch from "node-fetch";
 
 import { uniqBy } from "./utils";

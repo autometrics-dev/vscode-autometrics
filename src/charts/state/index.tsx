@@ -1,4 +1,4 @@
-import { TimeRange, Timeseries } from "fiberplane-charts";
+import { TimeRange, Timeseries } from "@fiberplane/fiberplane-charts";
 import { ReactNode, createContext, useEffect, useRef } from "react";
 import { proxy, useSnapshot } from "valtio";
 import { derive } from "valtio/utils";

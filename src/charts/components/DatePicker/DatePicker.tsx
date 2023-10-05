@@ -1,4 +1,4 @@
-import { TimeRange } from "fiberplane-charts";
+import { TimeRange } from "@fiberplane/fiberplane-charts";
 import { Button } from "../Button";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
